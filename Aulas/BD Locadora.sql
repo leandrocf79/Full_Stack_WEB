@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS jogos (
 	valor_R$ DECIMAL(6,2) NOT NULL,
 	localizacao_id INT(3) NOT NULL,
 	FOREIGN KEY localizacao_id 
-		REFERENCES localizacao(id) *******REFERENCES está dando erro*******
+		REFERENCES localizacao(id)    -- *******REFERENCES está dando erro*******
 );
 
     
