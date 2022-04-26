@@ -19,12 +19,9 @@ CREATE TABLE IF NOT EXISTS jogos (
 	cod_do_jogo INT(3) PRIMARY KEY AUTO_INCREMENT,
 	nome_do_jogo VARCHAR(50) NOT NULL,
 	valor_R$ DECIMAL(6,2) NOT NULL,
-	-- localizacao_id INT(3) NOT NULL,     *******esta parte está dando erro*******
-	-- FOREIGN KEY localizacao_id
-	-- REFERENCES localizacao(id)
 	localizacao_id INT(3) NOT NULL,
 	FOREIGN KEY localizacao_id 
-		REFERENCES localizacao(id)
+		REFERENCES localizacao(id) *******REFERENCES está dando erro*******
 );
 
     
