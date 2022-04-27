@@ -6,7 +6,7 @@ USE SuperGames ;
 -- Table `SuperGames`.`localizacao`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS localizacao (
-  category_id INT (3)  PRIMARY KEY AUTO_INCREMENT,
+  id INT (3)  PRIMARY KEY AUTO_INCREMENT,
   secao VARCHAR(50) NOT NULL,
   prateleira INT(3) ZEROFILL NOT NULL
   );
@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS jogos (
 	nome_do_jogo VARCHAR(50) NOT NULL,
 	valor_R$ DECIMAL(6,2) NOT NULL,
 	localizacao_id INT(3) NOT NULL,
-	FOREIGN KEY localizacao_id 
-		REFERENCES localizacao(id)    -- *******REFERENCES está dando erro*******
+    FOREIGN KEY localizacao_id 
+		REFERENCES localizacao(id)
 );
 
     
@@ -61,3 +61,21 @@ SELECT localizacao.secao, localizacao.prateleira, jogo.nome_do_jogo
 FROM localizacao LEFT JOIN localizacao   
 ON localizacao.id = jogos.localizacao_id
 ORDER BY jogos.nome_do_jogo ASC;
+
+-- pesquisas
+SELECT count(*) FROM jogos;
+
+SELECT MAX(valor_R$) AS "Maior valor" from jogos;
+
+SELECT MIN(valor_R$) AS "Menor valor" from jogos;
+SELECT * FROM jogos;
+
+SELECT AVG (valor) AS 'Media Guerra'
+FROM jogos INTER JOIN 
+ON localizacao.id = jogos.localizacao_id
+WHERE secao = 'Guerra';
+
+SELECT SUM(valor_R$) AS 'Total' FROM jogos;
+
+
+
