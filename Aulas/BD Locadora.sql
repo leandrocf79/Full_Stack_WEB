@@ -6,7 +6,7 @@ USE SuperGames ;
 -- Table `SuperGames`.`localizacao`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS localizacao (
-  id INT (3)  PRIMARY KEY AUTO_INCREMENT,
+  loc_id INT (3)  PRIMARY KEY AUTO_INCREMENT,
   secao VARCHAR(50) NOT NULL,
   prateleira INT(3) ZEROFILL NOT NULL
   );
@@ -16,13 +16,14 @@ CREATE TABLE IF NOT EXISTS localizacao (
 -- Table `SuperGames`.`jogo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS jogos (
-	cod_do_jogo INT(3) PRIMARY KEY AUTO_INCREMENT,
-	nome_do_jogo VARCHAR(50) NOT NULL,
-	valor_R$ DECIMAL(6,2) NOT NULL,
-	localizacao_id INT(3) NOT NULL,
-    FOREIGN KEY localizacao_id 
-		REFERENCES localizacao(id)
+jogo_id INT(3) PRIMARY KEY AUTO_INCREMENT,
+nome_do_jogo VARCHAR(50) NOT NULL,
+valor_R$ DECIMAL(6,2) NOT NULL,
+localizacao_id INT(3) NOT NULL,
+FOREIGN KEY (localizacao_id)
+	REFERENCES localizacao(loc_id)
 );
+
 
     
 INSERT localizacao VALUES
@@ -46,36 +47,75 @@ SELECT * FROM localizacao;
 SELECT * FROM jogos;
 
 -- identificar nome do jogo e prateleira
-SELECT jogo.nome_do_jogo, localizacao.prateleira
+SELECT jogos.nome_do_jogo, localizacao.prateleira
 FROM jogos INNER JOIN localizacao
-ON localizacao.id = jogos.localizacao_id;
+ON localizacao.loc_id = jogos.localizacao_id;
 
--- identificar nome do jogos de aventura
-SELECT jogo.nome_do_jogo, localizacao.prateleira
+
+
+-- identificar nome do jogo de aventura
+SELECT jogos.nome_do_jogo, localizacao.prateleira
 FROM jogos INNER JOIN localizacao
-ON localizacao.id = jogos.localizacao_id
-WHERE secao 'Aventura';
+ON localizacao.loc_id = jogos.localizacao_id
+WHERE secao = 'Aventura';
 
 -- identificar e ordedar crescente as secoes    (LEFT, ASC) 
-SELECT localizacao.secao, localizacao.prateleira, jogo.nome_do_jogo
-FROM localizacao LEFT JOIN localizacao   
-ON localizacao.id = jogos.localizacao_id
+SELECT  jogos.nome_do_jogo, localizacao.prateleira, localizacao.secao
+FROM jogos LEFT JOIN localizacao  
+ON localizacao.loc_id = jogos.localizacao_id
 ORDER BY jogos.nome_do_jogo ASC;
 
--- pesquisas
-SELECT count(*) FROM jogos;
+-- Inserir novos jogos
+INSERT jogos VALUES 
+(0, "Super Metroid", 174.97, 7),
+(0, "SDonkey Kong", 374.00, 8),
+(0, "FF XV", 144.54, 5),
+(0, "SMB", 199.00, 6);
 
-SELECT MAX(valor_R$) AS "Maior valor" from jogos;
-
-SELECT MIN(valor_R$) AS "Menor valor" from jogos;
-SELECT * FROM jogos;
-
-SELECT AVG (valor) AS 'Media Guerra'
-FROM jogos INTER JOIN 
-ON localizacao.id = jogos.localizacao_id
-WHERE secao = 'Guerra';
-
-SELECT SUM(valor_R$) AS 'Total' FROM jogos;
+SELECT jogos.nome_do_jogo FROM jogos;
 
 
+-- Alterar valor dos jogos em promoção
+UPDATE jogos SET valor_R$ = valor_R$ * 0.5
+WHERE localizacao_id = 3; -- ZELDA B
+SELECT * FROM jogos; 
 
+
+UPDATE jogos SET valor_R$ = valor_R$ * 1.3
+WHERE localizacao_id = 4;
+SELECT * FROM jogos; 
+
+-- UPDATE jogos SET valor_R$ = valor_R$ * 0.5
+-- WHERE nome_do_jogo = 'FF XV';                      -- DEU ERRO
+
+CREATE TABLE promocao(
+Promo INT (3) NOT NULL,
+cod_promocao_jogo INT(3) NOT NULL,
+FOREIGN KEY (cod_promocao_jogo)
+	REFERENCES jogos (jogo_id )
+);
+-- INSERIR VALORES JOGO 1 E 2
+INSERT promocao VALUES(0, 1), (0,2);
+SELECT * FROM promocao;
+SELECT * FROM jogos; 
+
+
+
+-- exibir jogos em promocao
+SELECT jogos.nome_do_jogo, jogos.valor_R$
+FROM jogos
+WHERE jogos.jogo_id IN 
+-- SUBCONSULTA
+(SELECT cod_promocao_jogo FROM promocao);
+
+
+-- jogos que não estão em promoção NOT IN
+SELECT jogos.nome_do_jogo, jogos.valor_R$
+FROM jogos
+WHERE jogos.jogo_id NOT IN 
+-- SUBCONSULTA
+(SELECT cod_promocao_jogo FROM promocao);
+
+SELECT nome_do_jogo AS 'Mais barato!!'
+FROM jogos WHERE valor_R$ = SOME (
+SELECT MIN(valor_R$) FROM jogos);
