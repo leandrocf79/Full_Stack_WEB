@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Login</title>
+</head>
+<body>
+	<a href="index.html">Home</a> / 
+			<a href="Aula1_index.html">Aula 1</a> /
+			<a href="Contato.html">Contato</a> /
+			<a href="login.html">Login</a> /
+			<a href="https://www.google.com">Site Google</a>
+			<hr>
+
+			
+	<h2>Login</h2>
+	<form> <!--     <form action="processamento.php">
+
+		"processamento.php" é a pagina criada para comparar dados de login de forma segura, será criada mais para frente no curso-->
+		Login:<br>
+		<input type="text" name="Login"><br>
+		Senha:<br>
+		<input type="password" name="Senha"> <!-- para aparecer os famosos **** tem que trocar "text" por "password"-->
+		<br><input type="submit" value="Entrar"> <!-- "submit" para enviar dados-->
+	</form>
+
+	<br><br><h2>Cadastre-se</h2>
+	<form>
+		Login:<br>
+			<input type="text" name="Login"> <br><br>
+		Sexo:<br>
+			<input type="radio" name="sexo" value="masc"> Masculino<br>
+			<input type="radio" name="sexo" value="femi"> Feminino<br>
+			<input type="radio" name="sexo" value="outr"> Outros<br>
+			<input type="radio" name="sexo" value="outr"> Prefiro não responder<br>
+		Interesses:<br>
+			<input type="checkbox" name="interesse"> Futebol<br>
+			<input type="checkbox" name="interesse"> Moda<br>
+			<input type="checkbox" name="interesse"> Cusos<br>
+			<input type="checkbox" name="interesse"> Revistas<br>
+			<input type="checkbox" name="interesse"> Jogos de azar<br>
+			<input type="checkbox" name="interesse"> Vídeos Game<br><br>
+		Estado:<br>
+			<select name="estado">
+				<option value=""></option>
+				<option value="sp">SP</option>
+				<option value="ce">CE</option>
+				<option value="mg">MG</option>
+				<option value="rs">RS</option>
+				<option value="sc">SC</option>
+				<option value="rj">RJ</option>
+			</select><br><br>
+		Observações:<br>
+			<textarea></textarea><br><br>
+			<input type="submit" name="Cadastrar">
+
+	</form>
+
+
+
+
+</body>
+</html>
