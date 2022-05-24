@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Fontes e Cores</title>
+	<style type="text/css">
+		/*cores e imagens de fundo, pode ser aplicada em body, div etc*/
+
+		div{
+			background-color: #8550F6;
+			color: white;                /* cor do texto */
+		}
+
+		body{
+			background-image: url('resources/mbross.png'); /* scroll left bottom etc*/
+			background-color: lightsteelblue;
+			background-repeat: no-repeat; /* repeat-x e outros*/
+			background-position: right top;  /* center center top down etc*/
+			background-attachment: fixed;   /* a imagem fica fixa na tela, sempre visível
+			background-attachment: scroll;     a imagem vai rolar com o texto*/
+			
+
+		}
+
+
+
+
+
+
+		.formatacao{                 /* Pode usar vários sites para pegar o cod hexadecimal para usar: 
+			                            https://html-color-codes.info/codigos-de-colores-hexadecimales/ 
+			                            ***Pode por uma imagem na aba  https://html-color-codes.info/colors-from-image/#
+			                            e selecionar a cor desejada, por exemplo, o cinza do site Amazon #232F3E, #131921*/
+			color: #232F3E;
+			background-color: #D4F0E4;
+			font-size: 30px;
+			font-weight: bold; /* NEGRITO */
+			font-family: "Arial Black", Helvetica, Arial, sans-serif;         
+														/*As fontes foram colocadas por prioridade,
+			                                            caso o aparelho do usuário não tenha uma fonte será buscada a próxima e depois uma qualquer da familia de fontes, no caso do exemplo é a familia sans-serif.
+
+			                                            Escolher fontes: 
+			                                               https://www.w3schools.com/css/css_font_websafe.asp   */
+
+		}
+		.italico{
+			font-style: italic;			
+		}
+		.negrito{
+			/* nomal, bold e intensidade de negrito opcional de 100 a 900*/
+			font-weight: 900;
+		}
+		.underline{
+			text-decoration: underline;
+			/* text-decoration: overline;*/   /* para comentários */
+			/* text-decoration: line-through;*/  /* para riscar no centro das palavras */
+		}
+		.variasFormatacoes{
+			font-style: italic;
+			font-weight: bold;
+			text-decoration: underline;
+			font-size: 20px;
+		}
+
+
+
+
+		.texto40{
+			font-size: 40px;
+			font-weight: bold;         
+
+			/*
+			px		tamanho fixo
+			% 		tamanho relativo, padrão adotado pelo broWser 
+			em 		relativo ao container pai
+*/
+		}
+		.em{
+			font-size: 1em;   /* não vai mudar nada se existir formatação pai, a preferência sempre do FILHO*/
+		}
+		.em2{
+			font-size: 2em;   /*Vai DOBRAR o tamanho do pai e manter sempre proporcional, no caso aqui fica de 40px para 80px, se alterar valor do pai(texto40) "em" muda altomaticamente sua proporção. Pode usar 1.3, 1.5 etc*/
+		}
+
+
+		#borda1{ 
+			border-color: #131921 #232F3E;
+			border-width: 20px;
+			border-style: solid;
+			font-size: 16px;   /* 16px é o padrão*/			
+		}
+
+	</style>
+</head>
+<body id="borda1">
+	<div>
+		<p class="formatacao" >Cupom de R$100 off</p>
+	</div>
+	<p class="texto40">
+		Cupom de R$100 off<br>
+	</p>
+	<div class="texto40">         <!-- pai -->
+		<p class="em">  <!-- filho -->  
+		Cupom de R$100 off
+	</p>
+		<p class="em2">  
+		Cupom de R$100 off
+	</p>
+	</div>
+	<p class="italico">
+		Teste italico 
+	</p>
+	<p class="negrito">
+		Teste negrito
+	</p>
+
+	<p class="variasFormatacoes">
+		Varias formatações agrupasdas
+	</p>
+	<p>Padrão normal de fonte sem formatações</p>
+	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
