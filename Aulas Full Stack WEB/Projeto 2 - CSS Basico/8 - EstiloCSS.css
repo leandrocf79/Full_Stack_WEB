@@ -1,0 +1,34 @@
+.conteudo{
+	border: 2px solid red;
+	/*padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px; /* espaçamento inferior
+	padding-left: 20px;*/
+
+	/*padding: 25px 20px 20px 20px; /* conf no sentido horario comecando pelo top*/
+
+	/* PODE AINDA SER FEITO COM UM VALOR PARA TODOS OS LADOS*/
+	/*padding: 20px; */
+
+	/* PODE AINDA SER FEITO COM UM VALOR PARA cima e baixo e laterais diferentes*/
+	padding: 30px 20px;
+	margin: 30px;
+	width: 250px;
+	text-align: justify;
+}
+
+.conteudo2{
+	border: 2px solid red;
+	padding: 30px 20px;
+	margin: 20px 180px;
+	width: 250px;
+	text-align: justify;
+	background: #D0F5A9;
+}
+
+h2{
+	margin: 20px;
+	border: 1px solid gray;
+	background: #A9D0F5;
+	text-align: center;
+}
