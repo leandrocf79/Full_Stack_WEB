@@ -1,4 +1,5 @@
 .conteudo1{
+
 	background: #E6E0F8;
 	border: 1px solid gray;
 	width: 220px;
@@ -43,18 +44,27 @@
 	width: 380px;
 	height: 230px;
 	text-align: justify;
+	
 	padding: 20px;
-
 	float: right;
 	margin: 2px;
 
 }
 
-.clear{
+.clearleft{
 	clear: left;	
 }
 
 p{
 	text-align: justify;
 	padding: 20px;
+}
+
+.clearboth{
+	clear: both;
+}
+
+#principal{
+		background: #BDBDBD;
+		border: 10px solid darkgray;
 }
