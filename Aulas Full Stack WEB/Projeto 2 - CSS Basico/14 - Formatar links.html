@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Formatar Links</title>
+	<style type="text/css">
+		
+		/*Manter a sequência de formatações link, visited, hover e active. Sendo que pode excluir alguns, mas mantenha a ordem*/
+		a{
+			padding: 15px 10px; /* espaçar os links*/
+			text-decoration: none; /*remove o underline*/
+		}
+		/*Primeiro estado:  links NÃO visditados.*/
+		a:link{
+			color:  darkblue;
+		}
+
+		/*Segundo estado:  links visditados.*/
+		a:visited{
+			color: orange;
+		}
+
+		/*Passar o mouse*/
+		a:hover{
+			color: silver;
+			background: grey;
+		}
+
+		/*Clicar e segurar, link ativo*/
+		a:active{
+			color: red;
+		}
+
+
+		/*Para configurações iguais pode fazer o exemplo abaixo: 
+
+		a:link a:visited {
+			color:  darkblue;
+		}  */
+
+
+
+
+
+	</style>
+</head>
+<body>
+	<a href="https://www.google.com/">Google
+	</a> |
+	<a href="https://www.tecmundo.com.br/">Tecmundo
+	</a> |
+	<a href="https://www.megacurioso.com.br//">Megacurioso
+	</a> |
+	<a href="https://www.yahoo.com.br//">Yahoo</a>
+
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Posicionamento static - relative - absolute - fixed</title>
+	<style type="text/css">
+		#container{
+			background: #fff;
+			widows: 800px;
+			margin: 10px auto;
+			padding: 10px;
+
+			position: relative;  /* deve manter relative para funcionar o
+			class: "relative"; */
+		}
+		
+		body{
+			background: #007fc7;
+		}
+		h1{
+			/* position: static;   esse é o padrão*/
+		}
+		p{
+			width: 300px;
+		}
+
+		.relative{
+			border: 1px solid red;
+			position: relative;
+			/* top, right, botton and left para usar com relative*/
+			/*top: 20px;
+			left: 100px;*/
+			bottom: -45px;
+
+			/*position: relative; sem essa opção ele alinha no body, com ela vai alinhar no container criado desde que ele também tenha relative*/
+		}
+
+		.absolute{
+			border: 2px solid orange;
+			background: #f2f2f2;
+			
+			position: absolute;
+			top: 80px;
+			right: 150px;
+		}
+
+		.fixed{
+			border: 2px solid orange;
+			background: #f2f2f2;
+			
+			position: fixed;
+			right: 30px;
+			top: -5px;
+		}
+
+
+
+
+	</style>
+
+</head>
+<body>
+	<div id="container">
+		<h1>Posicionamentos 
+			<p> Role o mouse e deminua a página para observar comportamentos
+			</p>
+		</h1>
+		<p class="absolute">
+			P1 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+		</p>
+		<p class="relative">
+			P2 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+		</p>
+		<p class="fixed">
+			P3 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+		</p>
+		<p>
+			P4 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+		</p>
+	</div>
+
+</body>
+</html>
