@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Estilizando formulários - parte 1</title>
+	<link rel="stylesheet" type="text/css" href="2- css/10-estilos.css">
+</head>
+<body>
+	<h2>Estilizando formulários - parte 1</h2>
+
+	<form>
+		<fieldset> <!-- agrupa dados semelhantes -->
+			<legend>Detalhes de contato</legend>
+
+			<div>
+				<label for="nome">Nome:</label>
+				<input type="text" name="nome" id="nome"> 
+				<!-- pode fazer de 2 maneiras para marcar o"nome" sem uso do FOR -->
+			</div>
+
+			<!--<div>
+				<label>E-mail:        pode fazer de 2 maneiras para marcar o"nome"
+				<input type="text" name="e-mail" id="e-mail"> 
+				</label>
+			</div> -->
+			<div>
+				<label for="email">E-mail:</label>
+				<input type="text" name="email" id="email"> 
+				<!-- pode fazer de 2 maneiras para marcar o"nome" sem uso do FOR -->
+			</div>
+
+			<div>
+				<label for="url">URL:</label>
+				<input type="text" name="url" id="url"> 
+				<!-- pode fazer de 2 maneiras para marcar o"nome" sem uso do FOR -->
+			</div>
+			
+		</fieldset>
+		<fieldset>
+			<legend>Comentarios</legend>
+			<div>
+				<label for="mensagem">Mensagem:</label>
+				<textarea name="mensagem" id="mensagem"></textarea>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>lembrar de mim</legend>
+			<div>
+				<label>
+					<input class="radio" type="radio" name="lembrar" id="lembrar">Sim
+				</label>
+			</div>
+			<div>
+				<label>
+					<input class="radio" type="radio" name="lembrar" id="lembrar">Não
+				</label>
+			</div>
+		</fieldset>
+
+	</form>
+
+</body>
+</html>
