@@ -1,0 +1,90 @@
+/* Formatação básica da pagina FIXA */
+
+body{
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	background: #f2f2f2
+}
+
+#container{
+	width: 90%;     /*Pode por 85%, 100%; tambem. 
+						720px;  FIXO */ /* vão sobrar 20px entre conteudo e navegação*/
+	
+	margin: 0 auto;   /* quando tiver auto para laterais vai centralizar o conteudo*/
+	background: #fff;
+
+	min-width: 720px; /* Define a largura mínima para o texto não 
+	sair das caixas quando minimizar a tela e comprir o conteúdo*/ 
+
+	max-width: 1300px; /*para um tamanho máximo de expansão
+						caso a tela seja extremamente larga*/
+}
+
+#marca{
+	height: 100px;
+	background: #9e9e9e;
+	text-align: center;
+	line-height: 100px;
+}
+
+#conteudo{
+	width: 75%;    /*520px; Equivalente a 520 FIXO */
+	float: right; /* dica de usabilidade. Conteudo fica
+	 acima de Navegação, mas será exibido primeiro*/
+}
+
+#navegacao{
+	width: 23% ;     /*180px;   FIXO */
+	float: left;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background: #d1d1d1;
+}
+
+
+#rodape{
+	clear: both;
+	background: #c4c4c4;
+	padding: 5px;
+}
+
+
+
+/* Formatação de conteudos */
+
+
+#navegacao ul{
+	list-style: none;
+}
+
+#navegacao li a{
+	text-decoration: none;
+}
+
+
+#conteudo_principal{
+	width:  63%;    /*320px;   520 foi dividiso para 320 e 180, sobrando 20 */
+	float: left;
+}
+
+#conteudo_secundario{
+	width: 34%;       /*180px;    520 foi dividiso para 320 e 180, sobrando 20 */
+	float: right;
+	background: #d1d1d1;
+}
+
+#conteudo_secundario h1,
+#conteudo_secundario h2,
+#conteudo_secundario h3,
+#conteudo_secundario p
+{
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+
+
+
+
+p{
+	text-align: justify;
+}
