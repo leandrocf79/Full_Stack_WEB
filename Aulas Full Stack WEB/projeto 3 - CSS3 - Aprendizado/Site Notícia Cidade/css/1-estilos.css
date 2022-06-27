@@ -67,6 +67,18 @@ ul{ /* remover formatação padrão*/
 }
 
 
+a:link, a:visited{
+	color: #b10333;  /* vai ser preciso fazer uma correção em 
+	"lista-noticias li a p" para corrigir cor do texto que tb foi alterado*/
+	padding: 2px;
+}
+
+
+p{
+	text-align: justify;
+}
+
+
 /* marcar como aba selecionada, usar uma class no body e id no link*/
 body.home #navegacao a#home,
 body.brasil #navegacao a#brasil,
@@ -209,5 +221,75 @@ input.submit{
 	color: #fff;
 	background-color: #b10333;
 	border: 2px solid #870529;
-	padding: 5px;
 }
+
+
+/* formatação área principal */
+
+
+/* img{       sempre formatação padrão e depois criar classes
+	border: 2px solid #dfdfdf;
+}*/
+
+img.imagem-principal{
+	width: 98%;
+	border: 2px solid #dfdfdf;
+}
+
+h3{
+	text-transform: uppercase;
+	display: inline;
+	font-size: 0.9em;
+	padding: 3px;
+}
+
+.destaque h3{  /* Todo h3 que tiver dentro de .destaque recebe a formatação*/
+	background: #b10333;
+	color: #fff;
+}
+
+.entrevista h3{  /* Todo h3 que tiver dentro de .destaque recebe a formatação*/
+	background: #de003e;
+}
+
+
+
+
+/* formatação lista-noticias, abaixo área principal */
+
+#lista-noticias li{
+	padding: 2px;
+	border-bottom: 1px solid #ccc;
+	height: 63px;
+}
+
+#lista-noticias li a {
+	text-decoration: none;
+}
+
+
+#lista-noticias li a p{   /* vai ser preciso fazer uma correção em 
+	"lista-noticias li a p" para corrigir cor do texto que tb foi alterado em
+	"a:link, a:visited" */
+	font-size: 0.7em;
+	color: #000;
+}
+
+#lista-noticias li:hover{
+	background: #eee;
+}
+
+
+#lista-noticias li a h3{
+	font-size: 0.8em;
+	padding: 0;
+	color: #3e7ab9;
+}
+
+
+#lista-noticias li a img{
+	float: left;
+	margin: 5px;
+}
+
+
