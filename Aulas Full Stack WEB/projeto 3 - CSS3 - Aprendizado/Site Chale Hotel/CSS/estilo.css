@@ -1,0 +1,235 @@
+/* Estrutura do site
+*/
+* {
+	margin:0;
+	padding: 0;            
+}
+
+body {
+	font-family: Helvetica, "Trebuchet MS", sans-serif;
+	background: #fff url(../imagens/bg.png);
+	margin: 15px;
+}
+
+#container {
+	background: #ede9cc url(../imagens/bg-container.png) top center repeat-y;
+	margin: 0 auto;      /* Vai centralizar ao expandir a pagina  */
+	min-width: 740px;       /* Para limitar a diminuição da tela  */
+	max-width: 1180px;     /* Para limitar a expansão da tela  */
+}
+
+#topo {
+	position: relative; /*  Para ficar atrás da outra imagem */
+	background: #dbcd87;
+	height: 15.4em;
+	min-height: 250px;
+}
+
+#area-logo {
+	position: absolute; /* Vai sobrepor a imagem Esq. do menu  */
+
+	background: url(../imagens/topo-imagem-principal.png) no-repeat;
+					   /* Se usar a imagem-princiapl2.png vai dar um 
+					   efeito interessante se aumentar a largura da pagina para
+					   > 740px, mas neste caso ficou melhor como está */
+
+
+	width: 100%;
+	height: 250px; /*  É o tamanho da altura da imagem, ver em propriedades/detalhes */
+	top: 0;
+	left: 0;
+	z-index: 1;     /*  Imagem vem posta 1º na sobreposição*/
+}
+
+.logo a {
+	position: absolute;  /* Vai sobrepor a imagem Esq. do menu  */
+	top: 15px;
+	left: 15px;
+	z-index: 3;  /*  Imagem vem posta 3º na sobreposição*/ */
+	background: url(../imagens/logo.png) no-repeat;
+	width: 151px;
+	height: 66px;
+	text-indent: -9000px;
+}
+
+#area-menu {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: url(../imagens/topo-imagem-lateral.png) no-repeat; 
+	width: 450px;
+	height: 250px;
+	z-index: 2;      /*  Imagem vem posta 2º na sobreposição*/
+}
+
+#conteudo-menu {
+	margin-left: 90px;
+	margin-right: 15px;
+	padding-top: 15px;
+}
+
+#menu-locais {
+	border-bottom: 1px solid #b5ab56;
+	border-top: 1px solid #b5ab56;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-size: 0.7em;
+	color: #8b8448;
+}
+
+#menu-locais .locais {
+	float: left;
+	line-height: 2.1em; /* Vai centralizar a altura do texto com nomes de cidades no menu */  
+}
+
+a {
+	text-decoration: none;
+}
+
+a.reserva {
+	text-transform: uppercase;
+	background: #a29750;
+	color: #fff5b0;
+	padding: 5px 10px;
+	float: right;
+}
+
+/* Barra de navegação vertical
+*/
+#menu {
+	margin-top: 15px;
+}
+
+ul {
+	list-style: none;
+}
+
+ul#navegacao {
+	float: left;
+}
+
+ul#navegacao a {
+	text-transform: uppercase;
+	font-size: 0.8em;
+	padding: 5px;
+	color: #6e672c;
+	line-height: 30px;     /* Distanciar a altura entre as palavras do menu  */  
+}
+
+ul#navegacao a:hover {  /* Vai criar hover apenas sobre cada palavra e não no Block todo  */  
+	background: #fdf6be;
+}
+
+.depoimento {
+	width: 226px;
+	height: 164px;
+	float: right;
+}
+
+/* Área de conteúdos
+************************/
+#area-principal {
+	float: left; /* À esquerda e 50% */
+	width: 50%;
+	background: url(../imagens/bg-area-principal.png) top left repeat-x;
+	padding: 15px 0px;
+}
+
+#area-lateral {
+	float: right; /* À direita e 50% */
+	width: 50%;
+	background: url(../imagens/bg-area-lateral.png) top left repeat-x;
+	padding: 20px 0px;
+}
+
+.conteudo {
+	margin: 0 auto;
+	width: 90%;
+}
+
+#rodape {
+	clear: both;
+	padding: 16px;
+	background: #fff url(../imagens/bg-rodape.png) repeat-x top;
+	color: #7d7640;
+}
+
+
+/* Formatações de textos
+*/
+h2 {
+	color: #7d7640;
+	font-size: 1.1em;
+	padding: 5px 0px;
+}
+
+p {
+	font-size: 1em;
+	margin-bottom: 10px;
+}
+
+/* Formatações da area lateral
+*/
+#beneficios li {
+	padding: 8px;
+	border-bottom: 1px solid #f3efcb;
+	height: 6em;
+}
+
+#beneficios li a img {
+	float: left;
+	margin-right: 8px;
+}
+
+#beneficios li a p {
+	color: #000;
+	font-size: 0.8em;
+}
+
+#beneficios li a h3 {
+	font-size: 1em;
+	color: #615b2d;
+	padding: 5px 0;
+	background: url(../imagens/ornamento.png) no-repeat center right;
+}
+
+#beneficios li:hover {
+	background: #f6f3d6;
+	cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
