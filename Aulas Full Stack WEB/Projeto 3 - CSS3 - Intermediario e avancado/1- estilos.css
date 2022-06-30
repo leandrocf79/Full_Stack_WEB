@@ -1,0 +1,56 @@
+/* HERANÇA */
+
+body{
+	color: red;
+
+	/* Esses abaixo não são herdados, 
+	todos teriam bordas se usasse o 
+	" *{border: 1px solid blue;} " 
+	que é para config. geral*/
+
+	border: 1px solid blue;
+	background: lightcyan;
+}
+
+
+
+
+/* ESPECIFICIDADE */
+
+/* Seletores iguais sempre o último será aplicado:
+
+p{color: blue;}
+p{color: red;}
+
+vai exibir RED
+ */
+
+p{color: blue !important;}   /* É bom evitar usar !important, muita cautela */
+p{color: red;}
+
+
+
+.pagina{
+
+}
+
+
+
+/* Seletor mais expecífico terá prioridade sobre os gerais mesmo colocado antes */
+
+h2{   /* 3º */
+	color: hotpink;
+} 
+
+*{   /* 4º */
+	color: yellow;
+}
+
+
+h2.verde{   /* 2º */
+	color: green;
+}
+
+h2#prateado{ /* 1º */
+	color: silver;   /* id é mais específico que class */
+}

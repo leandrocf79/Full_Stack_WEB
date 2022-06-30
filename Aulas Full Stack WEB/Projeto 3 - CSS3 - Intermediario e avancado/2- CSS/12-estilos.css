@@ -1,0 +1,42 @@
+.caixa{
+	width: 400px;
+	background: #dedede url(../resources/12-imagens/topo.png) no-repeat top center;
+
+}
+
+.caixa h2{
+	text-align: center;
+	padding: 10px 20px 0 20px;
+}
+.caixa p{
+	background: url(../resources/12-imagens/baixo.png) no-repeat bottom center;
+	padding: 0 20px 20px 20px;
+	text-align: justify;
+}
+
+
+/*  caixa 2  */
+
+.caixa2{
+	width: 400px;
+	background: #dedede url(../resources/12-imagens/fundo-arredondamento.png) repeat-y;
+
+}
+
+.caixa2 h2{
+	text-align: center;
+	padding: 10px 20px 0 20px;
+	background: url(../resources/12-imagens/topo2.png) no-repeat top left;
+}
+.caixa2 p{
+	padding: 0 20px;
+	margin-bottom: 0;
+	text-align: justify;
+}
+
+.caixa2 .ultimo{
+	background: url(../resources/12-imagens/baixo2.png) no-repeat bottom center;
+	width: 400px; /* tamanho da imagem */
+	height: 24px;
+
+}
