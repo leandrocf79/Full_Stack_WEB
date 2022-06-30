@@ -1,0 +1,50 @@
+#caixa{
+	width: 300px;
+	height: 300px;
+	background: #b9c941;
+	padding: 20px;       /* vai colocar mais 20px de cada lado totalizando 340px,
+	para resolver isso veja "caixa 3e 4"*/
+	margin: 20px;
+	-webkit-border-radius: 10px 50px 80px 100px;
+	-moz-border-radius: 10px 50px 80px 100px;
+	-webkit-border-radius: 10px 50px 80px 100px;
+
+	border-radius: 10px 50px 80px 100px; /* Faz o arredondamento das bordas*/
+
+}
+
+
+#caixa2{
+	width: 300px;
+	height: 300px;
+	background: #b9c9;
+	padding: 20px;
+
+	border-radius: 150px; /* 150px fica redondo */
+}
+
+.arredondamento{
+	border-radius: 150px;
+}
+
+
+#caixa3{
+	width: 300px;
+	height: 300px;
+	background: #b9c9;
+	margin: 50px;
+	padding: 50px;
+}
+
+#caixa4{
+	width: 300px;
+	height: 300px;
+	background: #b9c9;
+	margin: 50px;
+	padding: 50px;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+
+	box-sizing: border-box; /*mantem o tamanho padrão width e heigth sem somar o padding*/
+}

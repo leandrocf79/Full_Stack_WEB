@@ -1,0 +1,46 @@
+#caixa{
+	width: 300px;
+	height: 300px;
+	background: url("../imagem/camera.png");
+}
+
+
+
+/*
+https://www.w3schools.com/css/css_colors.asp
+https://www.w3schools.com/css/css3_colors.asp
+https://www.w3schools.com/css/css3_gradients.asp
+*/
+#caixa h1{
+	background: rgba(255, 255, 255, 0.5);
+}
+
+
+#caixa2{
+	width: 300px;
+	height: 300px;
+	background: linear-gradient(red, blue, yellow, #ccc);
+}
+
+#caixa3{
+	width: 300px;
+	height: 300px;
+	background: linear-gradient( to left, red, blue, yellow, #ccc);
+	/*to right, button, top, left, --> 90deg, 120deg etc */
+}
+
+#caixa4{
+	width: 300px;
+	height: 300px;
+	background: linear-gradient( 120deg, red, blue, yellow, #ccc);
+	/*to right, button, top, left, --> 90deg, 120deg etc */
+}
+
+#caixa5{
+	width: 300px;
+	height: 300px;
+	background: radial-gradient( red, blue, yellow, #ccc);
+	/*   https://www.w3schools.com/css/css3_gradients_radial.asp
+
+	to right, button, top, left, --> 90deg, 120deg etc */
+}
