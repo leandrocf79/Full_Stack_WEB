@@ -1,0 +1,67 @@
+/*    https://www.w3schools.com/css/css3_animations.asp   */
+
+@keyframes animacao-caixa{
+	
+	from{   /* formatação inicial */
+		background: yellow;
+		border-radius: 0;
+		top: 0;
+		left: 0;
+	}
+
+	
+	to{      /*formatação final */
+		background: green;
+		border-radius: 300px;
+		top: 250px;
+		left: 250px;
+	}
+}
+
+
+/*um exemplo para navegadores em versões mais antigas
+-webkit-
+-moz-
+-o-
+-webkit-   */
+-moz-@keyframes animacao-caixa{
+	
+	from{   /* formatação inicial */
+		background: yellow;
+		border-radius: 0;
+		top: 0;
+		left: 0;
+	}
+
+	
+	to{      /*formatação final */
+		background: green;
+		border-radius: 300px;
+		top: 250px;
+		left: 250px;
+	}
+}
+
+
+
+
+
+#caixa{
+	width: 300px;
+	height: 300px;
+	background: red;
+
+	position: relative; /* para poder movimentar a caixa usando top e left*/
+
+	/*
+	animation-name: animacao-caixa;
+	animation-duration: 2s; 
+	animation-delay: 1s;             <--intervalo entre as repetições
+	animation-iteration-count: 23;   <--repetições
+	animation-direction: alternate;  <--volta para o estado inicial
+
+
+ ---- tudo isso acima pode ser feito em um comando ----*/
+
+ animation: animacao-caixa 2s 1s 23 alternate;
+}

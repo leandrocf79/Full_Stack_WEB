@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Novas tags input</title>
+	
+	<link rel="stylesheet" type="text/css" href="css/Normalize-css.css">
+	<link rel="stylesheet" type="text/css" href="css/8-estilos.css">
+
+
+</head>
+<body>
+
+	<form>
+		<label for="nome">Nome:</label>
+		<input type="text" name="nome"  id="nome">
+		<br><br>
+
+		<label for="email">E-mail:</label>
+		<input type="text" name="email"  id="email"> 
+		<br><br>
+		<input type="submit" name="" value="Enviar">
+
+	</form>
+
+	<form id="caixa">  <!-- Alguns recursos fora tirados com uso de required-->
+		<label for="nome">Nome:</label>
+		<input type="text" id="nome" required> <!--required solicita o preenchimento caso deixe em braco-->
+		<br><br>
+
+		<label for="email">E-mail:</label>
+		<input type="text" id="email" required autofocus> <!--autofocus marca um campo --> 
+		<br><br>
+		
+
+		<label for="numero">Número:</label>
+		<input type="number" id="numero" min="3" max="50" step="5">
+		<br><br>
+
+
+		<label for="url">Url:</label>
+		<input type="url" id="url"  placeholder="Ex: http://www...">
+		<br><br>
+
+
+		<label for="pesquisa">Pesquisa:</label>
+		<input type="search" id="pesquisa">
+		<br><br>
+
+
+		<label for="range">Range:</label>
+		<input type="range" id="range" min="1" max="5" value="4">
+		<!-- è possivel por (min="1" max="5") e valor inicial (value="3") -->
+		<br><br>
+
+
+		<label for="data">Data:</label>
+		<input type="date" id="data">
+		<br><br>
+
+
+		<label for="cor">Cor:</label>
+		<input type="color" id="cor">
+		<br><br>
+
+
+		<input type="submit" name="" value="Enviar">
+		<br><br>
+	</form>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Flexbox layout</title>
+
+	<style type="text/css">
+		
+		#conteudo{
+			background: #dcdcdc;
+			height: 400px;
+			/*width: 400px;*/
+			display: flex;  /* Veja a diferença entra flex e block.
+			
+			Testar cada um: row, row-reverse, column, column-reverse */
+			flex-direction: row-reverse;
+
+
+			/* Quebras de layout: nowrap, wrap, wrap-raverse */
+			flex-wrap: nowrap; /*nowrap não permite quebrar a largura caso use uma valor maior que o apropriado*/
+			flex-wrap: wrap; /*vai ajustar ao tamanho da área, se ajusta*/
+
+
+			justify-content: space-around; /* flex-start, flex-end, center, 
+			space-between(MUITO INTERESANTE), space-around */
+
+
+			align-items: baseline; /* baseline, stretch, flex-start, flex-end, center */
+
+
+
+		}
+
+		.item{
+			background: white;
+			border: 1px solid gray;
+			margin: 5px;
+			/*width: 100px;
+			height: 100px;*/
+		}
+
+	</style>
+</head>
+<body>
+
+	<h1>Flexbox</h1>
+	<div id="conteudo"> <!-- inicio cantainer -->
+		<div class="item" style="padding-top: 60px;">01</div>
+		<div class="item">02</div>
+		<div class="item">03</div>
+		<div class="item">04<br>Mais conteudo de texto</div>
+	</div><!-- fim cantainer -->
+
+</body>
+</html>

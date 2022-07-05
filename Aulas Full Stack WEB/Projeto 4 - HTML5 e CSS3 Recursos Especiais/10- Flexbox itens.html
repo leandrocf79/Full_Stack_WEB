@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Flexbox layout</title>
+
+	<style type="text/css">
+		
+		#conteudo{
+			background: #dcdcdc;
+			height: 400px;
+			/*width: 400px;*/
+			display: flex;  /* Veja a diferença entra flex e block.*/
+			
+			
+		}
+
+		.item{
+			background: white;
+			border: 1px solid gray;
+			margin: 5px;
+			width: 150px;
+			height: 100px;
+
+			/*   Uma dica para compatibilidade:  após criar todo o conteúdo com flex pode copiar e colar neste site para pegar o "modo compativel" com outros navegadores     https://autoprefixer.github.io/;
+
+			flex-grow: 0;
+			flex-shrink: 1;
+			flex-basis: 100px; pode ser usado como width: ou se existir width pode por "auto"; 
+
+			--- essa parte acima fica: 
+				background: white;
+			border: 1px solid gray;
+			margin: 5px;
+			width: 150px;
+			height: 100px;
+			-webkit-box-flex: 0;
+			    -ms-flex-positive: 0;
+			        flex-grow: 0;
+			-ms-flex-negative: 1;
+			    flex-shrink: 1;
+			-ms-flex-preferred-size: 100px;
+			    flex-basis: 100px; 
+			*/
+
+			
+		}
+
+		.ordem1{
+			order: 1;
+		}
+		.ordem2{
+			order: 2;
+		}
+		.ordem3{
+			order: 3;
+		}
+		.ordem4{
+			order: 4;
+		}
+
+		.ordem-1{
+			order: -1;
+		}
+
+
+		.item1{
+			flex-grow: 1;/*2 é o dobro do tamanho. Ocupa todo espaço e é líquido, pode tpor em todos os itens*/
+		}
+
+		.item2{
+			flex-shrink: 5;/*define tamanho mínimo, minimize a tela para observar e encolha o tamanho*/
+		}
+
+
+
+	</style>
+</head>
+<body>
+
+	<h1>Flexbox</h1>
+	<div id="conteudo"> <!-- inicio cantainer -->
+		<div class="item ordem2 item1">01<br>flex-grow</div>
+		<div class="item ordem3 item2">02<br>flex-shrink</div>
+		<div class="item ordem4">03</div>
+		<div class="item ordem1">04</div>
+
+		<div class="item ordem-1">05</div>
+	</div><!-- fim cantainer -->
+
+</body>
+</html>
