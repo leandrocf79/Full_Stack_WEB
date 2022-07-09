@@ -1,0 +1,75 @@
+#home {
+	background: #ffc107;
+	color: white;
+}
+
+.caixa {
+	padding: 60px 0;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+footer p a {
+	margin: 5px 15px;
+}
+
+
+
+
+
+
+
+
+
+/* ANIMAÇÃO 1 */
+
+@keyframes animacao-caixa{
+	
+	from{   /* formatação inicial */
+		border-radius: 3px;				
+	}
+
+	
+	to{      /*formatação final */
+		border-radius: 300px;
+		padding: 0px 0px 0px 20px;
+	}
+}
+
+
+#animacao{
+	position: relative; /* para poder movimentar a caixa usando top e left*/
+
+	/*
+	animation-name: animacao-caixa;
+	animation-duration: 2s; 
+	animation-delay: 1s;             <--intervalo entre as repetições
+	animation-iteration-count: 23;   <--repetições
+	animation-direction: alternate;  <--volta para o estado inicial
+
+
+ ---- tudo isso acima pode ser feito em um comando ----*/
+
+ animation: animacao-caixa 8s 1s 300 alternate;
+}
+
+
+
+
+/* ANIMAÇÃO 2        https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay*/
+
+
+.animacao2 {
+  animation-duration: 3s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 100%;
+  }
+
+  to {
+    margin-left: 0%;
+  }
+}
