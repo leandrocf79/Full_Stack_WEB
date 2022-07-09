@@ -57,13 +57,7 @@ footer p a {
 
 /* ANIMAÇÃO 2        https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay*/
 
-
-.animacao2 {
-  animation-duration: 3s;
-  animation-name: slidein;
-}
-
-@keyframes slidein {
+@keyframes animacao-caixa2 {
   from {
     margin-left: 100%;
     width: 100%;
@@ -73,3 +67,32 @@ footer p a {
     margin-left: 0%;
   }
 }
+#animacao2 {
+  animation-duration: 3s;
+  animation-name: slidein;
+  animation: animacao-caixa2 8s 1s;
+}
+
+
+
+
+
+/* ANIMAÇÃO 3  */
+
+@keyframes animacao-caixa3{
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+
+}
+
+#animacao3 {
+  
+ animation: animacao-caixa3 8s 1s;
+}
+
+
