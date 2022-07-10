@@ -1,0 +1,133 @@
+/*
+function funcao(c){
+  let a =3
+  let b =4
+  valor = a + b + c 
+  return valor
+}
+
+let k=7000
+let abc = funcao(k) + valor
+console.log(abc)
+
+//Números randomicos de 5 a 10
+Math.floor(Math.random()  * 6) +5;
+
+
+const nome = 'Leandro'
+const num = 1979
+const anoAtual = 2022
+// Concatenação: Sinal grave usado em crase   `${}` 
+const texto = `O ${nome} nasceu em ${num} e sua idade é ${anoAtual - num}`
+console.log(texto)
+
+
+let numero = 1
+while (numero <= 4){
+  console.log('Comeu ' + numero + ' pedaço da pizza.')
+  //console.log(`Comeu ${numero} pedaço da pizza.`)
+  numero ++
+}
+
+
+
+let post = ['postagem 1', 'postagem 2', 'postagem 3', 'postagem 4']
+let num1 = 0
+
+while (num1 < 5){
+  console.log('Imagem '+ (num1 + 1))
+  console.log(`Sua ${post[num1]} foi enviada.`)
+  console.log('-----------------------------------')
+  num1 ++
+}
+
+
+//UM MODO MAIS INTELIGENTE DE SE FAZER O EXERCÍCIO ACIMA:   
+
+let post = ['postagem 1', 'postagem 2', 'postagem 3', 'postagem 4']
+const totalPost = post.length
+let num1 = 0
+
+while (num1 < totalPost){
+  console.log('Imagem '+ (num1 + 1))
+  console.log(`Sua ${post[num1]} foi enviada.`)
+  console.log('-----------------------------------')
+  num1 ++
+}
+console.log(totalPost)
+
+
+
+
+//Pode ser usando Do While:
+
+let post = ['postagem 1', 'postagem 2', 'postagem 3', 'postagem 4']
+const totalPost = post.length
+let num1 = 0
+
+do{
+  console.log('Imagem '+ (num1 + 1))
+  console.log(`Sua ${post[num1]} foi enviada.`)
+  console.log('-----------------------------------')
+  num1 ++
+}while (num1 < totalPost)
+console.log(totalPost)
+
+
+
+// Ou ainda usado For:
+
+let post = ['postagem 1', 'postagem 2', 'postagem 3', 'postagem 4']
+const totalPost = post.length
+
+for (let num1 = 0; num1 < totalPost; num1 ++){
+  console.log('Imagem '+ (num1 + 1))
+  console.log(`Sua ${post[num1]} foi enviada.`)
+  console.log('-----------------------------------')
+}
+console.log(totalPost)
+
+
+//O melhor de todos até agora!!!
+let post = ['postagem 1', 'postagem 2', 'postagem 3', 'postagem 4']
+for (indice in post){
+  console.log('Imagem '+ (indice))
+  console.log(`Sua ${post[indice]} foi enviada.`)
+  console.log('-----------------------------------')
+}
+console.log(totalPost)
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
