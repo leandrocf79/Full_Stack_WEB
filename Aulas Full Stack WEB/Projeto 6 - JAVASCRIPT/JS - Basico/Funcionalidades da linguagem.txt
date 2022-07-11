@@ -97,10 +97,82 @@ for (indice in post){
 }
 console.log(totalPost)
 
+
+
+let salario = 500
+let hExtra = 200
+let imposto = -0.08
+salario += hExtra
+salario += hExtra * imposto
+
+//Operadores
+++hExtra   //1º incrementa e depois exibe valor 
+hExtra++   //1º exibe valor e depois incrementa
+++hExtra 
+
+*/
+/*
+// --------------------------
+//      let OU var  ??
+
+//LET - Escopo glogal, função e bloco
+//var - Escopo glogal e função 
+
+//let num1 = 1  //GLOBAL - Todos podem ver
+//var num2 = 2  //GLOBAL - Todos podem ver
+
+{
+  let num1 = 3  // LET dentro do bloco fica visível apenas dentro dele
+	var num2 = 4  // Var mesmo dentro do bloco fica visivel para todos
+ 	console.log(num1)
+  console.log(num2)
+}
+//console.log(num1)  //ERRO
+//console.log(num2)
+
+
+function calc(){
+ //let num1 = 5    //Se apagar LET funciona
+	  num1 = 6      //  apagar esse e observar
+}
+calc() //ERRO - não sobrepõe valor
+
+
+function calcular(){
+  var num2 = 7  //Se apagar VAR funciona
+}
+calcular()  //ERRO - não sobrepõe valor
+
+
+console.log(num1)  //ERRO - só vai funcionar com a variável GLOBAL
+console.log(num2)
+
 */
 
 
 
+// Função ANÔNIMA
+const somar = function(a, b){
+  console.log(a+b)
+}
+
+// Função ARROW (SETA)
+/*
+const subtrair = (a, b) =>{
+  console.log(a-b)
+}       					Uma outra forma:
+*/
+const subtrair = (a, b) => console.log(a-b)
+const exibir = (n) => console.log(n)
+const multplicar = (a, b) => a*b
+
+somar(1, 4)
+subtrair(1, 4)
+exibir('Leandro')
+multplicar(3, 4)
+
+	let resultado = multplicar(3, 5)
+	console.log(resultado)
 
 
 
@@ -111,23 +183,3 @@ console.log(totalPost)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.
