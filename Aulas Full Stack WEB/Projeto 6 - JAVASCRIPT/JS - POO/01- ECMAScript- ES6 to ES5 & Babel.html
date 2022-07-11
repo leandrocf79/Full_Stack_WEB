@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+	<!-- Load Babel -->
+	<!-- v6 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> -->
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	<!-- Your custom script here -->
+	<script type="text/babel">
+		const getMessage = () => "Deu certo";
+		document.getElementById('output').innerHTML = getMessage();
+	</script>
+
+</head>
+<body>
+
+	<div id="output"></div>
+
+	<!-- Alguns navegadores não vão suportar a tecnologia ES6, mas é mais facil de 
+	trabalhar, é bom converter para ES5 para expandir para o maior número de navegadores. Esse conteúdo vai converter automaticamnte. 
+	https://babeljs.io/setup#installation
+
+-->
+</body>
+</html>
