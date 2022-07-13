@@ -526,7 +526,7 @@ class Papagaio extends Passaro{
 const cao = new Cao()
 const passaro = new Passaro()
 const papagaio = new Papagaio()
-8?
+*/
 //-----------------------
 /*
 passaro.cor
@@ -548,19 +548,265 @@ const papagaio = new Papagaio("rosa", 27, 8, "Asia", "sabe cantar bonito")
 console.log(papagaio)
 
 
-//---------------------------------------------------------(3)Outro exemplo:
+
+//---------------------------------------------------------
 //Atributo e método dinâmicos
 
 
+// Objetos literais - melhorias
+
+
+//let nome = "Notebook"
+//let preco = 1200
+/*
+const produto = {
+  nome,   //Nas versões atuais é o mesmo que: nome: nome
+  preco,
+  exibirProduto(){
+    console.log(`${this.nome}, ${this.preco}, ${this.categoria}`)
+  }
+}
+*/
+
+class Produto {
+  constructor(){
+    this.nome = "Notebook"
+    this.preco = 1200
+  }
+}
+
+const produto = new Produto()
+const produto2 = new Produto()
+
+const pro = produto
+pro.preco = 2000
+produto.preco = 3000
+
+console.log(pro.preco)
+console.log(produto.preco)
+
+produto.nome
+delete produto.nome
+produto.nome
+/*
+produto.categoria = "Eletrônicos"
+produto.exibirPreco = function(){
+  console.log(`Preço: ${this.preco}`)
+}
+
+produto.nome = "Notebook"
+produto.exibirPreco()
+//produto.exibirProduto()
+//console.log( produto.categoria )
+/*
+produto.exibirProduto()
+console.log( produto.nome )
+*/
+
+
+//---------------------------------------------------------
+// Objetos e constantes
+
+
+//produto -> 1635 -> {nome: "Notebook"}
+
+const produto = {
+  nome: "Notebook",
+  preco: ""
+}
+
+//Object.freeze( produto )   // TENTE ESTE PARA VER. Vai "congelar" a informação primaria
+produto.nome = "Celular"
+produto.preco = 120
+produto.preco = 2300
+
+console.log(produto)
+
+//---------------------------------------------------------
+
+// Tratamento de erros com Try Catch
+
+function contarQuantidadeLetras( produto ){
+  try {
+    console.log( produto.nome.length )
+    console.log("Teste ok")
+  } catch( erro ){
+   // tratarErro( erro )    //Aqui entra no  function tratarErro( erro )
+    console.log("Erro ao processar, código erro: 164")
+    
+  } /*finally {
+    console.log("finally")   // se usar o "try catch" não precisa do finally que será sempre executado
+  }*/
+}
+
+function tratarErro( erro ){
+  throw new Error("Código erro: 164")
+}
+
+const produto = {
+  nom: "Notebook",    // "nome" apresenta erro
+  preco: 1200
+}
+
+contarQuantidadeLetras(produto)
 
 
 
+//----------------------------------------------------------
+
+// Funções construtoras
+
+const Hotel = function(){
+  
+  this.nome = "Hotel do Jamilton"
+  this.quantidadeSuites = 30
+  this.suitesOcupadas = 25
+  
+  this.reservar = function(){
+    this.suitesOcupadas++     // incrementa
+    console.log("ocupadas: " + this.suitesOcupadas)
+  }
+  
+}
+
+const hotel = new Hotel()
+hotel.reservar()
+hotel.reservar()
+hotel.reservar()
+
+hotel.nome = "Jose"
+console.log(hotel.nome)
+
+typeof Hotel
+typeof hotel
+typeof hotel.nome
+typeof hotel.quantidadeSuites
 
 
 
+//--------------------------------------------------------------------
+
+// Funções construtoras - encapsulamento
+const Hotel = function(){
+  
+  this.nome = "Hotel do Jamilton"
+  this.quantidadeSuites = 30
+  //this._suitesOcupadas = 25
+  let suitesOcupadas = 25  // vai funcionar como se fosse private
+  
+  this.reservar = function(){
+    if( suitesOcupadas < this.quantidadeSuites ){ // não vai incrementar alem da capacidade
+      suitesOcupadas++
+      console.log("ocupadas: " + suitesOcupadas)
+    }else{
+      console.log("Estamos lotados")
+    }
+  }
+  
+}
+
+const hotel = new Hotel()
+hotel.reservar()
+hotel.reservar()
+hotel.reservar()
+hotel.reservar()
+hotel.reservar()
+hotel.suitesOcupadas = 8 // não será possivel alterar pelo usuáio devido ao uso de "let"
+hotel.reservar()
+hotel.reservar()
+hotel.reservar()
+ 
+//-------------------------------------------------------------
+
+// Funções Factory
 
 
 
+const produto1 = {
+  nome: "Notebook",
+  preco: 1200
+}
+
+const produto2 = {
+  nome: "Notebook",
+  preco: 1200
+}
+
+const ProdutoFactory = function(nome, preco){
+  
+  return {
+    nome,
+    preco,
+    recuperarAvaliacoes(){
+      console.log(`Avaliações para ${this.nome}: ${this.preco}`)
+    }
+  }
+  
+}
 
 
+const produto = ProdutoFactory("Notebook", 1200)
+produto.recuperarAvaliacoes()
+
+const produtoNovo = ProdutoFactory("Celular", 1200)
+console.log(produtoNovo)
+
+
+//-------------------------------------------------------------
+//Protótipos
+
+//Descendentes de Object
+Object.prototype
+
+const obj = {
+}
+
+//console.log( obj.toString() )
+//console.log( obj.__proto__ )
+//console.log( obj.__proto__ == Object.prototype )
+
+class Carro {
+  constructor(){
+    this.placa = "AMP-1230"
+  }
+}
+
+class Bmw extends Carro {
+  constructor(){
+    super()
+    this.nome = "BMW 320i 300 cavalos"
+  }
+}
+/*
+const objBmw = new Bmw()
+console.log(objBmw.placa)
+console.log(objBmw.nome)
+*/
+//Prototype Chain - encadeamento de objetos
+const veiculo = {
+  motor: "50 cavalos" 
+}
+
+const carro = {
+  placa : "AMP-1230",
+  motor: "300 cavalos",
+  __proto__: veiculo,
+  acelerar: function(){
+    console.log( "Acelerar" )
+  }
+  
+}
+
+const bmw = {
+  nome : "BMW 320i",
+  __proto__: carro
+}
+
+console.log( bmw.toString() )
+
+
+bmw.nome
+bmw.motor
+bmw.placa
+bmw.acelerar()
 
