@@ -1,0 +1,122 @@
+//Parâmetros padrão
+
+//   isNaN verifica se não é número9is Not A Namber)
+
+function somar(numero1, numero2){
+  numero1 = isNaN(numero1) ? ", (1)Digitar um número" : numero1
+  numero2 = isNaN(numero2) ? ", (2)Digitar um número" : numero2
+  return "A soma é: "+ (numero1 + numero2)
+}
+
+//Valor padrão do es2015
+/*function somar(numero1=0, numero2=0){
+  return numero1 + numero2
+}*/
+
+somar(3, "hgfghkuyuky")
+somar(3, 4)
+//isNAN(3)
+//NaN -> Not a Number ( não é um número )
+
+
+
+//Parâmetros e retornos opcionais
+function calcularSalario(salario, desconto){  
+  //desconto = isNaN(desconto) ? 0 : desconto
+  if( salario == 0 ){
+    console.log("Salário não informado")
+    return 0 // USAR ESSE MODELO
+  }else{
+    return salario - desconto
+  }
+  
+}
+
+let resultado = calcularSalario(700, 30)
+console.log(resultado)
+
+calcularSalario(300, "hgfghkuyuky")
+calcularSalario(300, 40)
+
+//-------------
+//(Sem if else)Se não tiver desconto simplesmente continúa, sem exibir erro:
+function Pagamento(salario, desconto){
+  desconto = isNaN(desconto) ? 0 : desconto
+  return salario - desconto
+  }
+
+Pagamento(700, "hgfghkuyuky")
+Pagamento(700, 33)
+Pagamento(700)
+
+//-----------------------------------------------------------
+// CALLBACK - é o retorno de uma função após executar algum comando, 
+//exemplo, após salvar exibir uma mensagem para o usuário
+
+function processar(callbackSucesso, callbackErro){
+  
+  /*
+  ações sendo realizadas que demoram algum tempo
+  ...
+  */
+  
+  let resultadoProcessamento = true // troque por false para observar
+  if( resultadoProcessamento ){
+    callbackSucesso()
+  }else{
+    callbackErro()
+  }
+}
+
+const salvarResultado = function(){
+  /*
+  ...simulação
+  */
+  console.log("Salvo com sucesso.")
+}
+
+
+const erro = function(){
+  /*
+  ...simulação
+  */
+  console.log("Erro. Tente novamente.")
+}
+
+processar(salvarResultado, erro)
+
+//-----------------------------------------------------------
+
+
+
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+//-----------------------------------------------------------
+  
