@@ -1,0 +1,442 @@
+//   Dúvidas??
+//////////////////////////////////////
+//    https://www.w3schools.com/    //
+//////////////////////////////////////
+
+
+//Parâmetros padrão
+
+//   isNaN verifica se não é número9is Not A Namber)
+
+function somar(numero1, numero2){
+  numero1 = isNaN(numero1) ? ", (1)Digitar um número" : numero1
+  numero2 = isNaN(numero2) ? ", (2)Digitar um número" : numero2
+  return "A soma é: "+ (numero1 + numero2)
+}
+
+//Valor padrão do es2015
+/*function somar(numero1=0, numero2=0){
+  return numero1 + numero2
+}*/
+
+somar(3, "hgfghkuyuky")
+somar(3, 4)
+//isNAN(3)
+//NaN -> Not a Number ( não é um número )
+
+
+
+//Parâmetros e retornos opcionais
+function calcularSalario(salario, desconto){  
+  //desconto = isNaN(desconto) ? 0 : desconto
+  if( salario == 0 ){
+    console.log("Salário não informado")
+    return 0 // USAR ESSE MODELO
+  }else{
+    return salario - desconto
+  }
+  
+}
+
+let resultado = calcularSalario(700, 30)
+console.log(resultado)
+
+calcularSalario(300, "hgfghkuyuky")
+calcularSalario(300, 40)
+
+//-------------
+//(Sem if else)Se não tiver desconto simplesmente continúa, sem exibir erro:
+function Pagamento(salario, desconto){
+  desconto = isNaN(desconto) ? 0 : desconto
+  return salario - desconto
+  }
+
+Pagamento(700, "hgfghkuyuky")
+Pagamento(700, 33)
+Pagamento(700)
+
+//-----------------------------------------------------------
+// CALLBACK - é o retorno de uma função após executar algum comando, 
+//exemplo, após salvar exibir uma mensagem para o usuário
+
+function processar(callbackSucesso, callbackErro){
+  
+  /*
+  ações sendo realizadas que demoram algum tempo
+  ...
+  */
+  
+  let resultadoProcessamento = true // troque por false para observar
+  if( resultadoProcessamento ){
+    callbackSucesso()
+  }else{
+    callbackErro()
+  }
+}
+
+const salvarResultado = function(){
+  /*
+  ...simulação
+  */
+  console.log("Salvo com sucesso.")
+}
+
+
+const erro = function(){
+  /*
+  ...simulação
+  */
+  console.log("Erro. Tente novamente.")
+}
+
+processar(salvarResultado, erro)
+
+//-----------------------------------------------------------
+//Funções nativas - Manipulação de textos
+
+
+const nome0 = {
+  texto: "jacaré",
+  length: 2,
+  charAt(){}
+}
+nome0.texto.charAt()
+
+
+let nome = "avião"
+nome.charAt(3)
+
+let nome1 = "carro do leandro"
+nome1.replace("leandro", "joao")  // substiui valor da variavel
+
+let frase = "O success é ir de fracasso em fracasso sem perder o entusiasmo"
+let n = frase.substr(0,30) + "..."
+console.log(n)
+frase.substr( 2, 3)
+let n2 =  frase.substr( 2, 3) + "cesso é ir de..."
+console.log(n2)
+
+
+let nome3 = "leandro cf79 @ gmail . com"
+let resultado = nome3.split(" ") // tire OU acrescente espaço para observar
+console.log(resultado)
+
+
+
+let nome4 = "pedro"
+let sobrenome4 = "silverio"
+let s = sobrenome4.slice(0, 20)
+
+nome4 + s + "@empresa.com.br"
+
+
+
+let pesquisa = "PEdrO SILvA"
+let itemSalvo = "pedro silva"
+//pesquisa.toUpperCase()
+let item = pesquisa.toLowerCase()
+if(itemSalvo == item){
+  console.log("Achei")
+}
+
+//jamiltondamasc@empresa.com.br
+
+let nome5 = "    Pedro Silva          " // espaços desnecessários serão retirados
+nome5
+nome5.trim()// trim() remove espaços
+
+
+
+let a = "Olá"
+let b = "leandro"
+let c = "cf79"
+
+a.concat(" ", b, " ", c)
+
+//-----------------------------------------------------------
+//Funções nativas - Matemática
+//   https://www.w3schools.com/jsref/jsref_obj_math.asp
+
+
+let numero = 280.50
+
+Math.PI
+Math.ceil(numero) //arredonda para cima
+Math.floor(numero) //arredonda para baixo
+Math.round(numero) // arredonda
+Math.random() //0 e 1
+Math.random()*100  //0 a 100
+Math.min(15,10)
+Math.max(10,20)
+Math.pow(2,3)
+Math.sqrt(49)
+
+
+//-----------------------------------------------------------
+//Funções nativas - Datas
+
+const data = new Date()
+
+data.toString()
+
+let dia = data.getDate()
+let mes = data.getMonth() +1 // sempre acrescentar "+1", contagem inicia no zero
+let ano = data.getFullYear()
+console.log(`data: ${dia}/${mes}/${ano}`)
+console.log(`data: ${dia}-${mes}-${ano}`)
+
+let hora = data.getHours()
+let min = data.getMinutes()
+let second = data.getSeconds()
+console.log(`hora: ${hora}:${min}:${second}`)
+
+
+//Operações com datas
+data.setDate(data.getDate() + 3)  // adicionar dias
+data.setMonth(data.getMonth() + 2) // add mes
+data.setFullYear(data.getFullYear() + 2) // add ano
+let d = data.getDate()
+let m = data.getMonth() + 1
+let a = data.getFullYear()
+console.log(`data: ${d}/${m}/${a}`)
+
+data.setHours(data.getHours() + 2) //horario de  verão
+let h = data.getHours()
+let mi = data.getMinutes()
+let s = data.getSeconds()
+console.log(`hora: ${h}:${mi}:${s}`)
+
+//-----------------------------------------------------------
+// Array - Métodos úteis
+
+// tanto faz usar: typeof[]  ou typeof new Array
+
+typeof []
+typeof new Array
+let nome = "Jamilton"
+const nome2 = ["Jamilton", "Maria"]
+const frutas = new Array("Morango", "Banana")
+
+console.log(frutas[0])
+
+
+const nomes = [ 1, 2, 5, 4, 3]
+nomes.push("Pedra")
+//delete nomes[2]
+nomes[0] = "um" // numero 1 agora é um
+console.log(nomes)
+nomes.sort() // organiza
+console.log(nomes.length)
+
+
+const estados = ["São Paulo", "Ceará", "Rio de Janeiro", "Bahia", "Minas Gerais"]
+
+/*** Remove elementos do array*/
+estados.pop()//remove último
+estados.shift()//remove primeiro
+console.log(estados)
+
+/*** Adiciona novo elemento no array*/
+estados.push("teste")//adiciona no final
+estados.unshift("teste2")//adiciona no inicio
+console.log(estados)
+
+/*** Retorna novo array */
+const novo = estados.splice(1,1, "teste1", "mais 1", "Mais 2")//emendar
+console.log(estados)
+
+const novo2 = estados.slice(2,5)//cortar
+console.log(novo2)// cortados
+console.log(estados)
+
+/*** Converte Array / String */
+const usuarios = ["Jamilton", "Ana", "Carla"]
+let texto = usuarios.join() // converte array em texto
+console.log(texto)
+
+let arrayTexto = texto.split(",") // converte em array
+console.log(arrayTexto)
+
+
+//-----------------------------------------------------------
+
+//Array: foreach
+
+const lista = ["Jamilton", "Ana", "Marcela", "Pedro"]
+
+for(indice in lista){
+  console.log(lista[indice])
+}
+
+const percorrer = function(item,b,arr){
+	
+  console.log(item)
+ //console.log(b)
+ // console.log(arr)
+}
+lista.forEach(percorrer)
+
+//ou ainda
+lista.forEach(item => console.log(item))
+
+
+// CRIANDO O FOREACH - APENAS PARA CONHECIMENTO DE COMO FUNCIONA
+Array.prototype.percorrer = function(funcao){
+  //console.log(this)     // VEJA ESSES
+   //console.log(this[2])                 
+  for(let i=0; i < this.length; i++){
+    //console.log("teste")
+    funcao(this[i],i,this)
+  }
+}
+
+const funcao = function(item){
+  console.log(item)
+}
+lista.percorrer(funcao)
+
+
+
+//-----------------------------------------------------------
+// Array: map
+
+const pessoas = [
+  "Jamilton", "Ana", "Maria"
+]
+
+let funcao = function(item, indice, arr){
+  return {nome: item}
+}
+
+const novoArray = pessoas.map(funcao)
+console.log(novoArray)
+
+// 1 dolar = 3 reais
+const produtosDolar = [
+  {produto: "Notebook", preco: 1200, moeda: "EUA $"},
+  {produto: "Celular", preco: 800, moeda: "EUA $"},
+]
+console.log(produtosDolar)
+
+// Formas de converter
+const novo1 = produtosDolar.map(function(item){
+  let preco = item.preco * 4
+  return {produto: "Notebook", preco: preco, moeda: "R$"}
+} )
+console.log(novo1)
+
+                               
+const novo = produtosDolar.map(item => {
+  let preco = item.preco * 4
+  return {produto: "Notebook", preco: preco, moeda: "R$"}
+})
+console.log(novo)
+
+
+
+
+//-----------------------------------------------------------
+//Array: filter
+// Filtrar quais itens vai utilizar
+
+const usuarios = [
+  {nome: "Jamilton", idade: 32},
+  {nome: "Ana", idade: 16},
+  {nome: "Maria", idade: 40},
+  {nome: "Mariana", idade: 18},
+  {nome: "Ana", idade: 71}
+]
+
+
+const funcao = function(item,i,arr){// pode usar um if else
+  return item.idade >= this.filtro // pode por o valor direto em "this.filtro "
+  //return item.idade >= 18 
+}
+const filtro = {
+  filtro: 18
+}
+const usuariosMaiorIdade = usuarios.filter(funcao, filtro)
+console.log(usuariosMaiorIdade)
+//----------------------------
+
+
+
+const carros = [
+  {nome: "Gol", marca: "volkswagem"},
+  {nome: "iX35", marca: "hyundai"},
+  {nome: "Santa Fé", marca: "hyundai"},
+  {nome: "Polo", marca: "volkswagem"}
+]
+
+const carrosFiltrado = carros.filter(
+  carro => carro.marca == "hyundai"
+)
+console.log(carrosFiltrado)
+console.log(carros)
+
+const carrosMarcas = carros.filter( carro => carro.nome == "Gol")
+console.log(carrosMarcas)
+
+//-----------------------------------------------------------
+// Array: reduce
+
+
+
+const numeros = [
+  2,3,5
+]
+
+//primeira -> 6 +  2 = 8
+//segunda -> 8 + 3 = 11
+//terceira -> 11 + 5 = 16
+
+//PRIMEIRO ITEM DA LISTA SEMPRE É O ACUMULADOR
+const funcao = function(acumulador, atual, i){ // i é indice
+  console.log("i:" + i)
+  console.log("ac:" + acumulador)
+  console.log("a:" + atual)
+  console.log("-----")
+  return acumulador + atual
+}
+const resultado = numeros.reduce(funcao, 6) // pode ou não indicar o primeiro número
+console.log(resultado)
+//sem o 6 fica:
+//primeira -> 2 +  3 = 5
+//segunda -> 5 + 5 = 10
+
+
+
+const produtos = [
+  {nome: "Notebook", promocao: true},
+  {nome: "Celular", promocao: false},
+  {nome: "Mouse", promocao: false},
+]
+
+const produtosPromo = produtos.map(
+  produto => produto.promocao
+)
+console.log(produtosPromo)
+const funcao2 = function(acumulador, atual){
+ /* console.log("ac:"+acumulador)
+  console.log("a:"+atual)
+  console.log("-----")  */
+  return acumulador || atual ///true
+}
+const novo = produtosPromo.reduce(funcao2)
+console.log(novo)
+if(novo) console.log("Tem promocao")
+
+
+//PRIMEIRO ITEM DA LISTA SEMPRE É O ACUMULADOR
+
+const lista = [
+  "Jamilton", "Ana", "Lorena", "Leandro"
+]
+const funcao3 = (acumulado, atual) => acumulado += `<li>${atual}</li><br>`
+
+let listaHtml = lista.reduce( 
+  funcao3, ""
+)
+console.log(listaHtml)
+
+
