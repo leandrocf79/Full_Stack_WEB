@@ -3,7 +3,7 @@
 <head>
 	<title>Selecionando elementos</title>
 	<link rel="stylesheet" type="text/css" href="css/01- estilo.css">
-	<script type="text/javascript" src="js/01-script.js"></script>
+	
 </head>
 <body>
 
@@ -17,6 +17,20 @@
 	</ul>
 
 	<button onclick="executar()">Clique aqui</button>
+	
+	<script type="text/javascript">
 
+		function executar() { //função executar é do button
+			const obj = document.querySelector('li.primeiro')
+			obj.innerHTML = "teste, texto do js"
+			obj.classList.add("destaque")
+
+		}
+
+		//const obj = document.getElementById('#destaque')
+		//const obj = document.querySelector('li.primeiro')
+		//console.log(obj.textContent)
+
+	 </script>
 </body>
 </html>

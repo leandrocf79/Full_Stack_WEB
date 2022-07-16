@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Selecionando elementos</title>
+	<link rel="stylesheet" type="text/css" href="css/04- estilo.css">
+	
+</head>
+<body>
+
+	<div>Irmão anterior (primeira DIV)</div>
+
+	<div id="itens">
+		<p>Primeiro parágrafo</p>
+		<p>Segundo parágrafo</p>
+		<p>Terceiro parágrafo</p>
+		<p>Quarto parágrafo</p>
+	</div>
+
+	<div>Próximo irmão (segunda DIV)</div>
+
+	<script type="text/javascript">
+	
+const lista = document.querySelector('div#itens')
+console.log(lista)
+
+console.log(lista.parentNode)
+console.log(lista.childNodes[3])
+
+console.log(lista.firstChild)
+console.log(lista.lastChild)
+
+console.log(lista.nextSibling)
+console.log(lista.previousSibling)
+
+console.log(lista.children)
+console.log(lista.firstElementChild)
+console.log(lista.lastElementChild)
+
+console.log(lista.nextElementSibling)
+console.log(lista.previousElementSibling)
+	</script>
+
+</body>
+</html>
