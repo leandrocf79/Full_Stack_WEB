@@ -1,0 +1,19 @@
+#destaque {
+	background-color: red;
+}
+
+li.primeiro {	
+}
+
+
+.destaque {
+	color: white;
+	background-color: cadetblue;
+}
+
+input{
+	margin: 10px;
+	padding: 5px;
+	background-color: lightcyan;
+}
+
