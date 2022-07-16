@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Selecionando elementos</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet"  type="text/css" href="css/07- estilo.css" >
+</head>
+<body>
+
+	<span class="vermelho texto teste">Leandro CF</span><!-- O RECOMENDADO É SEMPRE ACESSAR USANDO ID , RECOMENDAÇÃO PROFISSIONAL-->
+
+	<button onclick="executar()">Clique aqui</button>
+
+	<script type="text/javascript">
+
+		function executar() {
+			const obj = document.querySelector('span')
+			const classes = obj.classList //retorna as classes que pode usar
+
+			console.log(classes)
+			console.log(classes.length)
+			console.log(classes.contains('vermelho')) // verifica se tem o vermelho (true)
+			classes.add('texto')
+			classes.remove('vermelho') // remove o vermelho
+			classes.toggle('vermelho') //toggle fica alternando entre uma classe e outra, neste caso a cor velelha, tem e não tem 
+			
+			obj.className = "vermelho texto" // class name substitui as classes que já existem
+
+			classes.forEach(item=>console.log(item))// percorre as classes com forEach
+
+		}
+		
+		
+		
+	</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
