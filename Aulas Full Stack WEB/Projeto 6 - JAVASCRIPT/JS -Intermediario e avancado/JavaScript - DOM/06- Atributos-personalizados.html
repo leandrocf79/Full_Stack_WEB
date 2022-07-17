@@ -19,34 +19,8 @@
 	<label id="labelNome" for="nome">Nome</label>
 	<input type="text" id="nome" name="nome" />
 
-	<script type="text/javascript">
-		// Clique em inspecionar e depois em console para observar:
-
-		const obj = document.getElementById('itens')
-		console.log(obj.id)
-		//console.log(obj.quantidade) //não consegue acessar
-		obj.setAttribute('quantidade', '10')
-		console.log(obj.getAttribute('quantidade'))
-
-		console.log(obj.hasAttribute('quantidade'))
-		console.log(obj.hasAttribute('data-status'))
-		//obj.removeAttribute('data-status') // remove o status "pendente" para "null"
-
-		//obj.dataset.status = "finalizado"
-		//console.log(obj.dataset.status)
-		console.log(obj.getAttribute('data-status'))
-
-		console.log(obj.attributes)
-		console.log(obj.attributes[1])
-		console.log(obj.attributes.quantidade)
-		console.log(obj.attributes['quantidade'])
-
-		const objeto = document.getElementById('labelNome')
-		console.log(objeto.htmlFor) //Se usar somente o FOR não funciona. O macete é usar htmlFor
-		console.log(objeto.getAttribute('for'))
-
-	</script>
-
+	<!-- JS tem que ser colocado aqui para executar após o conteúdo acima-->
+	<script type="text/javascript" src="js/06-script.js"></script>
 </body>
 </html>
 
