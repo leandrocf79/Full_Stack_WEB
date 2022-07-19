@@ -2,6 +2,11 @@
 	background-color: burlywood;
 }
 
+.destaque2 {
+	border: 1px solid blue;
+	margin: 1px;
+}
+
 .destaquejs {
 	background-color: lightblue;
 }
