@@ -10,10 +10,28 @@ $('[acao-clique]').click(function(){
 	$('#conteudo2').html('<span>leandrocf79</span>')
 	//$('ul').html('<li>Alterado</li>') // vai alterar tudo, todos 'ul'
 	
+//-----------------------------------------------------
+
+
 	$('ul li').html(function(){     // repare no html
 		let item = $(this).text()    // repare no text
-		return `<strong>${item}</strong>` + ' - Foi colocado em negrito'
+		return `<strong>${item}</strong>` + ' - -  ----  --- Negrito'
 	})  
+	
+
+//-----------------------------------------------------
+	
+	//$('#lista :eq(3)').html(function(){     // atençao para o espaço entre os dois pontos "#lista :"
+	$('ul li:eq(3)').html(function(){     // selecionar pelo indice
+		
+			let item = 'Dani Calabresa' 
+			return `${item}` 			
+		})  
+
+//-----------------------------------------------------
+
+
+
 
 	/*$('ul li').text(function(){
 		let item = $(this).html() // 'this' vai referenciar cada nome dentro do elemento
