@@ -21,9 +21,11 @@
 			<option value="f">Feminino</option>
 		</select>
 		<hr>
-		<input type="radio" name="idade" value="0-18"> de 0 até 18<br>
-		<input type="radio" name="idade" value="18-30">de 18 até 30<br>
-		<input type="radio" name="idade" value="30-100">de 30 até 100<br>
+	<!-- Tendo varios (name="idade") o usuário consegue selecionar apenas 1-->
+	<!--value="0-18" é para fazer a patura dos dados-->
+		<input type="radio" name="idade" value="0-17"> de 0 até 17<br> 
+		<input type="radio" name="idade" value="18-29">de 18 até 29<br>
+		<input type="radio" name="idade" value="30-120">30 ou mais<br>
 		<hr>
 		<input type="checkbox" name="termo" value="aceitar">Aceitar termos<br>
 

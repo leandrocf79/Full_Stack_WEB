@@ -10,3 +10,13 @@
 .destaquejs {
 	background-color: lightblue;
 }
+
+
+#conteudo10{
+	position: absolute;
+	top: 50px;
+	/*left: 50px;*//*será incrementado de forma animada*/
+	border: 1px solid #9c6a00;
+	background-color: #ffae00;
+	padding: 30px;
+}
