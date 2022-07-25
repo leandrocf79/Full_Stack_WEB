@@ -1,0 +1,33 @@
+"""
+Django
+
+Iniciar um novo projeto em python
+
+Abrir o terminal e digitar:
+pip install django
+
+Pode usar recursos como:
+clear
+ls
+
+Criar novo projeto com um nome, pode ser o mesmo do projeto:
+Colocar o "espaço ponto" no final vai impedir a crialçao de uma pasta extra.
+django-admin startproject django_basico .
+
+Criar um servidor local:
+python manage.py runserver
+
+Vai gerar um endereço, provavelmente esse:  http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+Ctrl-C para cancelar se for o caso.
+
+Caso a porta 8000 já esteja em uso pode selecionar outra qualquer com 4 dígitos:
+python manage.py runserver 8787
+
+Clique no link gerado. Pronto! Django já está em execução.
+
+
+
+
+
+"""
