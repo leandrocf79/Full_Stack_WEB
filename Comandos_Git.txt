@@ -1,0 +1,252 @@
+
+************************************************
+Resumo:
+
+$ git init
+$ git add Arquivo.txt  
+$ git commit -m "first commit"    
+$ git remote add origin https://github.com/leandrocf79/Full_Stack_WEB 
+$ git push -u origin master
+
+************************************************
+
+
+
+Baixe o GIT (Branching and Merging)
+
+https://git-scm.com/downloads
+
+----- Nome do arquivo a ser enviar não pode conter espaços -----
+
+
+-----
+Após instalado abra o terminal na pasta onde estão os arquivos que deseja fazer o commit,
+clique com o botão direito do mouse selecione "Git Bash Here" e digite apenas "git" no terminal para testar: $ git
+
+*** USE: ( Shift + Insert )  para copiar e colar se for o caso.
+
+Observe a na linha que comando que aparece se não tiver escrito MASTER digite:
+$ git branch -m main master
+
+
+O comando abaixo vai criar uma nova branch main no repositório remoto, não precisa usar inicialmente.
+$ git push -u origin main
+
+
+Faça suas configurações pessoais colocando seu nome e email do GITHUB.
+
+$ git config --global user.name "leandrocf79"
+
+$ git config --global user.email "leandrocf79@gmail.com"
+----------
+
+
+Gerando chaves no computador
+Caso não exista nenhuma chave criada, ele criará automaticamente, se já existir ele perguntará se quer sobrescrever.
+
+$ ssh-keygen
+
+Para pegar o conteúdo deste arquivo, rode os seguintes comandos:
+
+$ cd ~/.ssh/ 
+depois 
+$ ls
+$ cat id_rsa.pub
+ 
+Selecione e copie toda a chave com ( Shift + Insert )
+
+
+NA SUA PRÓPRIA CASA, NO SEU COMPUTADOR PESSOAL abra o github com seu usuário e senha.
+
+Vá no canto superior direito da tela, na seta ao lado da sua foto clique e entre em [ Settings ], depois na 
+coluna lateral esquerda entre em [ SSH and GPG keys ], agora no botão verde [ New SSH key ].
+Adicione a chave, escolha um nome para ele e confirma.
+------------
+
+sair:
+$ cd .. 
+avançar para: Exedmplo: (/nome_do_caminho/nome_das_pastas/arquivo.txt):
+$ cd /d/GitHub
+
+************************************************
+
+$ git init
+
+  ( adicionar o arquivo com extençao que queira enviar ou * asterisco envia tudo que estiver no repositório escolhido)
+$ git add README.txt  
+$ git commit -m "first commit"    
+
+                       ( 	    ESCOLHA O SEU REPOSITÓRIO		 )
+$ git remote add origin https://github.com/leandrocf79/Full_Stack_WEB 
+
+ //Caso faça alguma alteração no arquivo antes do PUSH utilize ($ git add) arquivo.txt novamente
+$ git push -u origin master
+
+************************************************
+
+
+################
+
+Outros recursos:
+
+---
+Este comando configurará o Git para colorir os comandos e resultados de comandos, 
+facilitando o entendimento de cada iteração.
+git config --global color.ui true
+---
+
+Criando arquivo: $ touch README.txt
+
+Para criar a pasta: $ mkdir aulagit
+
+Para acessar a pasta: $ cd aulagit
+
+---
+Ao rodarmos este comando, o Git criará uma pasta oculta chamada .git
+$ git init
+
+Este comando lista todos os arquivos e pastas, inclusive os ocultos.
+$ ls -la 
+---
+ git config --global --add safe.directory D:/GitHub
+
+
+Git utilizará para controlar as versões dos projetos. 
+Acessar pasta .git: $ cd .git
+
+Listar itens internos: $ ls
+---
+Com a criação do repositório, criaremos um arquivo dentro desta pasta.
+
+Criando arquivo: $ touch arquivo.txt
+---
+
+Primeiro estágio – Untracked Files
+$ git status
+
+Segundo estágio – Changes to be committed
+$ git add arquivo.txt
+ou
+$ git add *       para add tudo
+
+Terceiro estágio – Committed
+$ git commit -m "Meu primeiro commit"
+após o primeiro pode ser apenas
+$ git commit
+
+---
+
+Para remover um arquivo que já foi adicionado, rodem o comando abaixo:
+O reset HEAD é responsável para desfazer o comando add.
+$ git reset HEAD --nome_do_arquivo
+
+---
+Este comando, além de mostrar os logs, mostrará a alteração que foi feita em cada arquivo comitado
+$ git log -p
+
+últimos comits
+$ git log -p -2
+
+$ git log --autor="leandrocf79"
+$ git log shortlog   (mostra todos os outores)
+$ git log shortlog -sn
+$ git log --graph   ( mostra de forma gráfica)
+
+$ git show (numero da hash aqui para ver controle de versões)
+
+Este comando, além de mostrar os logs, mostrará a alteração que foi feita em cada arquivo comitado
+$ git log --stat
+
+
+Para deixar a listagem de logs mais enxuta, removendo alguns dados que poluem o seu terminal.
+$ git log --pretty=oneline
+
+ou
+$ git log --pretty=format:"%h - %an, %ar : %s"
+$ git log --since=2.days ou $ git log --since=2.weeks
+---
+
+Ignorando arquivo
+Agora, no arquivo .gitignore, adicionem este arquivo, para que seja ignorado.
+
+.idea/
+gitignore.txt
+---
+Depois de rodarem este comando, se rodarem o git status, 
+verão que ele sai do segundo estágio e volta ao primeiro, como Untracked 
+para que ele não faça parte do commit.para que ele não faça parte do commit.
+$ git reset HEAD teste2.txt
+
+---
+sempre usar para verificar se houve alguma alteração errada no arquivo
+
+$ git diff
+
+$ git diff --name-only
+
+$ git commit -am "arquivo editado"
+
+---
+Voltando versões
+
+$ git checkout 
+
+---
+Clonar repositório em um computador novo
+
+$ git clone (aqui é o ssh da pasta no github)
+
+---
+Fork pega um trab que não é seu para que passa trabalhar ne e depois devolver.
+Está na próproia aba do github
+---
+
+retornar para a versão master, e ignorar este branch que foi criado.
+
+$ git checkout master
+
+Outra forma de acessar commits anteriores, é com o seguinte comando:
+
+$ git reset HEAD~1 ou $ git reset HEAD~2 ou $ git reset HEAD~3
+
+Porém, existem dois tipos de reset HEAD: soft e hard.
+
+$ git reset HEAD~1 --soft     ou 
+$ git reset HEAD~1 --hard
+
+---
+
+Criar um novo BRANCH para trabalhar em alguma alteração, por exemplo, 
+correção de um bug enquanto outras pessoas também trabalham no mesmo arquivo.
+Ver:
+$ git branch
+
+$ git checkout -b novoBranch (nome à sua escolha)
+para voltar:
+$ git checkout master
+
+apagar o branch
+$ git branch -D novoBranch
+
+---
+Ignorar arquivos GitIgnore
+
+$ vi .gitignore
+(dentro do arquivo que vai abrir colocar *.txt 
+* para tudo
+. e a extenção desejada)
+esc
+:wq  ( para salvar e fechar)
+
+---
+
+
+
+
+
+
+ 
+
+
+
+
