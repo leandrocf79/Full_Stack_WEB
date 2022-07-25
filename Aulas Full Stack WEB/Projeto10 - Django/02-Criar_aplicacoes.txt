@@ -1,0 +1,67 @@
+"""
+Criando páginas com Django.
+
+No terminal use o comando seguido do nome desejado:
+django-admin startapp produtos
+
+*Se for o caso Ctrl+C antes do comando acima.
+
+Após criar uma aplicação tem que entrar em "nome do projeto"/settings.py
+e congigurar:
+
+Acrescente:
+
+INSTALLED_APPS = [
+
+'produtos.apps.ProdutosConfig',
+]
+
+*** "ProdutosConfig" está na pasta produtos/apps.py
+
+***********
+Para criar a URL de produtos:
+
+Entrar em "nome do projeto"/urls.py
+path('produtos/', admin.site.urls),
+
+Vai ficar assim:
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('produtos/', include('produtos.urls')),
+]
+*****
+
+Para criar sub-itens em produtos:
+Vá em produtos e crie um arquivo chamado urls.py
+
+
+from django.contrib import admin
+from django.urls import path
+from . import views   # O ponto para mostrar que está dentro da mesma pasta "produtos"
+urlpatterns = [
+    path('', views.index),  # Assim vai chamar produtos em "nome do projeto"/urls.py
+    # para acrescentar páginas:
+    path('celulares/', views.celulares )
+]
+
+************
+Feito isso agora criar a request
+
+Vá em produtos/views.py
+isira:
+
+
+from django.shortcuts import render
+
+from django.http import HttpResponse
+# Create your views here.
+def index(request):
+    return HttpResponse('Página de produtos')
+
+
+def celulares(request):
+    return HttpResponse('Página de celulares')
+
