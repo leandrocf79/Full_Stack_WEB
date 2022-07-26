@@ -1,0 +1,57 @@
+"""
+ O básico será sempre criar um html dentro de templates, declarar na views e urls
+
+Em "django_basico" /urls
+
+    # path('', admin.site.urls), # assim é que está acessando rota inicial. Não vai usar assim aqui.
+	
+    
+    path('admin/', admin.site.urls),
+    path('produtos/', include('produtos.urls')),
+    path('clientes/', include('clientes.urls')),
+
+
+*****
+No terminal:
+
+django-admin startapp home
+
+Configurar home:
+
+Em "django_basico" /sttings.py
+'home.apps.HomeConfig',
+
+
+Criar diretório templates dentro de home:
+criar um html index.html em templates:
+
+Escreva a página html.
+
+Em views:
+from django.shortcuts import render
+def index(request):
+    return render(request, 'index.html')
+
+Em dijango_basico/urls.py  adicione:
+from home.views import index
+
+vai ficar assim:
+from django.contrib import admin
+from django.urls import path, include
+from home.views import index
+
+urlpatterns = [
+     #path('', admin.site.urls), # assim é que está acessando rota inicial
+    path('', index),
+    path('admin/', admin.site.urls),
+    path('produtos/', include('produtos.urls')),
+    path('clientes/', include('clientes.urls')),
+]
+
+No terminal:
+python manage.py runserver  
+
+http://127.0.0.1:8000/
+
+
+"""

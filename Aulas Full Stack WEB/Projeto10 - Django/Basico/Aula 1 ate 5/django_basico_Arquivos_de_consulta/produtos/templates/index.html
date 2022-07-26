@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Página de produtos</title>
+</head>
+<body>
+
+    <div class="menu">
+        <a href="../"><< Voltar << </a> |
+        <a href="celulares/">Celulares</a> |
+        <a href="moveis/">Móveis</a> |
+        <a href="eletrodomesticos/">Eletrodomésticos</a>
+    </div>
+
+    <div class="conteudo">
+    {% block conteudo %}
+
+    <h1>Lista de produtos</h1>
+    <p>Nome: {{nome}}</p>
+    <p>Último acesso: {{ultimo_acesso}}</p>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for produto in produtos_loja %}
+	            <tr>
+                    <td>{{produto.nome|upper }}</td>
+                    <td>R$ {{produto.preco}}</td>
+                </tr>
+
+            {%endfor%}   <!-- Sempre usar endfor ou outro como endif-->
+
+
+            <tr>
+                <td>Leandrocf79</td>
+                <td>500,00</td>
+            </tr>
+            <tr>
+                <td>Romário</td>
+                <td>1000,00</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Total de itens: {{produtos_loja|length }}</p>
+
+    <!-- PODE FAZER A MESMA COISA EM VIEWS-->
+    <div>
+        {% if idade < 12 %}
+            <p>Criança</p>
+        {% elif idade >= 12 and idade < 18 %}
+            <p>Adolescente</p>
+        {% else %}
+            <p>Adulto</p>
+        {%endif%}
+    </div>
+
+    <p>Tipo: {{tipo1}}</p>  <!-- aqui é do if else de VIEWS -->
+        {% endblock %}
+        </div>
+
+
+        <div class="lateral">
+        {% block lateral %}
+        <h2>Categorias</h2>
+        <ul>
+            <li>Ofertas do dia</li>
+            <li>Samsung</li>
+            <li>Apple</li>
+            <li>Xiaomi</li>
+            <li>outros</li>
+            </ul>
+        {% endblock %}
+            </div>
+
+</body>
+</html>

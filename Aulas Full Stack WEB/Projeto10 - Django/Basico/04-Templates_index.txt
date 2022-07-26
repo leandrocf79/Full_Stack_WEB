@@ -1,0 +1,149 @@
+"""
+O básico será sempre criar um html dentro de templates, declarar na views e urls
+
+
+		https://docs.djangoproject.com/en/4.0/topics/http/shortcuts/
+
+
+Repare que cada template criado tem um index.
+
+
+Em produtos criar um diretório chamado template e index.html e celulares.html
+
+
+Em views:
+
+""" MELHOR USAR A OUTRA MANEIRA DE FAZER ISSO USANDO render()
+
+from django.http import HttpResponse
+# Create your views here.
+def index(request):
+    return HttpResponse('Página de produtos')
+
+
+def celulares(request):
+    return HttpResponse('Página de celulares')
+"""
+
+
+from django.shortcuts import render
+# Create your views here.
+
+def index(request):
+    return render(request, 'index.html')
+
+
+def celulares(request):
+    return render(request, 'celulares.html')
+
+
+
+# Ctrl+C
+#  python manage.py runserver 8000
+#  http://127.0.0.1:8000/produtos/celulares/
+
+############################
+Antes de exibir o template, pode ter algumas funcionalidades
+
+
+Em produtos/views:
+
+from django.shortcuts import render
+# Create your views here.
+
+def index(request):
+    #Processamento banco de dados
+  context = {
+        'nome': 'Leandro CF',  # vá em index para observar
+
+'produtos_loja': [
+            {'nome': 'Notebook Acer', 'preco': '1200.00'},
+            {'nome': 'Notebook Samsung', 'preco': '1750.00'},
+            {'nome': 'Notebook Dell', 'preco': '2330.00'}
+    }
+    return render(request, 'index.html', context)
+
+def celulares(request):
+    return render(request, 'celulares.html')
+
+
+Em produtos/index:
+<p>Nome: {{nome}}</p>
+
+##########
+
+Para percorrer lista usar FOR:
+'produtos_loja': [
+            {'nome': 'Notebook Acer', 'preco': '1200.00'},
+            {'nome': 'Notebook Samsung', 'preco': '1750.00'},
+            {'nome': 'Notebook Dell', 'preco': '2330.00'}
+
+
+Em produtos/index:
+
+{% for produto in produtos_loja%}
+	<tr>
+       		<td>{{produto.nome}}</td>
+                <td>R$ {{produto.preco}}</td>
+        </tr>
+{%endfor%} # Sempre usar endfor ou outro como endif
+
+
+
+<td>{{produto.nome|upper }}</td>  ou lower
+<p>Total de itens: {{produto_loja|length }}</p>
+
+
+
+
+http://127.0.0.1:8000/produtos/
+
+
+
+   <p>Total de itens: {{produtos_loja|length }}</p>
+
+    <!-- PODE FAZER A MESMA COISA EM VIEWS-->
+    <div>
+        {% if idade < 12 %}
+            <p>Criança</p>
+        {% elif idade >= 12 and idade < 18 %}
+            <p>Adolescente</p>
+        {% else %}
+            <p>Adulto</p>
+        {%endif%}
+    </div>
+
+    <p>Tipo: {{tipo1}}</p>  <!-- aqui é do if else de VIEWS -->
+
+
+# Pode fazer direfente:
+
+from django.shortcuts import render
+# Create your views here.
+tipo = ''
+idade = 2
+
+if idade < 12:
+    tipo = 'Criança'
+elif idade >= 12 and idade < 18:
+    tipo = 'Adolescente'
+else:
+    tipo = 'Adulto'
+
+
+
+def index(request):
+    context = {
+
+        'nome': 'Leandro CF',  # vá em index para observar
+        'ultimo_acesso': '26/07/2022',
+        'idade': 15,
+        'tipo1': tipo,
+        'produtos_loja': [
+            {'nome': 'Notebook Acer', 'preco': '1200.00'},
+            {'nome': 'Notebook Samsung', 'preco': '1750.00'},
+            {'nome': 'Notebook Dell', 'preco': '2330.00'}
+        ]
+    }
+    return render(request, 'index.html', context)
+

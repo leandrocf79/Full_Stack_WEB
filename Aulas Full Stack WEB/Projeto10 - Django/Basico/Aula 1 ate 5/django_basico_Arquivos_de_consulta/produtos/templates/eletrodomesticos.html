@@ -1,0 +1,39 @@
+
+{% extends 'base.html' %}  <!-- extends vai linkar tudo -->
+
+{% block titulo %}
+    Eletrodomésticos         <!-- TÍTULO -->
+{% endblock %}
+
+{% block conteudo %}          <!-- CONTEÚDO -->
+    <h1>Lista de Eletrodomésticos</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Refrigerador</td>
+                <td>R$ 800</td>
+            </tr>
+            <tr>
+                <td>Liquidificador</td>
+                <td>R$ 1.400</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block lateral %}
+    <h2>Categorias</h2>
+    <ul>
+        <li>Ofertas do dia</li>
+        <li>Mesa Jantar</li>
+        <li>Cadeira</li>
+        <li>Poltronas</li>
+        <li>Escritório</li>
+    </ul>
+{% endblock %}

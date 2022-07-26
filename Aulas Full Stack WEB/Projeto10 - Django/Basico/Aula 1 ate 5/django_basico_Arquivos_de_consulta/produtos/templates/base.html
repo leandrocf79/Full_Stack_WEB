@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titulo %}{% endblock %}</title>
+    <style type="text/css">
+        .conteudo {
+            background-color: #f2f2f2;
+            padding: 5px;
+            float: right;
+            width: 75%;
+        }
+
+        .lateral {
+            background-color: #f2f2f2;
+            padding: 5px;
+            float: left;
+            width: 20%;
+        }
+
+        .menu {
+            background-color: orange;
+            padding: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu">
+        <a href="../"><< Voltar << </a> |
+        <a href="celulares/">Celulares</a> |
+        <a href="moveis/">Móveis</a> |
+        <a href="eletrodomesticos/">Eletrodomésticos</a>
+    </div>
+
+    <div class="lateral">
+       {% block lateral %}{% endblock %}
+    </div>
+
+    <div class="conteudo">
+        {% block conteudo %}{% endblock %}
+    </div>
+
+</body>
+</html>

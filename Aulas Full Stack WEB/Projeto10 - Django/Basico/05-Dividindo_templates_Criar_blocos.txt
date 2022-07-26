@@ -1,0 +1,118 @@
+"""
+O básico será sempre criar um html dentro de templates, declarar na views e urls
+
+
+
+Criar uma criar uma página html especial, tudo que altear nela será igual nas outras.
+
+Esse modelo servirá para replicar nas outras páginas o conteúdo.
+
+*** Deverá ser alterado apenas o título e conteúdo. ***
+
+Em produtos:
+base.html
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titulo %}{% endblock %}</title>
+    <style>
+        .conteudo {
+            background-color: #f2f2f2;
+            padding: 5px;
+            float: right;
+            width: 75%;
+        }
+
+        .lateral {
+            background-color: #f2f2f2;
+            padding: 5px;
+            float: left;
+            width: 20%;
+        }
+
+        .menu {
+            background-color: orange;
+            padding: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu">
+        <a href="../"><< Voltar << </a> |
+        <a href="celulares/">Celulares</a> |
+        <a href="moveis/">Móveis</a> |
+        <a href="eletrodomesticos/">Eletrodomésticos</a>
+    </div>
+
+    <div class="lateral">
+       {% block lateral %}{% endblock %}
+    </div>
+
+    <div class="conteudo">
+        {% block conteudo %}{% endblock %}
+    </div>
+
+</body>
+</html>
+
+
+
+##########  Agora é só replicar nas outras com as alterações devidas para cada página:
+
+{% extends 'base.html' %}  <!-- extends vai linkar tudo -->
+
+{% block titulo %}
+    Eletrodomésticos         <!-- TÍTULO -->
+{% endblock %}
+
+{% block conteudo %}          <!-- CONTEÚDO -->
+    <h1>Lista de Eletrodomésticos</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Refrigerador</td>
+                <td>R$ 800</td>
+            </tr>
+            <tr>
+                <td>Liquidificador</td>
+                <td>R$ 1.400</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block lateral %}
+    <h2>Categorias</h2>
+    <ul>
+        <li>Ofertas do dia</li>
+        <li>Mesa Jantar</li>
+        <li>Cadeira</li>
+        <li>Poltronas</li>
+        <li>Escritório</li>
+    </ul>
+{% endblock %}
+
+
+
+
+#############
+    <!--
+    <div class="lateral">
+       {% block lateral %}{% endblock %}
+    </div>
+
+    <div class="conteudo">
+        {% block conteudo %}{% endblock %}
+    </div>
+    -->

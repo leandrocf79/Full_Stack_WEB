@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Moveis
+{% endblock %}
+
+{% block conteudo %}
+    <h1>Lista de Móveis</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Mesa de centro</td>
+                <td>R$ 800</td>
+            </tr>
+            <tr>
+                <td>Cadeira</td>
+                <td>R$ 1.400</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block lateral %}
+    <h2>Categorias</h2>
+    <ul>
+        <li>Ofertas do dia</li>
+        <li>Mesa Jantar</li>
+        <li>Cadeira</li>
+        <li>Poltronas</li>
+        <li>Escritório</li>
+    </ul>
+{% endblock %}
