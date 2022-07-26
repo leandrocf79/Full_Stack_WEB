@@ -21,9 +21,9 @@ from home.views import index
 urlpatterns = [
     # path('', admin.site.urls), # assim é que está acessando rota inicial
     path('', index), # aqui não terá outras rotas, por isso pode usar assim
-    path('admin/', admin.site.urls),
-    path('produtos/', include('produtos.urls')),
-    path('clientes/', include('clientes.urls')),
+    path('/admin', admin.site.urls),
+    path('/produtos', include('produtos.urls')),
+    path('/clientes', include('clientes.urls')),
 
     # uma outra forma de adicionar: não fazer assim.
     # path('produtos', index)
