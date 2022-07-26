@@ -5,8 +5,8 @@ from . import views   # O ponto para mostrar que está dentro da mesma pasta "pr
 urlpatterns = [
     path('', views.index),  # Assim vai chamar produtos em "nome do projeto"/urls.py
     # para acrescentar páginas:
-    path('celulares/', views.celulares),
-    path('moveis/', views.moveis),
-    path('eletrodomesticos/', views.eletrodomesticos),
+    path('/celulares', views.celulares),
+    path('/moveis', views.moveis),
+    path('/eletrodomesticos', views.eletrodomesticos),
 ]
 
