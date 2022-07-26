@@ -1,4 +1,5 @@
 /*      ATENÇAÕ ESPECIAL:
+
 DROP TABLE pais; Apaga a tabela.
 TRUNCATE TABLE pais; Apaga o todo o conteúdo da tabela
 DELETE FROM cidade WHERE id = 1;  Apaga um item específico
