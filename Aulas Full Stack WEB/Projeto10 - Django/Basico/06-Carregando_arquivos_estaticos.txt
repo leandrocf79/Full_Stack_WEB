@@ -1,0 +1,14 @@
+"""
+Na pasta com nome do projeto crie um diretório com nome de "static"
+dentro dela pode por os arquivos que serão chamados depois como o CSS, JS, imagens...
+
+É possível ainda criar essa pasta em outro local para ser utilizado em outros projetos.
+
+
+
+  *** Caso não carregue as imagens adequadamente limpe a memória cache do navegador ***
+
+
+
+
+"""
