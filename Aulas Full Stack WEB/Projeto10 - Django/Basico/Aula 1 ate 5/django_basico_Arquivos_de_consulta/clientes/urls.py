@@ -5,5 +5,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index ),
-    path('email/', views.email ), #email/  vai apontar para views de clientes.
+    path('/email', views.email ), #email/  vai apontar para views de clientes.
 ]
