@@ -240,7 +240,25 @@ $ vi .gitignore
 esc
 :wq  ( para salvar e fechar)
 
----
+--- ****************
+
+DELETAR um arquivo local, no computador:
+
+1. Os arquivos deverão estar no computador, se for o caso use
+$ git pull origin master
+para baixar do github e fazer as modificações.
+
+2. Vamos então remover a pasta e/ou os arquivos:
+$ git rm teste.txt
+ ou
+$ git rm -r [Nome do Arquivo ou Pasta]
+
+3. Em seguida fazemos o commit da modificação:
+$ git commit -m "Remove Arquivo e Pasta"
+
+4. E finalmente: sincronizamos com o repositório remoto:
+$ git push origin master
+
 
 
 
