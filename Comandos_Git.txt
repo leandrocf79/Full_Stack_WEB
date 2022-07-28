@@ -10,7 +10,10 @@ $ git push -u origin master
 
 ************************************************
 
-### CASO "git push" DER ERRO, vá ao final deste conteúdo, tem uma explikcação. ###
+### CASO "git push" DER ERRO, vá ao final deste conteúdo, tem uma explicação. ###
+
+Detalhe importante: Todos os diretórios ou arquivos não podem ter espaço entre as palavras, pode usar underline.
+Exemplo:Aulas_Full_Stack_WEB
 
 ************************************************
 
@@ -259,17 +262,127 @@ $ git commit -m "Remove Arquivo e Pasta"
 4. E finalmente: sincronizamos com o repositório remoto:
 $ git push origin master
 
+************************************************
+************************************************
+
+Fez algo errado no último commit, mas não deu push
+Em situações em que você precisa corrigir seu último commit (antes de executar push para o remote) 
+o comando 
+
+$ git commit --amend 
+
+após atualizar o arquivo vai ajudar a resolver.
+****************
 
 
+Escreu a mensagem de commit errada.
+Se precisar corrigir a mensagem de commit basta rodar o comando abaixo com a nova mensagem:
 
+$ git commit --amend -m "Nova mensagem de commit"
+****************
+
+
+Esqueceu de adicionar um arquivo ao commit.
+Se precisar adicionar um arquivo que ficou fora do commit ou se precisou fazer alguma alteração em um arquivo:
+
+$ git add arquivo-esquecido.md
+$ git commit --amend
+
+*** Note que, se você já fez o push para o seu repositório remoto, será necessário sobrescrever 
+o commit refazendo o push com a opção --force. ***Tome cuidado***  com essa opção porque ela 
+sobrescreve seu commit no remote.
+****************
+
+
+Precisa desfazer algo do último commit
+Às vezes precisamos desfazer alguma modificação feita. Para isso:
+
+$ git --reset 
+****************
+
+
+Adicionar um arquivo que não queria commitar
+Se não fez o commit basta resetar o arquivo com:
+
+$ git reset -- caminho/do/arquivo.jpg
+
+Um detalhe interessante:
+ 
+é sempre bom adicionar -- antes do caminho para indicar que é um arquivo e não o nome de uma branch.
+Caso tenha uma branch com o mesmo nome do arquivo, esse comando pode acabar em resultados indesejados.
+****************
+
+
+Se já fez o commit será necessário resetar o commit, depois remover o arquivo e fazer um novo commit:
+
+$ git reset --soft HEAD~1
+$ rm caminho/do/arquivo.jpg
+$git commit -m "Removendo arquivo"
+
+Note que, nesse caso, remove o arquivo do computador. Existem situações em que não quer remover o arquivo local,
+isso será descrito no tópico a seguir.
+****************
+
+
+Fez commit de uma pasta ou arquivo, mas quer que o Git o ignore.
+Nesse caso, quer que o arquivo ou pasta seja removido do repositório remoto e
+que ele pare de ser observado pelo Git. Você pode seguir os seguintes passos:
+
+$ git reset pasta_para_ser_ignorada/
+$ echo "pasta_para_ser_ignorada" >> .gitignore
+$ git add .gitignore
+$ git rm -r pasta_para_ser_ignorada/
+$ git commit -m "Removendo pasta do git"
+
+Essa sequência de comandos é um pouco mais complicada. Primeiro usamos o comando reset na pasta que precisa ser
+removida do Git. Depois disso, incluir essa pasta no arquivo .gitignore para que o Git passe a ignorar as 
+modificações que ocorram nela e adicionar o arquivo ao commit. Em seguida pode remover a pasta do Git, 
+mas mantendo a cópia local, com o comando git rm -r. Finalmente executar um novo commit para registrar
+as ações realizadas.
+****************
+
+
+Para desfazer as alterações realizadas no código.
+Se quiser voltar seu código inteiro para o estado de algum commit anterior, mas quer manter as adições atuais,
+pode usar:
+$ git reset --soft HEAD~1
+# ou
+$ git reset --soft ed51df2 
+No primeiro caso, o número indica a quantidade de commits que irá voltar atrás. 
+No segundo exemplo, entra o código exato do commit ao qual vai retornar.
+
+Se não quiser manter as alterações atuais do código, pode usar --hard no lugar de --soft, mas tome cuidado, 
+com essa opção o código será perdido.
+
+Também existe uma outra opção, caso queria desfazer alterações em arquivos específicos, por exemplo, que 
+tenha modificado um arquivo que não deveria e removido outro sem querer, mas quer manter todas as outras 
+modificações. Se ainda não fez o commit, basta usar o comando checkout:
+
+$ git checkout HEAD -- arquivo_deletado.txt arquivo_modificado.txt
+
+Dessa maneira ambos arquivos retornam ao estado do commit anterior.
+****************
+
+
+O nome da branch criado está errado.
+Se criou uma branch e percebeu que está com o nome incorreto, pode usar:
+
+$ git branch -m branch-errada branch-correta
+
+Caso você já tenha feito push dessa branch, será necessário apagá-la no remote também:
+
+$ git push origin --delete branch-errada
+$ git push origin branch-correta
 
 ************************************************
 
 ###        CASO "git push" DER ERRO:        ###
 
 ************************************************
-Faça um clone do repositório desejado:
+Se já tiver um clone do repositório no computador tente: 
+$ git pull 
 
+Se precisar baixar faça um clone do repositório desejado:
 $ git clone https://github.com/leandrocf79/Full_Stack_WEB
 
 
@@ -286,13 +399,5 @@ $ git remote set-url origin https://github.com/leandrocf79/Full_Stack_WEB.git
 $ git push -u origin master
 
 Pronto!! Caso o ERRO persista crie e troque a chave SSH e repita os comandos acima.
-
-
-
-
-
- 
-
-
 
 
