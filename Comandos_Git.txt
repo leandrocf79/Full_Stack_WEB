@@ -10,7 +10,9 @@ $ git push -u origin master
 
 ************************************************
 
+### CASO "git push" DER ERRO, vá ao final deste conteúdo, tem uma explikcação. ###
 
+************************************************
 
 Baixe o GIT (Branching and Merging)
 
@@ -240,6 +242,32 @@ esc
 
 ---
 
+
+
+
+************************************************
+
+###        CASO "git push" DER ERRO:        ###
+
+************************************************
+Faça um clone do repositório desejado:
+
+$ git clone https://github.com/leandrocf79/Full_Stack_WEB
+
+
+Abra o repositório que baixou no computador inicia o Git Bash dentro:
+
+$ git init
+$ git add arquivo.txt    [adicione o arquivo que queira enviar para o repositório]
+$ git commit -m "escreva algo aqui"
+$ git remote add origin https://github.com/leandrocf79/Full_Stack_WEB.git
+
+[SE DER ERRO SUBSTITUA "add" por "set-url"]
+
+$ git remote set-url origin https://github.com/leandrocf79/Full_Stack_WEB.git
+$ git push -u origin master
+
+Pronto!! Caso o ERRO persista crie e troque a chave SSH e repita os comandos acima.
 
 
 
