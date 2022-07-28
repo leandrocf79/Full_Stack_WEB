@@ -1,4 +1,6 @@
 
+https://www.codegrepper.com/code-examples/shell/config+global+user+git+command
+
 ************************************************
 Resumo:
 
@@ -10,12 +12,14 @@ $ git push -u origin master
 
 ************************************************
 
+
 ### CASO "git push" DER ERRO, vá ao final deste conteúdo, tem uma explicação. ###
 
 Detalhe importante: Todos os diretórios ou arquivos não podem ter espaço entre as palavras, pode usar underline.
 Exemplo:Aulas_Full_Stack_WEB
 
 ************************************************
+
 
 Baixe o GIT (Branching and Merging)
 
@@ -95,6 +99,7 @@ $ git push -u origin master
 Outros recursos:
 
 ---
+
 Este comando configurará o Git para colorir os comandos e resultados de comandos, 
 facilitando o entendimento de cada iteração.
 git config --global color.ui true
@@ -105,22 +110,23 @@ Criando arquivo: $ touch README.txt
 Para criar a pasta: $ mkdir aulagit
 
 Para acessar a pasta: $ cd aulagit
-
 ---
+
 Ao rodarmos este comando, o Git criará uma pasta oculta chamada .git
 $ git init
 
 Este comando lista todos os arquivos e pastas, inclusive os ocultos.
 $ ls -la 
 ---
- git config --global --add safe.directory D:/GitHub
-
 
 Git utilizará para controlar as versões dos projetos. 
+git config --global --add safe.directory D:/GitHub
+
 Acessar pasta .git: $ cd .git
 
 Listar itens internos: $ ls
 ---
+
 Com a criação do repositório, criaremos um arquivo dentro desta pasta.
 
 Criando arquivo: $ touch arquivo.txt
@@ -136,16 +142,16 @@ $ git add *       para add tudo
 
 Terceiro estágio – Committed
 $ git commit -m "Meu primeiro commit"
-após o primeiro pode ser apenas
-$ git commit
 
+Após o primeiro pode ser apenas
+$ git commit
 ---
 
 Para remover um arquivo que já foi adicionado, rodem o comando abaixo:
 O reset HEAD é responsável para desfazer o comando add.
 $ git reset HEAD --nome_do_arquivo
-
 ---
+
 Este comando, além de mostrar os logs, mostrará a alteração que foi feita em cada arquivo comitado
 $ git log -p
 
@@ -177,12 +183,13 @@ Agora, no arquivo .gitignore, adicionem este arquivo, para que seja ignorado.
 .idea/
 gitignore.txt
 ---
+
 Depois de rodarem este comando, se rodarem o git status, 
 verão que ele sai do segundo estágio e volta ao primeiro, como Untracked 
 para que ele não faça parte do commit.para que ele não faça parte do commit.
 $ git reset HEAD teste2.txt
-
 ---
+
 sempre usar para verificar se houve alguma alteração errada no arquivo
 
 $ git diff
@@ -190,18 +197,18 @@ $ git diff
 $ git diff --name-only
 
 $ git commit -am "arquivo editado"
-
 ---
+
 Voltando versões
 
 $ git checkout 
-
 ---
+
 Clonar repositório em um computador novo
 
 $ git clone (aqui é o ssh da pasta no github)
-
 ---
+
 Fork pega um trab que não é seu para que passa trabalhar ne e depois devolver.
 Está na próproia aba do github
 ---
@@ -218,7 +225,6 @@ Porém, existem dois tipos de reset HEAD: soft e hard.
 
 $ git reset HEAD~1 --soft     ou 
 $ git reset HEAD~1 --hard
-
 ---
 
 Criar um novo BRANCH para trabalhar em alguma alteração, por exemplo, 
@@ -232,8 +238,8 @@ $ git checkout master
 
 apagar o branch
 $ git branch -D novoBranch
-
 ---
+
 Ignorar arquivos GitIgnore
 
 $ vi .gitignore
@@ -244,6 +250,7 @@ esc
 :wq  ( para salvar e fechar)
 
 --- ****************
+
 
 DELETAR um arquivo local, no computador:
 
@@ -264,6 +271,7 @@ $ git push origin master
 
 ************************************************
 ************************************************
+
 
 Fez algo errado no último commit, mas não deu push
 Em situações em que você precisa corrigir seu último commit (antes de executar push para o remote) 
