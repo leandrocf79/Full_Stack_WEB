@@ -1,0 +1,35 @@
+"""
+
+Models.py  é um modelo de dados.
+
+Exemplo:
+class Produto(models.Model): # classe produto herda de models.Model
+	nome = models.CharField('Nome', max length=100 )  # max length=100  tamanho max. de caracteres
+	preco = models.DecimalField('Preço', decimal_places=2, max_digits=8 )
+	estoque = models.IntegerField('Quantidade em estoque')
+	
+
+## Lembre-se:
+Em "nome do projeto"/settings.py INSTALLED_APPS precisa estar declarado o nome do repositório principal, 
+somente o nome entre aspas.
+
+
+Após criar o conteúdo modelo:
+$ python manage.py makeimigrations
+
+Isso vai criar uma Migration para a aplicação, terá o nome de 0001_initial.py, tem que clicar lá para atualizar.
+Vai criar automaticamente uma PK.
+
+
+DATABASE será configurado automaticamente.
+
+Para executar no terminal é;
+$ python manage.py migrate
+
+
+
+
+
+
+
+.
