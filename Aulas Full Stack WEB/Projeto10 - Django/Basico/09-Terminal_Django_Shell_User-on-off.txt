@@ -1,0 +1,75 @@
+"""
+
+Listar todos comando que puder aplicar:
+$ python manage.py
+---
+
+Exemplo:
+$ python manage.py help makemigrations
+
+Na sequência aparece a lista de posibilidades e depois abaixo a lista de suas funções.
+
+
+$ python manage.py help superuser
+
+
+Uma outra forma mais expecífica:
+
+Em views do diretório principal após def pode por print no comando para saber algo expecífico no terminal:
+
+def index(request):
+	# print(dir(request))
+	print(f "User-agent: {request.headers['User-agent']}") # Da pra saber qual é o navegador do usuário etc
+	# print(f "Headers: {request.headers['Headers']}")
+	# print(f "User: {request.headers['User']}") # mostra usuários logados	
+	# print(dir(request.user))
+	# print(dir(request.user.last-name))
+	# print(dir(request.user.email))
+
+	context ={ 
+		'curso' : 'Programação web com Django.' ,
+		'curso' : 'Estudar Django é bom.' ,			
+	}
+	return render(request, 'index.html', context)
+
+def contato(request):
+	...
+
+*************
+
+
+Pode exibir para o próprio usuário quando ele estiver logado:
+
+
+def index(request):
+
+	# print(f "User: {request.user)")   # mostra usuários logados	
+	# print(dir(request.user))
+	
+	if str(request.user) == 'AnonymousUser' :  # converter para string - str
+		teste = 'Usuário não logado.'
+	else:
+		teste = 'Usuário logado.'
+	
+
+	context ={ 
+		'curso' : 'Programação web com Django.' ,
+		'curso' : 'Estudar Django é bom.' ,
+		'logado' : teste		
+	}
+
+
+	return render(request, 'index.html', context)
+
+def contato(request):
+	...
+
+
+
+***Depois disso vá para o html e coloque:
+<span>{{ logado }}</span>
+
+Uma coisa boa é a ideia de por, por exemplo, "Se inscreva e ganhe 10% de desconto". 
+O desconto só aparece para quem estiver LOGADO.
+
+"""
