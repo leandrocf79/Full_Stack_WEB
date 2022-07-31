@@ -1,0 +1,45 @@
+Recebendo parâmetros na execução da imagem. 
+É bom para acessar de forma indireta em outra pasta e personalizar o desenvolvimento de acordo com a necessidade.
+
+Abrir o programa instalado Docker e o terminal.
+
+Vá no editor (Sublime Text) e crie uma nova pasta e coloque o nome de build-com-arg
+Nela crie um arquivo Dockerfile (esse é nome padrão e sem extenção)
+
+No Dokerfile será inserido a utilização do Debian:
+
+###
+
+FROM debian
+LABEL maintainer 'Aluno Cod3r <aluno leandrocf79@gmail.com>'
+
+ARG S3_BUCKET=files   # área para armazenar arquivos
+ENV S3_BUCKET=${S3_BUCKET}
+
+###
+
+No terminal vá até a pasta criada:
+cd Desktop\curso-docker-leandro\build-com-arg
+
+( incluir o espaço-ponto ):
+docker image build -t ex-build-arg .
+docker container run ex-build-arg bash -c 'echo $S3_BUCKET' ( ATENÇÃO!!! No windows só vai rodar com aspas duplas )
+docker container run ex-build-arg bash -c "echo $S3_BUCKET"
+
+
+Pode passar um novo parâmetro para criação da imagem:
+docker image build --build-arg S3_BUCKET=myapp -t ex-build-arg .
+
+Passar o meso parâmetro e observar que agora executa o "myapp":
+docker container run ex-build-arg bash -c "echo $S3_BUCKET"
+
+Os labels podem ser extraídos futuramente da imagem, o comando abaixo extrai o
+mantenedor da imagem que acabau de criar.
+Esse filtro retorna apenas o que deseja saber:
+docker image inspect --format="{{index .Config.Labels \"maintainer\"}}"  ex-build-arg
+
+
+
+
+
+
