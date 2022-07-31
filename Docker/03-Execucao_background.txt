@@ -6,11 +6,10 @@ Esse é o modo principal.
 
 Para executar background vá até a pasta que deseja:
 cd ..
-cd ..
 
-cd Users\Lcf\Desktop\curso-doker-leandro\exercicio-volume
+cd Users\Lcf\Desktop\curso-docker-leandro\exercicio-volume
 
-docker container run -d --name ex-daemon-basic -p 8080:80 -v C:\Users\Lcf\Desktop\curso-doker-leandro\exercicio-volume\pasta-html:/usr/share/nginx/html nginx
+docker container run -d --name ex-daemon-basic -p 8080:80 -v C:\Users\Lcf\Desktop\curso-docker-leandro\exercicio-volume\pasta-html:/usr/share/nginx/html nginx
 
 Vai gerar um ID e o container está em execução.
 

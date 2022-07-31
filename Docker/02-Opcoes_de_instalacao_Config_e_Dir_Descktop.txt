@@ -113,9 +113,9 @@ cd ..
 cd Users
 cd Lcf
 cd Descktop
-mkdir curso-doker-leandro
+mkdir curso-docker-leandro
 
-cd curso-doker-leandro
+cd curso-docker-leandro
 mkdir exercicio-volume
 cd exercicio-volume
 mkdir pasta-html
@@ -126,7 +126,7 @@ docker container run -p 8080:80 -v $(pwd)/html:/usr/share/nginx/html nginx
 (-v é para mapear volume, pwd vai pegar a pasta corrente e vai procurar uma sub-pasta chamda not-found 
 e vai apontar agora para uma pasta host)
 
-docker container run -p 8080:80 -v C:\Users\Lcf\Desktop\curso-doker-leandro\exercicio-volume\pasta-html:/usr/share/nginx/html nginx
+docker container run -p 8080:80 -v C:\Users\Lcf\Desktop\curso-docker-leandro\exercicio-volume\pasta-html:/usr/share/nginx/html nginx
 
 Agora vá ao navegador:
 http://localhost:8080/

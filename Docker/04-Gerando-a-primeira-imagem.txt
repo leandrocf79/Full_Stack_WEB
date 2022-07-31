@@ -2,5 +2,45 @@ https://hub.docker.com/_/nginx
 
 Primeiro build
 
+Pode usar o editor de preferência para criar as pastas e os arquivos necessários, Visual Studio.
+
+Vai seguir a ordem de pasta e arquivo:
+
+Ditertório principal:
+curso-docker-leandro
+
+sub-diretórios:
+
+1)
+exrcicio-volume/pasta-html
+html.html
+
+2)
+primeiro-build
+Dockerfile   (Assim mesmo, sem extenção e "file" com letras minúsculas)
+
+Abra um editor, recomendo o "Sublime Text" e coloque neste arquivo o segunte cod:
+
+FROM nginx:latest
+RUN echo '<h1>Hello World !</h1>' > /usr/share/nginx/html/index.html
+
+
+No terminal digitar:
+cd ..
+Ir até a pasta primeiro-build:
+
+cd primeiro-build/
+
+Colocar uma tag na imagem:
+docker image build -t ex-simple-build .
+
+ ( -t é para colocar o nome, neste caso, o nome "ex-simple-build"
+O "espaço ponto" é para dizer que é a pasta local )
+Conferir:
+docker image ls
+docker container run -p 80:80 ex-simple-build
+
+
+
 
 
