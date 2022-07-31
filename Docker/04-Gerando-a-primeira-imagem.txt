@@ -2,34 +2,52 @@ https://hub.docker.com/_/nginx
 
 Primeiro build
 
-Pode usar o editor de preferência para criar as pastas e os arquivos necessários, Visual Studio.
+Pode usar o editor de preferência para criar as pastas e os arquivos necessários, 
+Visual Studio, Sublime Text ou ainda "Abrir como" txt.
 
-Vai seguir a ordem de pasta e arquivo:
+
 
 Ditertório principal:
-curso-docker-leandro
+curso-doker-leandro
 
 sub-diretórios:
 
 1)
+Diretório:
 exrcicio-volume/pasta-html
+
+Arquivo:
 html.html
 
 2)
+Diretório:
 primeiro-build
+
+Arquivo:
 Dockerfile   (Assim mesmo, sem extenção e "file" com letras minúsculas)
 
 Abra um editor, recomendo o "Sublime Text" e coloque neste arquivo o segunte cod:
 
-FROM nginx:latest
-RUN echo '<h1>Hello World !</h1>' > /usr/share/nginx/html/index.html
+********* NO EDITOR:
 
+# Se estiver no linux tem esse exemplo.
+
+# FROM nginx:latest
+# RUN echo '<h1>Hello World! Hello technology!</h1>' > /usr/share/nginx/html/index.html
+
+#   No Windows:
+
+FROM nginx:latest
+RUN echo '<h1>Hello World! Hello technology!</h1>' > C:\Users\Lcf\Desktop\curso-docker-leandro\exercicio-volume\pasta-html
+
+*********
 
 No terminal digitar:
 cd ..
 Ir até a pasta primeiro-build:
+(C:\Users\Lcf\Desktop\curso-docker-leandro\primeiro-build)
 
-cd primeiro-build/
+cd Desktop\curso-docker-leandro\primeiro-build
 
 Colocar uma tag na imagem:
 docker image build -t ex-simple-build .
@@ -39,6 +57,11 @@ O "espaço ponto" é para dizer que é a pasta local )
 Conferir:
 docker image ls
 docker container run -p 80:80 ex-simple-build
+
+No navegador abrir a porta 80 apenas inserindo:
+http://localhost/
+
+Verá a mensagem "Hello World! Hello technology"
 
 
 
