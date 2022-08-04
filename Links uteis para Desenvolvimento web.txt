@@ -1,0 +1,71 @@
+https://www.google.com/search?q=templates+gr%C3%A1tis&oq=templates+gratiu&aqs=chrome.1.69i57j0i13l9.10624j0j4&sourceid=chrome&ie=UTF-8
+
+Autoprefixer CSS online
+https://autoprefixer.github.io/
+
+Tabla de colores HTML
+https://html-color-codes.info/codigos-de-colores-hexadecimales/
+
+CSS Fonts, colors, js_random
+https://www.w3schools.com/css/css_font.asp
+https://www.w3schools.com/css/css_colors.asp
+https://www.w3schools.com/js/js_random.asp
+https://www.dafont.com/pt/ (cuidado, tem fontes pagas, não podem ser usadas sem compra-las)
+
+
+Códigos de Símbolo (HTML)
+http://fap.if.usp.br/~vvuolo/A%20-%20HOME%20-%20Fisica/simbolos.htm
+
+Icons
+https://getbootstrap.com/docs/4.0/extend/icons/
+https://useiconic.com/open#icons
+https://fontawesome.com/icons?d=gallery&m=free
+
+Styling with Font Awesome
+https://fontawesome.com/docs/web/style/styling
+
+Lorem Ipsum (textos para testes)
+https://www.lipsum.com/feed/html
+
+Remova fundos de imagens 
+https://pt.clippingmagic.com/
+
+imagens aleatórias para teste
+https://unsplash.com/developers
+
+Bootstrap
+https://getbootstrap.com/docs/4.1/getting-started/download/
+https://getbootstrap.com/docs/4.1/getting-started/introduction/#starter-template
+
+RUN js, html, css (SIMULADOR)
+https://jsfiddle.net/
+
+RunJS interativo
+https://runjs.app/
+
+Sublime Text
+https://www.sublimetext.com/
+
+jQuery
+https://jquery.com/
+https://releases.jquery.com/
+https://code.jquery.com/jquery-3.6.0.min.js
+https://api.jquery.com/
+
+Normalize.css
+https://necolas.github.io/normalize.css/
+
+Converter otf to woff
+https://www.google.com/search?q=converter+Otf+to+woff&sxsrf=ALiCzsZB75DoJqg3SzJceNcRApjBM3Cnqg%3A1656540318907&ei=nsy8YoWJN6bVkPIPxKmVWA&ved=0ahUKEwiF0I7K1dP4AhWmKkQIHcRUBQsQ4dUDCA4&uact=5&oq=converter+Otf+to+woff&gs_lcp=Cgdnd3Mtd2l6EAMyBAgAEBMyBggAEB4QEzIICAAQHhANEBMyCggAEB4QDRAFEBMyCAgAEB4QBRATMggIABAeEAUQEzIKCAAQHhANEAUQEzIKCAAQHhANEAUQEzIICAAQHhAFEBMyCggAEB4QDRAFEBM6BwgAEEcQsANKBAhBGABKBAhGGABQ4gdY4gdgwRloAXABeACAAd0BiAHdAZIBAzItMZgBAKABAcgBCMABAQ&sclient=gws-wiz
+
+XAMPP Apache + MariaDB + PHP + Perl
+https://www.apachefriends.org/pt_br/index.html
+
+MySQL Community Downloads
+https://dev.mysql.com/downloads/mysql/
+
+GREPPER  (Codigos Git )
+https://www.codegrepper.com/code-examples/shell/config+global+user+git+command
+https://git-scm.com/download/win
+
+
