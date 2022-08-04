@@ -16,7 +16,7 @@ ___________________
 Exemplo para começar:
 #docker caontainer run -d --net none debian
 
-Debian foi uma imagem escolhida, mas pode chamr outras.
+Debian foi uma imagem escolhida, mas pode chamar outras.
 ___________________
 
 
