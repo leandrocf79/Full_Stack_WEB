@@ -42,6 +42,6 @@ def error404(request, ex):
 
 Importar pagina ou 404 (pagina nao encontrada)
 
-Ver como ficou em core/django1/urls    tem que fazer configur~çoes aí também.
+Ver como ficou em core/django1/urls    tem que fazer configurções aí também.
 
 
