@@ -1,0 +1,21 @@
+No terminal:
+
+>>>from core.models import Produto        Core é o nome do diretório
+
+>>>dir(Produto)     Para saber o que é possível fazer
+>>>dir(Produto.objects)
+produtos = Produto.objects.all()
+produtos
+
+>>> for produto in produtos:
+...	print(produto)
+
+
+
+Produto.objects.count()
+Produto.objects.first()
+Produto.objects.last()
+Produto.objects.filter(id=1)
+
+
+

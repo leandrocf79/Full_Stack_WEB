@@ -1,0 +1,128 @@
+quando for publicar na web deve baixar essas 2 bibliotecas
+
+ pip install whitenoise gunicorn
+
+
+--------------------------------
+ATENÇÃO AO CONTEÚDO ABAIXO:
+
+Em settings:
+
+# SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG com valor True = modo desenvolvimento
+# DEBUG com valor False = modo produção
+DEBUG = False   
+
+
+#ALLOWED_HOSTS = ['*'] # ASSIM o servidor vai escolher aleatóriamente o nome,
+# então deve ser colocado o nome que já existe ou criar
+ALLOWED_HOSTS = ['django1-gu.herokuapp.com']  # www.geekuniversity.com.br ou www.django1-gu.herokuapp.com <---
+
+
+------------------------------------
+Acerescentar a linha abaxo em:
+'whitenoise.middleware.WhiteNoiseMiddleware',
+
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',     <--------
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+
+------------------------------------
+Agora deve criar um arquivo chamado .gitignore para ignorar arquivos que não deseja enviar.
+Na pasta principal New/file/ nomear com .gitignore
+Escrever nele:
+__pycache__
+
+*.*~
+
+*.pyc
+
+.idea
+
+
+------------------------------------
+inicializar no terminal 
+git init
+git status
+git add .        Com o ponto vai adicionar todos os arquivos
+
+git commit -m "Primeiro commit"
+
+Deverá logar agora, no terminal irá aparecer as instruções.
+
+git config --global user.email "leandrocf79@gmail.com"
+git config --global user.name "leandrocf79"
+git status
+
+
+_________________________________________
+Ir até a pagina web 
+https://signup.heroku.com/
+criar uma conta, confirmar e fechar
+
+________________________________________
+Na pagina abaixo para saber como proceder
+https://devcenter.heroku.com/articles/getting-started-with-python
+
+Vá até "Set up"
+https://devcenter.heroku.com/articles/getting-started-with-python#set-up
+
+Baixe o instalador conforme sistema operacional,
+se for windows ou pelo terminal se linux ou macOS.
+
+_________________________________________
+
+Vá na IDe em runtime.txt
+ e coloque a varsão correta atual que está usando do python.
+Exemplo: python-3.7.3
+****No terminal digite o comando abaixo para saber a versão correta:
+python -V
+
+---------------------------------------
+No terminal instalar:
+pip freeze > requiriments.txt
+
+______________________________________
+Criar mais um arquivo chmado Procfile
+marcar do tipo Text e ok.
+
+Agora adicionar o conteúdo relacionado:
+
+web: gunicorn django1.wsgi --log-file -
+
+
+Acima a aplicação web vai usar "gunicorn" que foi instalado para rodar o projeto wsgi que
+está dentro do diretório django1
+"django1.wsgi"
+
+______________________________________
+git commit -m "Novos arquivos Heroku"
+git status
+
+Ainda no terminal:
+heroku login
+
+Vai solicitar "qualquer tecla para abrir navegador"
+
+!! Pode dar erro na primeira tentativa.
+Ctrl+c
+e repetir login no heroku
+
+Agora deve criar a aplicação no heroku colocando umas letras após o nome do projeto para diferenciar. 
+Pode por as iniciais do nome "lc" ou "lcf" para não ter domínios iguais.
+heroku create django1.lc --buildpack heroku/python
+
+Ele vai criar um nome do link, melhor ja criar o projeto com o nome proximo ao que deseja para DNS
+http://django1-lc.herokuapp.com
+
+Agora é só fazer o push:
+git push heroku master
