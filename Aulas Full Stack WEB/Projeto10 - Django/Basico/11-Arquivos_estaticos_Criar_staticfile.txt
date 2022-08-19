@@ -1,0 +1,47 @@
+Arquivos estaticos
+
+Criar uma pasta com o nome padrão static em:
+core/static/     css, images, js
+
+Em django1 /settings:
+STATIC_URL = '/static/'  # usado durante o desenvolvimento se DEBUG = True
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # usado durante a produção se DEBUG = False
+
+
+No terminal:
+python menage.py shell
+from django1.settings import BASE_DIR
+BASE_DIR      Para imprimir na tela
+vai verificar o diretório raiz
+
+Centralizar todos os arquivos estáticos em um lugar só:
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+STATIC_ROOT
+
+
+Na página chamar static assim:
+No topo do html por
+{% load static %}
+
+e no head
+<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+
+o mesmo serve par js e outros
+
+
+-----------
+
+Em core/templates/views
+pode criar registro de uma pagina de erro:
+from django.shortcuts import get_object_or_404
+
+def error404(request, ex):
+    template = loader.get_template('404.html')
+    return HttpResponse(content=template.render(), content_type='text/thml; charset=utf8', status=404)
+
+Importar pagina ou 404 (pagina nao encontrada)
+
+Ver como ficou em core/django1/urls    tem que fazer configur~çoes aí também.
+
+
