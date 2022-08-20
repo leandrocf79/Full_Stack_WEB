@@ -1,0 +1,56 @@
+Em django2 / urls.py
+
+Acrescentar include e configurar path:
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('core.urls')),
+] 
+
+# Atenção, mais coisas serão colocadas em urls.py, está assim para teste inicial.
+
+-----
+Em core criar urls.py com todo conteúdo dele:
+from django.urls import path
+
+from .views import index, contato, produto
+
+urlpatterns = [
+    path('', index, name='index'),
+    path('contato/', contato, name='contato'),
+    path('produto/', produto, name='produto'),
+]
+
+
+-----
+Em dijango2 em settings já havia configurado DIRS que teria um diretório chamado templates
+
+** Se tiver no Ubuntu, no terminal:
+sudo apt-get install libmysqlclient-dev python3-dev
+
+** Se tiver no MacOS
+brew install mysql-connector-c
+
+** No windows já foram instaladas com MySQL
+
+No terminal conferir:
+pip install MySQL
+pip freeze > requiriments.txt     <--Para salvar tudo aí.
+
+python manage.py migrate    <-- Vai aplicar todas as migrations no BD
+
+Após criar superuser vai pedir usuário e senha:
+python manage.py createsuperuser  
+
+Verificar se as rotas estão corretas:
+python manage.py runserver
+
+No navegador testar:
+localhost:8000
+localhost:8000/contato/
+localhost:8000/produto
+
+

@@ -1,0 +1,14 @@
+Tudo que tiver em core no arquivo views.py da aula foi digitado para atender o propósito abaixo.
+
+---
+Se colocar palavras em portugues o Pycharm vai acusar como erro de digitação,
+não atrapalha em nada.
+
+---
+
+Após isso, ainda em core, pode criar uma pasta chamada templates.
+Os arquivos HTML devem ficar nela.
+
+
+Agora criar uma pasta chamada static, dentro dela outras como css, js, image...
+

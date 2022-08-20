@@ -1,0 +1,74 @@
+Criar novo projeto no pycharm, proferencialmente como um nome próximo ao que vai por na url depois
+ 
+pip install django whitenoise gunicorn django-bootstrap4 PyMySQL django-stdimage
+
+O ponto é para não criar sub diretório:
+django-admin startproject django02 .
+
+django-admin startapp core
+
+---
+Configuraçôes iniciais em settings:
+ALLOWED_HOSTS = ['*'] #no final trocar pelo nome correto
+
+---
+Declarar os itens instaldos:
+INSTALLED_APPS = [
+	...
+    'django.contrib.staticfiles',
+
+    'stdimage',          <---
+    'bootstrap4',
+    'core',
+]
+
+
+---
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',   <--- Será utilizado na hora de publicar
+
+---
+Em DIRS[]:
+'DIRS': ['templates'],
+
+---
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django2',
+        'USER': 'geek',    <--- Dono do BD MySQL
+        'PASSWORD': 'university',  <--Senha do BD
+        'HOST': 'localhost',
+        'PORT': '3306',    <--- 3306 É do MySQL
+    }
+}
+
+---
+LANGUAGE_CODE = 'pt-br'
+
+TIME_ZONE = 'America/Sao_Paulo'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  <-- Na hora da produção vai coletar tudo de static e centralizar em sataticfiles
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+_______________________ NO MYSQL
+Criar um script:
+
+CREATE DATABASE django2;
+
+E fechar, agora é o prórpio djando que vai fazer o resto rsrs
+
