@@ -1,0 +1,40 @@
+Enviar email sem ou com provedor
+
+
+Em django2/settings:
+
+"""
+#Enviar email sem servidor. EM AMBIENTE DE PRODUÇÃO, após isso usar o outro modelo abaixo. Isso aqui é um simulador no console.
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+	#Enviar email COM servidor de email
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = 'no-replay@SEU DOMINIO.com.br'
+EMAIL_PORT = 587  #Geralmente é essa porta segura. O host vai informar qual a porta.
+EMAIL_USER_TLS = True  #Criptografia, sim.
+EMAIL_HOST_PASSWORD = 'Senha do email no-replay, SUA SENHA'
+
+"""
+---
+Depois vá em core/templates/forms.py para visualisar o conteúdo.
+
+---
+Agora em views:
+
+def contato(request):
+    form = ContatoForm(request.POST or None)  # <---
+
+    if str(request.method) == 'POST':
+        if form.is_valid():
+            form.send_mail()   # <---
+
+            messages.success(request, 'E-mail enviado com sucesso!')
+            form = ContatoForm()
+        else:
+            messages.error(request, 'Erro ao enviar e-mail')
+    context = {
+        'form': form
+    }
+    return render(request, 'contato.html', context)
+

@@ -1,0 +1,30 @@
+No diretório core criar forms.py
+
+Olhar no arquivo da aula, tem todos os comandos lá.
+
+No terminal:
+python manage.py shell
+
+from django import forms
+dir(forms)
+
+help(forms.CharField)
+
+Aqui será possível ver os atributos disponíveis para utilizar no forms.py
+
+class ContatoForm(forms.Form):
+    nome = forms.CharField(label='Nome', max_length=100)   <-- É interessante limitar com max_length
+    email = forms.EmailField(label='E-mail', max_length=100)
+    assunto = forms.CharField(label='Assunto', max_length=120)
+    mensagem = forms.CharField(label='Mensagem', widget=forms.Textarea()) <-- Textarea()  vai criar uma caixa para texto.
+
+
+---
+Ver página contato recurso de segurança. 
+
+ {% csrf_token %}   Valída os dados para saber se não foram alterados no caminho.
+
+{% bootstrap_form form %} Vai aplicar css no formulario
+
+
+autocomplete="off" para que os textos digitados seja apagados após o envio.
