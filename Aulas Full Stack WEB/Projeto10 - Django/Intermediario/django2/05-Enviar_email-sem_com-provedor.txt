@@ -17,7 +17,7 @@ EMAIL_HOST_PASSWORD = 'Senha do email no-replay, SUA SENHA'
 
 """
 ---
-Depois vá em core/templates/forms.py para visualisar o conteúdo.
+Depois vá em core/forms.py para visualisar o conteúdo.
 
 ---
 Agora em views:

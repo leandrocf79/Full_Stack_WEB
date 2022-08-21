@@ -1,0 +1,54 @@
+Modelo de dados.
+
+Em django2/settings.py foi colocado 'stdimage'
+
+---
+Agora em core/models.py ver conteúdo pelo arquivo.
+
+
+Importar SIGNALS para antes ou depois de inserir algo no BD
+Importar SLUGIFY para criar uma url válida com algo da página, por exmplo, o título ou nome do produto separado por sinal de menos.  ...fale-conosco ou Play-sation-5
+
+Ver conteúdo no arquivo.
+
+---
+
+Obeservar principalmente essa parte,  SLUG e SLUGIFY.
+
+slug = models.SlugField('Slug', max_length=100, blank=True, editable=False)
+
+    def __str__(self):
+        return self.nome
+
+
+def produto_pre_save(signal, instance, sender, **kwargs):
+    instance.slug = slugify(instance.nome)
+
+
+signals.pre_save.connect(produto_pre_save, sender=Produto) #Ants de salvar execute: produto_pre_save quando sender=Produto submeter sinal.
+
+
+---
+Em admin.py ver decorators
+
+---
+
+Pode abrir a página de Admin e visualizar os produtos cadastrados:
+Terminal:
+python manage.py runserver
+
+Web:
+localhoast:8000/admin/core/produto
+
+---
+Ver recursos disponíveis pelo terminal:
+
+python manage.py shell
+from dijango.db.models import signals
+ Sair: Ctrl+c
+
+
+python manage.py shell
+from dijango.template.defaultfilters import slugify
+dir(slugify)
+ Sair: Ctrl+c
