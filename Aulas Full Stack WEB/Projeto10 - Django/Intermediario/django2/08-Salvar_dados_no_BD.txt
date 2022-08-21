@@ -1,0 +1,45 @@
+Em django2/settings.py acrescentar:
+
+MEDIA_URL = 'media/'  # Serve para qualquer coisa que faça upload, será criado dentro de mídia.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+ 
+---
+Agora em django2/urls.py:
+
+from django.conf.urls.static import static
+from django.conf import settings
+
+E adicionar + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) em:
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('core.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # Serve para fazer acesso aos templates com os
+                                                                # arquivos de mídia, é uma rota já existente do prórpio static.
+
+
+---
+Agora em core/views deixar no modo de envio para o BD, descrito na aula anterior:
+
+from .forms import ContatoForm, ProdutoModelForm
+
+def produto(request):
+    if str(request.user) != 'AnonymousUser':
+        if str(request.method) == 'POST':
+            form = ProdutoModelForm(request.POST, request.FILES)
+            if form.is_valid():
+                
+		form.save() # Significa: O formulario está vago?? Salvar.
+
+                messages.success(request, 'Produto salvo com sucesso.')
+                form = ProdutoModelForm()
+            else:
+                messages.error(request, 'Erro ao salvar produto.')
+        else:
+            form = ProdutoModelForm()  # <--- Esse é o destroier, vai limpar o formulário
+        context = {
+            'form': form
+        }
+        return render(request, 'produto.html', context)
+    else:
+        return redirect('index')

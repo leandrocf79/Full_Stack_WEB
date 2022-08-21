@@ -1,0 +1,58 @@
+Em core/forms.py observar:
+
+class ContatoForm(forms.Form):  #Herda classe Form de
+class ProdutoModelForm(forms.ModelForm): #Herda classe ModelForm
+
+Sendo que essa parte parte é o que o usuário vai informar nos campos.
+class ProdutoModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Produto
+        fields = ['nome', 'preco', 'estoque', 'imagem']
+
+** Esse Form veio de django2\django02\venv\Lib\site-packages\django\forms que foi criado pelo Django.
+
+
+Em views tem que importar ProdutosModelForm
+
+from .forms import ContatoForm, ProdutoModelForm
+
+def produto(request):
+    if str(request.user) != 'AnonymousUser':
+        if str(request.method) == 'POST':
+            form = ProdutoModelForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+
+                # Para testar apagar o form.save() acima para imprimir no terminal como teste usando o conteúdo abaixo:
+                """
+                prod = form.save(commit=False)
+                print(f:'Nome: (prod.nome))
+                print(f:'Preço: (prod.preco))
+                print(f:'Estoque: (prod.estoque))
+                print(f:'Imagem: (prod.imagem))
+                
+                # Ver agora produto.html
+                """
+
+                messages.success(request, 'Produto salvo com sucesso.')
+                form = ProdutoModelForm()
+            else:
+                messages.error(request, 'Erro ao salvar produto.')
+        else:
+            form = ProdutoModelForm()  # <--- Esse é o destroier, vai limpar o formulário
+        context = {
+            'form': form
+        }
+        return render(request, 'produto.html', context)
+    else:
+        return redirect('index')
+
+
+No navegador pode inserir dados para teste:
+localhoast:8000/produto
+
+No BD pode verificar que não estará lá ainda, core_produtos:
+SELECT * FROM django2.core_produto;
+
+Próxima aula enviar para o BD.
