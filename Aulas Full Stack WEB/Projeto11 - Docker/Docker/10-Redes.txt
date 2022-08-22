@@ -1,0 +1,127 @@
+Tem 4 tipos de redes no docker.
+
+1) Nome Network:
+Nenhuma rede, para processamento interno, algo que manupule um volume.
+
+2) Bridg Network (padrão):
+Cria uma ponte entre o container e o host com acesso a internet.
+
+3) Host network (modo de proteção baixo):
+Cria container sem ponte e com acesso direto ao host com internet.
+
+4) Overlay Nerwork (Swarm):
+Esse não será abordado neste curso, o docker utiliza clusters.
+
+___________________
+Exemplo para começar:
+#docker caontainer run -d --net none debian
+
+Debian foi uma imagem escolhida, mas pode chamar outras.
+___________________
+
+
+Acessar o diretório principal:
+Desktop\curso-docker-leandro
+
+docker network ls
+
+1) Nome Network, Container sem rede:
+
+### Para teste criar um container e apagar ele, é para exibir um container com acesso a rede e o número de ip.
+
+docker container run --rm alpine ash -c "ifconfig"
+
+--rm : Vai apagar o container após executar
+alpine : imagem
+ash : é um bash mais leve
+-c : para chamar o comando
+ifconfig : comando com "f" mesmo
+
+### O mesmo comando anterior, mas agora selecionando a rede NONE.
+
+docker container run --rm --net none alpine ash -c "ifconfig"
+
+Vai exibir sem acesso fora do container.
+
+###################
+
+
+2) Bridg Network (padrão):
+
+docker network inspect bridge
+
+Criar e acessar um container com ping e sleep 1000 para ficar ativo e executando:
+
+docker container run -d --name container1 alpine sleep 1000
+
+docker container exec -it container1 ifconfig
+para ver o ip criado para essa máquina
+
+
+Criar o SEGUNDO container:
+docker container run -d --name container2 alpine sleep 1000
+
+docker container exec -it container2 ifconfig
+para ver o ip criado para essa máquina
+
+
+Agora fazer o ping:
+docker container exec -it container1 ping 172.17.0.3
+
+Ctrl+C para parar.
+___________________
+
+docker container exec -it container1 ping www.google.com
+
+
+
+Criar uma nova rede:
+
+docker network create --driver bridge rede_nova
+docker network ls
+docker network inspect rede_nova
+Observar a faixa de rede criada:
+	"Subnet": "172.18.0.0/16",
+        "Gateway": "172.18.0.1"
+
+docker container run -d --name container3 --net rede_nova alpine sleep 1000
+
+docker container exec -it container3 ifconfig
+para ver o ip criado para essa máquina
+
+### Fazer um ping do container3 para container1(ip: 172.17.0.2 ):
+
+docker container exec -it container3 ping 172.17.0.2
+Ctrl+C para parar.
+___________________
+Observe que não houve ping! Agora criar acesso entre os containeres:
+
+Conectar ponte/container3:
+docker network connect bridge container3
+
+Para observar o resultado:
+docker container exec -it container3 ifconfig
+
+Agora fazer o ping novamente:
+docker container exec -it container3 ping 172.17.0.2
+Ctrl+C para parar.
+___________________
+
+Para desconectar:
+docker network disconnect bridge container3
+
+Para observar o resultado:
+docker container exec -it container3 ifconfig
+
+
+
+###################
+3) Host network (mais rápido, modo de proteção baixo):
+
+No terminal, para ver as redes disponíveis:
+ifconfig
+No windows:
+ipconfig
+
+docker container run -d --name container4 --net rede_nova alpine sleep 1000
+docker container exec -it container4 ifconfig

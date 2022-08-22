@@ -1,0 +1,5 @@
+Não usar commit, não deixa documentado. Não é considerado uma boa prática.
+
+Usar build
+
+Estratégia e vantagem de dividir uma imagem em camadas é o reuso.

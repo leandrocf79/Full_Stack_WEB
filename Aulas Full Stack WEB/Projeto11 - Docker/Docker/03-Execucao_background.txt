@@ -1,0 +1,102 @@
+https://hub.docker.com/_/nginx
+
+
+Esse é o modo principal.
+
+
+Para executar background vá até a pasta que deseja:
+cd ..
+
+cd Users\Lcf\Desktop\curso-docker-leandro\exercicio-volume
+
+docker container run -d --name ex-daemon-basic -p 8080:80 -v C:\Users\Lcf\Desktop\curso-docker-leandro\exercicio-volume\pasta-html:/usr/share/nginx/html nginx
+
+Vai gerar um ID e o container está em execução.
+
+Verificar container em execução:
+docker container ps
+
+Parar:
+docker container stop ex-daemon-basic
+
+Iniciar:
+docker container start ex-daemon-basic
+
+Restart:
+docker container restart ex-daemon-basic
+
+@@@
+*** Pode ainda usar o ID: (docker container ps)
+
+docker container stop ex-daemon-basic
+docker container stop aa643f43eabc
+@@@
+---------------------------------------------------
+Manipulação de containers em modo daemon:
+
+docker container ps
+docker container ps -a
+docker container ls
+docker container ls -a
+docker container list
+docker container list -a
+
+-----
+Antigamente era: 
+(docker ps
+docker ps -a)   Isso causava alguns problemas. Seguir o modelo  mais recente chamado daemon.
+-----
+
+Verificar o que foi feito:
+docker container logs aa643f43eabc
+
+Fazer uma inspeção docontainer:
+docker container inspect ex-daemon-basic
+
+Que tipo de sistemas está no container:
+docker container exec ex-daemon-basic uname -or
+
+Apagar imagem, não o container:
+docker image rm "nome a ser removido"
+
+Imagem é a classe, camadas e container é o objeto, o processo. A partir de uma classe pode instanciar muitos objetos.
+
+docker image --help
+docker container --help
+docker volume --help
+
+
+
+Para uma imagem mais recente (Tomar cuidado, pode gerar erros e problemas na recuperação de dados e correção de bugs):
+docker image pull redis:latest
+docker image inspect redis:latest
+
+Alterar o nome:
+docker image tag redis:latest leandrocf79
+docker image ls
+
+Apagar 1,  2 ou mais é só dar espaço e colocar os nomes:
+docker image rm redis:latest leandrocf79
+
+
+#######################
+
+COMANDOS BÁSICOS NO GERENCIAMNTO DAS IMAGES:
+
+docker image pull  (baixa a imagem do docker hub)
+docker image ls
+docker image rm "nome a ser removido"
+docker image inspect
+docker image tag (para aplicar um novo nome)
+docker image build (vai gerar a imagem)
+docker image push (para publicar)
+
+#######################
+
+Docker Hub × Docker Registry:
+
+Docker Hub:
+É um SAAS, é uma núvem disponibilizada pelo docker, tambem tem um registry.
+
+Docker Registry:
+Servoço de registro e obtenção ou resgate de images.

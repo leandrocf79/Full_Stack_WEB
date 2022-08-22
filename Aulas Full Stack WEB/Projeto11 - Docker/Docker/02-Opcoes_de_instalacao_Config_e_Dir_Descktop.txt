@@ -1,0 +1,135 @@
+https://hub.docker.com/_/nginx
+
+ install Docker Community Edition on Windows 10 ATUALIZADO.
+
+ou em otras versões do windows
+docker tollbox
+
+Para verificar a instalação.
+Apos instalado abra o CMD e digite no terminal:
+docker
+
+Se listar, então está ok.
+
+ Digite tanbém:
+docker container run hello-world
+
+Primeiro não vai encontrar e depois vai fazer um pull e exibir a mensagem.
+  --------
+
+bash --version
+
+Para limpar o terminal: cls
+
+Run sempre cria um novo container.
+docker container run -it debian bash --version
+
+ps
+
+(verificar quais são os containers ativos)
+docker container ps
+
+(exibir todos os containers, mesmo os que não estão ativos)
+docker container -a 
+
+(para executar e remover o container)
+docker container ps -a
+
+
+###########################################################
+
+
+
+
+docker container run -it debian bash
+
+i- iterativo
+t- terminal
+
+Agora utilizando o debian no terminal:
+
+Use o botão DIREITO do mouse para colar comandos copiados.
+
+ Criar: 
+
+# touch curso-docker.txt
+#ls
+
+Para entrar em um novo container:
+# exit
+
+docker container run -it debian bash
+
+# ls curso-docker.txt
+
+Vai avisar que não existe. Está em novo container.
+# exit
+
+##############################################################
+
+docker container run --help
+
+(criar um container com um nome escolhido)
+docker container run --name leandrodocker -it debian bash
+
+Lembrando que RUN sempre cria um novo container.
+
+verificar os containers existentes novamente:
+docker container ls -a
+
+
+Iniciar um container específico (start):
+docker container start -ai leandrodocker
+ 
+# touch curso-docker.txt
+
+#############################################################
+Não é interessante manter um container totalmente isolado, pode manter uma porta aberta e compartilhar algo,
+algum serviço.
+
+Parar a execução de um container diretamente do terminal com o comando CTRL+C, 
+porém, esse comando só funciona no Mac e no Linux. Para o Windows é preciso utilizar
+o comando:
+docker container stop "NomeDoContainer"
+
+docker container run -p 8080:80 nginx
+
+testar no navegador:
+http://localhost:8080/
+
+docker container stop leandrodocker
+
+########################################################
+
+
+
+Ao utilizar um trecho de comando chamado "pwd"  retorna o caminho atual da pasta onde o terminal está localizado, porém, esse "pwd" 
+não irá funcionar em todos os terminais ou sistemas operacionais. Caso não funcione será necessário utilizar o comando absoluto 
+da pasta em questão, ou seja, algo como "c/users/SeuNome/docker"
+ cd ..
+cd ..
+ Ir até   C:\Users\Lcf\Desktop
+
+cd Users
+cd Lcf
+cd Descktop
+mkdir curso-docker-leandro
+
+cd curso-docker-leandro
+mkdir exercicio-volume
+cd exercicio-volume
+mkdir pasta-html
+cd pasta-html
+(colocar nesssa pasta, para teste, um arquivo chamado html.html)
+
+docker container run -p 8080:80 -v $(pwd)/html:/usr/share/nginx/html nginx
+(-v é para mapear volume, pwd vai pegar a pasta corrente e vai procurar uma sub-pasta chamda not-found 
+e vai apontar agora para uma pasta host)
+
+docker container run -p 8080:80 -v C:\Users\Lcf\Desktop\curso-docker-leandro\exercicio-volume\pasta-html:/usr/share/nginx/html nginx
+
+Agora vá ao navegador:
+http://localhost:8080/
+
+
+**************

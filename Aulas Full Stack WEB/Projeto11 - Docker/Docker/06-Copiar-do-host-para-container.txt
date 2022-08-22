@@ -1,0 +1,54 @@
+
+Criar uma pasta chamada build-com-copy
+Nela criar:
+index.html
+
+Por o conteúdo para teste para acessar conteúdo.html criado no dentro de Dockerfile:
+
+### Em index.html:
+
+<a href="conteudo.html">Conteudo do site</a>
+
+###
+
+
+
+No Dockerfile:
+###
+
+FROM nginx:latest
+LABEL maintainer 'Aluno Cod3r <aluno leandrocf79@gmail.com>'
+
+RUN echo '<h1>Copia de conteudo realizada com sucesso</h1>' > /usr/share/nginx/html/conteudo.html
+COPY *.html /usr/share/nginx/html/
+
+
+##############  PARA WINDOWS USAR:
+
+FROM nginx:latest
+LABEL maintainer "Aluno Cod3r <aluno: leandrocf79@gmail.com>"
+
+RUN echo "<h1>Copia de conteudo realizada com sucesso</h1>" > C:\Users\Lcf\Desktop\curso-docker-leandro\build-com-copy\conteudo.html
+COPY *.html C:\Users\Lcf\Desktop\curso-docker-leandro\build-com-copy
+
+###
+
+No terminal acessar a pasta criada build-com-copy:
+cd ..
+cd build-com-copy
+ou
+cd Desktop\curso-docker-leandro\build-com-copy
+
+( incluir o espaço-ponto ):
+docker image build -t ex-build-copy .
+
+docker image ls
+
+docker container run -p 8077:80 ex-build-copy 
+# Serviço disponível em:
+http://localhost:8077
+
+
+
+
+
