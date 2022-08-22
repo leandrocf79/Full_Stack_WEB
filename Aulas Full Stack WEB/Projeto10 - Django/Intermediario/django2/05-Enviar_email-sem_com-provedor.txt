@@ -5,7 +5,7 @@ Em django2/settings:
 
 """
 #Enviar email sem servidor. EM AMBIENTE DE PRODUÇÃO, após isso usar o outro modelo abaixo. Isso aqui é um simulador no console.
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # <----- Comentar # para publicar site.
 
 
 	#Enviar email COM servidor de email

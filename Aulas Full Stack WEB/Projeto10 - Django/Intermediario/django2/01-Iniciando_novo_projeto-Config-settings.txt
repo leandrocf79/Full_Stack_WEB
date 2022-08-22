@@ -1,4 +1,15 @@
-Criar novo projeto no pycharm, proferencialmente como um nome próximo ao que vai por na url depois
+Criar novo projeto no pycharm, proferencialmente como um nome próximo ao que vai por na url depois.
+
+
+	***  Observação: Heroku não da suporte gratuito ao MySQL, portanto, no arquivo 11 será trocado para PostgreSQL. 
+	     Essa parte em MySQL está para aprendizado caso deseje usar em algum projeto.
+	
+	O whitenoise não vai apresentar os arquivos de midia, só os estáticos, o ideal é usar o NGINX. 
+	O heroku está sendo utilizdo no modo gratuito, limitado também.
+	Na aula 11, no final do arquivo, alguns comandos para corrigira isso. dj-static vai substituir whitenoise. 
+	Para fase de desenvolvimento pode seguir usando whitenoise normalmente, depois tirar ele.
+
+
  
 pip install django whitenoise gunicorn django-bootstrap4 PyMySQL django-stdimage
 
