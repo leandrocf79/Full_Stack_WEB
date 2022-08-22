@@ -1,6 +1,0 @@
-Bridg Network (padrão):
-Cria uma ponte entre o container e o host com acesso a internet. Muito mais seguro.
-Será abordado melhor na próxima aula.
-
-Para criar um repositório privado no https://hub.docker.com/repositories clique no projeto
-e na página seguinte na aba "Settings" e escolha o botão "Make Private".
