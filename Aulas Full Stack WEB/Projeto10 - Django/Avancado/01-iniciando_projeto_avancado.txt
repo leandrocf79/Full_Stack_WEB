@@ -1,0 +1,107 @@
+Criar o arquivo python para o projeto.
+
+Abrir o terminal e instalar as bibliotecas:
+pip install django psycopg2-binary gunicorn dj-static django-stdimage
+
+
+###
+psycopg2-binary - é para postegresql
+gunicorn - para rodar aplicação
+dj-static - para associar arquivos estáticos
+django-stdimage - ajudar a trabalhar co imagens
+###
+
+
+Criar arquivo e salvar as bibliotecas:
+pip freeze > requirements.txt
+
+Iniciar projeto, colocar o "espaço ponto":
+django-admin startproject fision .
+
+
+---
+Criar a aplicação core:
+django-admin startapp core
+
+New / Directory
+*Criar templates (no plural para diferenciar da pasta de apoio template).
+*Criar pasta static
+*Criar arquivo urls.py
+
+Agora em fision/settings  INSTALLED_APPS  acrescentar core:
+'core'
+
+---
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [templates], # No plural deve ser criado no djando, o que está no singular foi colocado para apoio de conteúdo
+
+---
+Corrigir para o BD correto e configurar demais opções:
+Seguir modelo: https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',  # <--postgresql
+        'NAME': 'fusion', # <-- Alterar nome do BD para o nome do projeto
+        'USER': 'leandrocf', # <-- Colocar o usuário correto 
+        'PASSWORD': 'umasenha', # <-- Colocar senha corretamente 
+        'HOST': 'localhost',
+        'port': '5432', # <-- Porta do postgresql
+    }
+}
+
+
+## Para conferir se está correto, tem um link logo acima de DATABASE, abre ele no navegador:
+https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+---
+LANGUAGE_CODE = 'pt-BR'
+TIME_ZONE = 'America/Sao_Paulo'
+
+---
+Por fim acrescentar itens:
+
+STATIC_URL = '/static/' # Abaixo desse
+
+MEDIA_URL = 'media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+-----------
+Em fusion/urls.py:
+
+from django.contrib import admin
+
+from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('core.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+----------
+Em core/urls. Deixar assim para configurar as rotas mais a frente:
+
+from django.urls import path
+
+urlpatterns =[
+    
+]
+
+----------
+Baixar PostgreSQL, fazer usuário e senha ou utilizar uma que já exista.
+https://www.postgresql.org/download/
+
+---> Deve criar o Database
+Nome do BD: fusion
+Owner: leandrocf
+
+
+
+
