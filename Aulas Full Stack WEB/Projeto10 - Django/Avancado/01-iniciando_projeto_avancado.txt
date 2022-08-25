@@ -28,7 +28,9 @@ New / Directory
 *Criar pasta static
 *Criar arquivo urls.py
 
-Agora em fision/settings  INSTALLED_APPS  acrescentar core:
+
+--------------
+Agora em fusion/settings  INSTALLED_APPS  acrescentar core:
 'core'
 
 ---
@@ -94,14 +96,23 @@ urlpatterns =[
     
 ]
 
-----------
-Baixar PostgreSQL, fazer usuário e senha ou utilizar uma que já exista.
+
+----------AGORA MUITA ATENÇÃO PARA NÃO TER PROBLEMAS!!!!
+
+Baixar PostgreSQL, fazer usuário e senha ou utilizar uma que já exista. 
+
+*** TEM ESSA SENHA ""DE INSTALÇÃO"" SERÁ SOLICITADA E UMA SENHA "MASTER" PARA ACESSAR "SERVERS", são 2 senhas então.
+
 https://www.postgresql.org/download/
 
+
 ---> Deve criar o Database
-Nome do BD: fusion
-Owner: leandrocf
+Nome do BD para este projeto, 
+Database: fusion
+Owner: lcf   # Para este curso deixar tudo fusion.
 
+Depois de renomear vai precisar reiniciar, digite no menu iniciar do windows "services.msc",
+procure Prostgresql-x64-(versão) 
+clique com botão direito e reinicie.
 
-
-
+Caso deseje pode por para iniciar manualmente no windows.

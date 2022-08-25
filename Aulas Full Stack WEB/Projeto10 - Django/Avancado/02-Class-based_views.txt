@@ -1,0 +1,31 @@
+Ver modelos de algoritmos em:
+https://docs.djangoproject.com/en/4.1/topics/class-based-views/intro/
+https://ccbv.co.uk/
+https://ccbv.co.uk/projects/Django/4.0/django.views.generic.base/TemplateView/
+
+
+Em core/views:
+from django.views.generic import TemplateView
+
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+---
+Criar rotas, em urls.py:
+from django.urls import path
+from .views import IndexView
+
+urlpatterns =[
+    path ('', IndexView.as_view(), name='index'),
+]
+
+
+---
+Testar aplicação:
+python manage.py runserver
+
+*** Falta criar a index, portanto, vai encontrar o caminho, mas não a página.
+
+Ctrl+c  # Parar servidor.
+
+Esse conteúdo é o class based view, muito mais fácil de usar que as funções aprendidas anteriormente.
