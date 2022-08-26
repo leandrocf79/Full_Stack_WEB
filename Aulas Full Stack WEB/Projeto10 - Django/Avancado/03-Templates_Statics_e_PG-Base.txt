@@ -1,0 +1,230 @@
+Criar as páginas html e os arquivos estáticos.
+
+Para este curso apenas colar o conteúdo já disponibilizado em cada pasta.
+
+Templates/index.html
+static/ css
+	fonts
+	img
+	js
+	scss   <--São arquivos compilados
+
+---
+Sempre que for usar static colocar no topo da html, antes de qualquer outra coisa:
+{% load static %}
+
+
+---
+Pode corrigir idioma:
+<html lang="pt-br">
+
+
+---
+Para cada entrada static deverá ser informada:
+Antes (    <link rel="stylesheet" href="assets/css/bootstrap.min.css" >  
+Dpois (    <link rel="stylesheet" href="{% static  'css/bootstrap.min.css'   %}" >  
+
+
+{% static '      <-- É o diretório
+
+css/bootstrap.min.css' %}"    <-- É o caminho para os arquivos dentro do diretório.
+
+Trocar de todos os locais possíveis, verificar abaixo na html se há imagens.
+
+exemplo:
+<a href="index.html" class="navbar-brand"><img src="{% static 'img/logo.png' %}" alt=""></a>    
+
+No Pycharm pode usar uma Replace All para substituir tudo de uma vez:
+Ctrl+R
+
+Substituir:
+assets/    
+Por:
+{% static '
+
+Lembrando que ainda vai faltar fechar o linha depois substituindo   "     por     ' %}"
+
+Pode fazer uma nova busca por     {% static '     e corrigir apenas o final da linha.
+
+
+---
+Testar se está tudo correto:
+python manage.py runserver
+
+Ctrl+c
+
+
+
+_____________________
+
+HERANÇA DE TEMPLATES
+
+-------------------------Criar página base
+
+templates/base.html
+
+Selecionar todo o conteúdo da index.html e colar em base.html, neste momento serão idênticos.
+
+Configurar base.html para que suas alterações se expanda para todas as outras:
+
+
+Para esta página, excluir o conteúdo entre  <!-- Navbar End -->    e    <!-- Go to Top Link -->    
+     
+<!-- Navbar End -->
+e
+<!-- Hero Area Start -->
+
+colocar um {% block content %}, é um bloco de conteúdo:
+
+
+      <!-- Navbar End -->
+	{% block content %}
+      <!-- Hero Area Start -->
+
+
+fechar ele logo abaixo de     <!-- Footer Section End -->
+
+
+    <!-- Footer Section End -->
+	{% endblock %}
+    <!-- Go to Top Link -->
+
+
+-----Assim pode excluir o conteúdo interno ao bloco e deixar assim:
+
+
+      <!-- Navbar End -->
+
+      {% block content %}
+
+      <!-- conteúdo excluido da pg base -->
+
+      {% endblock %}
+
+    <!-- Go to Top Link -->
+
+
+*** Sem problema algum pode organizar assim, um ao lado do outro:   {% block content %}   {% endblock %}
+
+
+
+
+
+-------------------Agora em index.html será apagado o oposto:
+
+Apagar tudo que estiver entre:
+{% load static %}
+
+
+      <!-- Hero Area Start -->
+
+**** e deixar assim para extender o conteúdo html:
+
+{% extends 'base.html' %} <!-- PRECISA SER ANTES DE LOAD STATIC -->
+{% load static %}
+{% block content %}
+
+      <!-- Hero Area Start -->
+
+
+
+----Repetir no final da index.html e fechar:
+
+Apagar tudo que tiver abaixo de <!-- Footer Section End -->
+
+e acrescentar para fechar o bloco na index:
+
+<!-- Footer Section End -->
+{% endblock %}
+
+
+---
+Testar se está tudo correto:
+python manage.py runserver
+
+Ctrl+c
+
+
+
+
+---------------
+Cuidado com as ASPAS onde houver dentro das {}
+---------------
+
+
+
+
+Precisa observar e fazer uma correção no conteúdo desta página, base.html precisa corrigir rota:
+
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <a href="index.html" class="navbar-brand"><img src="{% static 'img/logo.png' %}" alt=""></a>
+
+Para isso:
+<a href="{% url 'index' %}"  class="navb.....
+
+Observar em urls.py que a rota é 'index'
+
+
+
+
+------------------Fragmentar index em partes expecíficas:
+
+Criar uma página hero.html com o conteúdo:
+
+
+{% load static %}
+      <!-- Hero Area Start -->
+
+		<!-- Recortar conteúdo da index.html referênte a isso e colar aqui. -->				
+
+      <!-- Hero Area End -->
+</header>
+<!-- Header Area wrapper End -->
+
+<!-- não precisa fechar -->
+
+
+
+-----
+e na index.html onde houve o recorte colocar:
+      <!-- Hero Area Start -->
+
+        {% include 'hero.html' %}  <!-- O conteúdo recortado está exatamente aqui. -->
+
+      <!-- Hero Area End -->
+
+<!-- Services Section Start -->
+
+
+-----
+Repetir o processo para as demais áreas do site:
+Criar e colocar no topo de todos {% load static %}
+
+
+servicos.html
+{% include 'servicos.html' %}
+
+sobre.html
+{% include 'sobre.html' %}
+
+features.html
+{% include 'feaures.html' %}
+
+equipe.html
+{% include 'equipe.html' %}
+
+precos.html
+{% include 'precos.html' %}
+
+clientes.html
+{% include 'clientes.html' %}
+
+call-to.html
+{% include 'call-to.html' %}
+
+contato.html
+{% include 'contato.html' %}
+
+footer.html
+{% include 'footer.html' %}
+
