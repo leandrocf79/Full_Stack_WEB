@@ -111,6 +111,8 @@ Nome do BD para este projeto,
 Database: fusion
 Owner: lcf   # Para este curso deixar tudo fusion.
 
+Com relação ao BD só precisa criar o DATABASE automaticamente e fechar o BD, todo o restante será o Django que fará.
+
 Depois de renomear vai precisar reiniciar, digite no menu iniciar do windows "services.msc",
 procure Prostgresql-x64-(versão) 
 clique com botão direito e reinicie.
