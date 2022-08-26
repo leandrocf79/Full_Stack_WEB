@@ -30,8 +30,16 @@ New / Directory
 
 
 --------------
-Agora em fusion/settings  INSTALLED_APPS  acrescentar core:
+Agora em fusion/settings:
+
+ALLOWED_HOSTS = ['*']
+
+---
+INSTALLED_APPS  acrescentar core:
 'core'
+
+---
+ROOT_URLCONF = 'fusion.urls'
 
 ---
 TEMPLATES = [
@@ -101,7 +109,7 @@ urlpatterns =[
 
 Baixar PostgreSQL, fazer usuário e senha ou utilizar uma que já exista. 
 
-*** TEM ESSA SENHA ""DE INSTALÇÃO"" SERÁ SOLICITADA E UMA SENHA "MASTER" PARA ACESSAR "SERVERS", são 2 senhas então.
+*** TEM ESSA SENHA ""DE INSTALÇÃO"" SERÁ SOLICITADA DEPOIS DE UMA SENHA "MASTER" PARA ACESSAR "SERVERS", são 2 senhas então.
 
 https://www.postgresql.org/download/
 
@@ -110,8 +118,6 @@ https://www.postgresql.org/download/
 Nome do BD para este projeto, 
 Database: fusion
 Owner: lcf   # Para este curso deixar tudo fusion.
-
-Com relação ao BD só precisa criar o DATABASE automaticamente e fechar o BD, todo o restante será o Django que fará.
 
 Depois de renomear vai precisar reiniciar, digite no menu iniciar do windows "services.msc",
 procure Prostgresql-x64-(versão) 

@@ -1,16 +1,20 @@
-Criar as páginas html e os arquivos estáticos.
+Criar as páginas html e os arquivos estáticos(css,js, img...).
 
-Para este curso apenas colar o conteúdo já disponibilizado em cada pasta.
-
-Templates/index.html
-static/ css
-	fonts
-	img
-	js
-	scss   <--São arquivos compilados
+*** 	Para este curso apenas colar o conteúdo já disponibilizado em cada pasta.
+	Pense como se o front-end já estivesse pronto e vai fazer os ajustes para Django e publicação.
 
 ---
-Sempre que for usar static colocar no topo da html, antes de qualquer outra coisa:
+Criar: core/templates/index.html
+	    static/ css
+		    fonts
+		    img
+		    js
+		    scss   <--São arquivos compilados
+*Colar os arquivos já existentes.
+
+
+---
+Sempre que for usar static colocar no topo da html, antes de qualquer outra coisa na index:
 {% load static %}
 
 
@@ -20,21 +24,32 @@ Pode corrigir idioma:
 
 
 ---
-Para cada entrada static deverá ser informada:
+Cada entrada "static" deverá ser informada com    "{% static '' %}"  :
+
+Substituir:
+assets/    
+Por:
+{% static '
+
+e depois finalizar o conteúdo com:
+' %}"
+
+
 Antes (    <link rel="stylesheet" href="assets/css/bootstrap.min.css" >  
-Dpois (    <link rel="stylesheet" href="{% static  'css/bootstrap.min.css'   %}" >  
+Dpois (    <link rel="stylesheet" href= "{% static  'css/bootstrap.min.css'   %}" >  
 
 
-{% static '      <-- É o diretório
+{% static '    <-- É o diretório
 
 css/bootstrap.min.css' %}"    <-- É o caminho para os arquivos dentro do diretório.
 
 Trocar de todos os locais possíveis, verificar abaixo na html se há imagens.
 
 exemplo:
-<a href="index.html" class="navbar-brand"><img src="{% static 'img/logo.png' %}" alt=""></a>    
+<a href="index.html" class="navbar-brand"><img src= "{% static  'img/logo.png'  %}"  alt=""></a>    
 
-No Pycharm pode usar uma Replace All para substituir tudo de uma vez:
+
+>>> No Pycharm pode usar uma Replace All para substituir tudo de uma vez:
 Ctrl+R
 
 Substituir:
@@ -44,7 +59,9 @@ Por:
 
 Lembrando que ainda vai faltar fechar o linha depois substituindo   "     por     ' %}"
 
-Pode fazer uma nova busca por     {% static '     e corrigir apenas o final da linha.
+Pode fazer uma nova busca por     {% static '     
+
+e corrigir apenas o final da linha depois.
 
 
 ---
@@ -59,7 +76,7 @@ _____________________
 
 HERANÇA DE TEMPLATES
 
--------------------------Criar página base
+-------------------------Criar página base, é a página mestre.
 
 templates/base.html
 
@@ -68,7 +85,7 @@ Selecionar todo o conteúdo da index.html e colar em base.html, neste momento se
 Configurar base.html para que suas alterações se expanda para todas as outras:
 
 
-Para esta página, excluir o conteúdo entre  <!-- Navbar End -->    e    <!-- Go to Top Link -->    
+Para esta página, base.html, excluir o conteúdo entre  <!-- Navbar End -->    e    <!-- Go to Top Link -->    
      
 <!-- Navbar End -->
 e
@@ -120,7 +137,7 @@ Apagar tudo que estiver entre:
 
 **** e deixar assim para extender o conteúdo html:
 
-{% extends 'base.html' %} <!-- PRECISA SER ANTES DE LOAD STATIC -->
+{% extends 'base.html' %} <!-- PRECISA SER ANTES DE "LOAD STATIC" -->
 {% load static %}
 {% block content %}
 
@@ -148,19 +165,21 @@ Ctrl+c
 
 
 ---------------
-Cuidado com as ASPAS onde houver dentro das {}
+Cuidado onde houver ASPAS dentro das {}
 ---------------
 
 
 
+Um erro interessante para se observar:
 
 Precisa observar e fazer uma correção no conteúdo desta página, base.html precisa corrigir rota:
 
           <!-- Brand and toggle get grouped for better mobile display -->
-          <a href="index.html" class="navbar-brand"><img src="{% static 'img/logo.png' %}" alt=""></a>
+Aqui-->   <a href="index.html" class="navbar-brand"><img src="{% static 'img/logo.png' %}" alt=""></a>
 
+Substituir rota em   <a href="index.html" 
 Para isso:
-<a href="{% url 'index' %}"  class="navb.....
+<a href="{% url 'index' %}"  class="navbar-brand"><im.....
 
 Observar em urls.py que a rota é 'index'
 
@@ -227,4 +246,201 @@ contato.html
 
 footer.html
 {% include 'footer.html' %}
+
+
+
+--------------------Para finalizar (opcional):
+
+Pode criar uma página de teste para diversos fins. *** Lembrando que tem que criar rotas em urls.py e views.py :
+
+
+---
+Criar uma classe em Core/templates/views.py:
+
+class TesteViews (TemplateView):
+	template_name = 'teste.html'
+
+
+---
+Em urls.py acrescentar  TesteViews e path para 'teste/':
+
+from django.urls import path
+from .views import IndexView, TesteViews     
+
+urlpatterns =[
+    path ('', IndexView.as_view(), name='index'),
+    path ('teste/', TesteViews.as_view(), name='teste'), # Se alguem digitar teste/ no navegador abre página teste.  
+
+]
+
+
+
+---
+Criar: core/templates/teste.html com o seguinte conteúdo:
+
+____________________________________________________________________
+{% extends 'base.html'  %}  <!-- Chamou o cabeçalho da página -->
+{% load static %}
+{% block content %}
+
+<!-- Pode adicionar conteúdo de teste -->
+
+
+<h1 style="color: blue;"><br><br>Página teste</h1>
+<!-- Pode adicionar conteúdo da página index.html aqui -->
+
+<!-- Footer Section Start -->
+{% include 'footer.html' %}
+<!-- Footer Section End -->
+
+
+<!-- OBJETIVO DO TESTE É COLAR O CONTEÚDO HTML PARA EDIÇÃO -->
+<!-- ***************************************************** -->
+
+
+ <!-- Hero Area Start -->
+<div id="hero-area" class="hero-area-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+          <div class="contents">
+            <h2 class="head-title">Com muito estudo e <br>esforço, you'll be there!</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat! fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat!</p>
+            <div class="header-button">
+              <a href="#" class="btn btn-common">Download Now</i></a>
+              <a href="{% url 'index' %}" class="btn btn-border video-popup">RETORNAR PARA PÁGINA PRINCIPAL </i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+          <div class="intro-img">
+            <img class="img-fluid" src="{% static 'img/intro-mobile.png' %}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- Hero Area End -->
+
+{% endblock %}
+___________________________________________________________________
+
+
+
+Criar páginas
+Erro de carregamento: 404  
+e  
+Erro de processamento: 500
+
+404.html
+500.html
+
+
+*** Lembrando que tem que criar rotas em urls.py e views.py :
+
+
+Em urls.py acrescentar:
+
+from django.urls import path
+from .views import IndexView, TesteViews, Teste404, Teste500
+
+urlpatterns =[
+    path ('', IndexView.as_view(), name='index'),
+    path ('teste/', TesteViews.as_view(), name='teste'), # Se alguem digitar teste/ no navegador abre página teste.
+    path ('404/', Teste404.as_view(), name='404'),
+    path ('500/', Teste500.as_view(), name='500'),
+]
+
+
+
+---
+Em views.py acrescentar:
+
+class Teste404 (TemplateView):
+	template_name = '404.html'
+
+
+
+
+---
+Modelo a ser colado:
+
+{% extends 'base.html'  %}  <!-- Chamou o cabeçalho da página -->
+{% load static %}
+{% block content %}
+
+<h1 style="color: blue;"><br><br>Página teste</h1>
+
+ <!-- Hero Area Start -->
+<div id="hero-area" class="hero-area-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+          <div class="contents">
+            <h2 class="head-title">404 <br>Erro de carregamento</h2>
+              <h1>Tente novamente mais tarde.</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat! fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat!</p>
+            <div class="header-button">
+              <a href="#" class="btn btn-common">Download Now</i></a>
+              <a href="{% url 'index' %}" class="btn btn-border video-popup">RETORNAR PARA PÁGINA PRINCIPAL </i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+          <div class="intro-img">
+            <img class="img-fluid" src="{% static 'img/intro-mobile.png' %}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- Hero Area End -->
+
+{% endblock %}
+
+
+
+
+----------- Preparar para publicar em fase de teste ainda, pode deletar o teste.html e deixar as demais,
+neste novo modelo do Django ele procura pelas páginas com nomes 404 ou 500 altomáticamente sem ter que 
+declará-las: 
+
+Páginas 404 e 500 estão herdando base.
+
+
+Feitos os testes agora deixar "views.py" e "urls.py" exatamente como estava antes, 
+os demais conteúdos pode deixar como comentário FORA DOS COLCHETES ou apagar:
+
+
+from django.views.generic import TemplateView
+
+class IndexView(TemplateView):
+    template_name ='index.html'
+
+
+---
+from django.urls import path
+from .views import IndexView                     TesteViews, Teste404, Teste500   <-- apagar imports !!!
+
+urlpatterns =[
+    path ('', IndexView.as_view(), name='index'),
+]
+
+
+
+---------------PUBLICAR O SITE em teste para exibir erro:
+
+Em settings.py colocar DEBUG = False
+e observar 
+ALLOWED_HOSTS = ['*']
+
+
+No terminal executar:
+python manage.py runserver
+
+Agora veja que ao acessar  http://127.0.0.1:8000/  vai funcionar normalmente, 
+mas ao tentar uma página que não existe vai exibir mensagem de erro:
+
+http://127.0.0.1:8000/abacaxi
+ 
 
