@@ -1,0 +1,197 @@
+
+
+Em servicos.html pode numerar cada divisão de serviços para facilitar:
+<!-- Services item 1-->
+<!-- Services item 2-->
+...
+
+
+---
+No terminal:
+python manage.py runserver
+http://127.0.0.1:8000/
+
+Observe que cada quadro na aba Services tem 3 coisas:
+1- icone
+2- título
+3- descrição
+
+Ctrl+c    Parar 
+
+
+---
+Em core/models.py criar uma classe abstrata, criar uma classe com cada ícone com seu respectivo nome nos atributos:
+
+
+from django.db import models
+from stdimage.models import StdImageField
+
+# auto_now_add= True coloca data automaticamente
+# auto_now=True  coloca data de atualização
+
+class Base(models.Model):
+    criados = models.DateField('Data de criação', auto_now_add= True) 
+    modificado = models.DateField('Atualização', auto_now=True)
+    ativo = models.BooleanField('Ativo: ', default=True)
+
+    class Meta:
+        abstract = True
+
+# 1- icone:
+# Pode criar tuplas e depois receber o conteúdo abaixo
+class Servico(Base):
+    ICONE_CHOICES = (
+        ('lni-cog', 'Engrenagem'),
+        ('lni-stats-up', 'Gráficos'),
+        ('lni-users', 'Usuário'),
+        ('lni-layers', 'Design'),
+        ('lni-mobile', 'Mobile'),
+        ('lni-rocket', 'Foguete'),
+    )
+    servico = models.CharField('Serviço', max_length=100)
+    descricao = models.TextField('Descrição', max_length=200)
+    icone = models.TextField('Ícone', max_length=13, choices=ICONE_CHOICES)
+
+    class Meta:
+        verbose_name = 'Serviço'
+        verbose_plural = 'Serviços'
+
+    def __str__(self):
+        return self.servico
+
+
+
+# 2- título(Cargo na empresa):
+
+class Cargo(Base):
+    cargo = models.CharField('Cargo', max_length=100)
+
+    class Meta:
+        verbose_name = 'Cargo'
+        verbose_plural = 'Cargos'
+
+    def __str__(self):
+        return self.cargo
+
+
+
+# 3- descrição(Funcionário):
+
+# Vai criar um diretório equipe e por as imagens lá. 480 é o tamanho real da imagem e se precisar cortar --> Crop = pode recortar.
+# Importante por "on_delete=models.CASCADE", se não houver mais o cargo o nome também será excluido.
+# Em "thumbnail" é importante manter o nome do arquivo original. Ao final será dada instrução para criar uma Def para evitar erros de imagens com mesmo nome.
+
+class Funcionario(Base):
+    nome = models.CharField('Nome', max_length=100)
+    cargo = models.ForeignKey('core.Cargo', verbose_name='Cargo', on_delete=models.CASCADE)
+    bio = models.TextField('Bio', max_length=200 )
+    imagem = StdImageField('Imagem', upload_to= 'equipe', variations={'thumb': {'width':480, 'height':480, 'crop': True}})
+
+    facebook= models.CharField('Facebook', max_length=100, default='#')
+    twitter = models.CharField('Twitter', max_length=100, default='#')
+    instagram = models.CharField('Instagram', max_length=100, default='#')
+
+    class Meta:
+        verbose_name = 'Funcionário'
+        verbose_plural = 'Funcionários'
+
+    def __str__(self):
+        return self.nome
+
+
+
+-----------
+Criado "model.py" é necessário fazer o makemigrations:
+python manage.py makemigrations
+
+Agora fazer a migração para o BD:
+python manage.py migrate
+
+Superuser:
+python manage.py createsuperuser
+
+---------
+Em core/admin.py inserir dados para área administrativa:
+
+
+from django.contrib import admin
+from .models import Cargo, Servico, Funcionario
+
+
+@admin.register(Cargo) #Registrar endereço pelo decorator
+class CargoAdmin(admin.ModelAdmin):
+    list_display = ('cargo', 'ativo', 'modificado')
+
+
+@admin.register(Servico)
+class ServicoAdmin(admin.ModelAdmin):
+    list_display = ('servico', 'icone', 'ativo', 'modificado')
+
+
+@admin.register(Funcionario)
+class FuncionarioAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'cargo', 'ativo', 'modificado')
+
+
+Ctrl+S
+
+-----------
+No terminal verificar:
+python manage.py runserver
+
+http://127.0.0.1:8000/admin
+Entrar em serviços e cadastrar Serviço, Descrição e ecolher o ícone a ser usado para cada um, neste site são 6.
+Salvar
+
+Pode ir em cargos e depois em equipe e fazer o mesmo, alterar todos para teste.
+
+Observe que no Projeto foi criado um diretório novo chamdo "media".
+
+
+Ctrl+c
+
+--------------
+Para evitar erros com imagens com mesmo nome pode por abaixo de 
+from django.db import models
+from stdimage.models import StdImageField
+a definição:
+
+import uuid
+
+def get_file_path(_instance, filename):
+	ext = filename.split('.')[-1]
+	filename = f'{uuid.uuid4()}.{ext}'
+	return filename
+
+---Para entender o que o "uuid" faz ir ao terminal e digitar:
+python
+>>> import uuid
+>>> uuid.uuid4()
+
+* A sequência alfanumérica apresentada será o tipo de nome dado para as imagens adicionadas.
+
+---
+Deve alterar agora a linha imagem:
+imagem = StdImageField('Imagem', upload_to =    'equipe',      variations={'thumb': {'width':480, 'height':480, 'crop': True}})
+
+Para:
+imagem = StdImageField('Imagem', upload_to =  get_file_path,   variations={'thumb': {'width':480, 'height':480, 'crop': True}})
+
+
+Devido a isso pode deletar o diretório Equipe criado em media.
+
+---
+Toda mudança em models:
+python manage.py makemigrations
+
+Agora fazer a migração para o BD:
+python manage.py migrate
+
+python manage.py runserver
+
+http://127.0.0.1:8000/admin
+Vá em funcionários e faça os testes.
+
+Próxima aula os dados serão apresentados no template.
+
+Ctrl+c

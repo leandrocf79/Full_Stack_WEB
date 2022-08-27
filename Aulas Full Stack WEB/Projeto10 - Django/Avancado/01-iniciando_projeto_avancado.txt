@@ -80,6 +80,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+Ctrl+S
+
+
 -----------
 Em fusion/urls.py:
 
@@ -95,6 +98,10 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
+
+Ctrl+S
+
+
 ----------
 Em core/urls. Deixar assim para configurar as rotas mais a frente:
 
@@ -103,6 +110,9 @@ from django.urls import path
 urlpatterns =[
     
 ]
+
+
+Ctrl+S
 
 
 ----------AGORA MUITA ATENÇÃO PARA NÃO TER PROBLEMAS!!!!
