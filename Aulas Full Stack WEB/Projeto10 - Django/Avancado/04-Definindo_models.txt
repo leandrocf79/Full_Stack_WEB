@@ -1,4 +1,4 @@
-
+Models serve para armazenar dados no BD e poder alterar tudo pelo Admin.
 
 Em servicos.html pode numerar cada divisão de serviços para facilitar:
 <!-- Services item 1-->
