@@ -16,7 +16,7 @@ Criar arquivo e salvar as bibliotecas:
 pip freeze > requirements.txt
 
 Iniciar projeto, colocar o "espaço ponto":
-django-admin startproject fision .
+django-admin startproject fusion .
 
 
 ---
