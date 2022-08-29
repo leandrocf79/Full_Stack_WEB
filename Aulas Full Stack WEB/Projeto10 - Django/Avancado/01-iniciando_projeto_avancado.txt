@@ -45,7 +45,7 @@ ROOT_URLCONF = 'fusion.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [templates], # No plural deve ser criado no djando, o que está no singular foi colocado para apoio de conteúdo
+        'DIRS': ['templates'], # No plural deve ser criado no djando, o que está no singular foi colocado para apoio de conteúdo
 
 ---
 Corrigir para o BD correto e configurar demais opções:
