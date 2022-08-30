@@ -55,8 +55,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # <--postgresql
         'NAME': 'fusion', # <-- Alterar nome do BD para o nome do projeto
-        'USER': 'leandrocf', # <-- Colocar o usuário correto 
-        'PASSWORD': 'umasenha', # <-- Colocar senha corretamente 
+        'USER': 'postgres', # <-- Colocar o usuário correto
+        'PASSWORD': '321654', # <-- Colocar senha corretamente
         'HOST': 'localhost',
         'port': '5432', # <-- Porta do postgresql
     }
