@@ -117,6 +117,9 @@ Ctrl+S
 
 ----------AGORA MUITA ATENÇÃO PARA NÃO TER PROBLEMAS!!!!
 
+Tem que usar um BD ou não vai funcionar nem o teste.
+
+
 Baixar PostgreSQL, fazer usuário e senha ou utilizar uma que já exista. 
 
 *** TEM ESSA SENHA ""DE INSTALÇÃO"" SERÁ SOLICITADA DEPOIS DE UMA SENHA "MASTER" PARA ACESSAR "SERVERS", são 2 senhas então.
