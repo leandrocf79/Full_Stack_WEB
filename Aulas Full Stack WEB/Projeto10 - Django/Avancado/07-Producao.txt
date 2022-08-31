@@ -1,3 +1,8 @@
+Caso der erro no heroku pode usar a sugestão ao final deste arquivo.
+____________________________________________________________________
+Lembre-se de abrir o BD também.
+
+
 No diretório raiz fusion, new / file,  criar arquivo .gitignore para ignorar os arquivos que não são importantes para a publicação.
 
 __pycache__
@@ -80,7 +85,7 @@ Pode por as iniciais do nome "lc" ou "lcf" para não ter domínios iguais.
 
 heroku create fusion.lcf --buildpack heroku/python
 
-Ele vai criar um nome do link, melhor ja criar o projeto com o nome proximo ao que deseja para DNS
+Ele vai criar um nome do link, melhor ja criar o projeto com o nome próximo ao que deseja para DNS
 http://django1-lc.herokuapp.com
 
 ---
@@ -169,3 +174,34 @@ git status
 
 *** Publicar:
 git push heroku master
+
+
+
+_____________________________________________________________
+ERRO HEROKU:
+Caso der erro no heroku pelos procedimentos no terminal vá em
+https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli
+
+instale o software e no 
+Painel de configurações do windows/ Sistema/ Sobre. 
+na parte lateral direita tem "Configurações avançadas do sistema"
+
+na aba "Avançado" procure por "Variáveis de Ambiente"
+
+  insira nos dois locais que vão aparecer o seguinte caminho:
+
+heroku
+C:\Program Files\heroku\bin
+
+Fechar e reiniciar o PC.
+
+Isso deve resolver.
+
+---
+Após reiniciar, no terminal do Pycharm digite:
+heroku login
+
+
+;) 
+
+
