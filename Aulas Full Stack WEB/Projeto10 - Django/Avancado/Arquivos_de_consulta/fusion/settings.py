@@ -24,7 +24,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '6c84000n*5423ov#u9h6f@&+%1ph4rxi(t1!83z+1u@(%2hh!6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -84,8 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'fusion',
-        'USER': 'lcf',
-        'PASSWORD': '321654',
+        'USER': 'Geek',
+        'PASSWORD': 'university',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -138,18 +139,20 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Email teste console
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
+# Email teste console
 """
-# Email produção
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Email produção, heroku não vai enviar email no modo gratuito.
 
 EMAIL_HOST = 'localhost'
 EMAIL_HOST_USER = 'no-reply@fusion.com.br'
 EMAIL_PORT = 587
 EMAIL_USE_TSL = True
-EMAIL_HOST_PASSWORD = 'fusion'
+EMAIL_HOST_PASSWORD = 'fusion'    # Senha real do email
 DEFAULT_FROM_EMAIL = 'contato@fusion.com.br'
 """
 
-LOGOUT_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'   # logoff vai voltar para index.html

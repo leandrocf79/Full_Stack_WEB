@@ -5,15 +5,16 @@ from django.contrib import messages
 from .models import Servico, Funcionario
 from .forms import ContatoForm
 
+#Criar contxt para serviços e funcionários
 
 class IndexView(FormView):
     template_name = 'index.html'
     form_class = ContatoForm
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('index')  # Após dar certo o envio abrirá a página index
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['servicos'] = Servico.objects.order_by('?').all()
+        context['servicos'] = Servico.objects.order_by('?').all()  # order_by('?') vai embaralhar apresentação a cada acesso, se tirar ele e deixar apenas .all() ficam todos estáticos.
         context['funcionarios'] = Funcionario.objects.order_by('?').all()
         return context
 
