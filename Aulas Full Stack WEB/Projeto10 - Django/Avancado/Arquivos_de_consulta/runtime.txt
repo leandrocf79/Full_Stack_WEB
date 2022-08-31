@@ -1,1 +1,1 @@
-python-3.6.2heroku run python manage.py createsuperuser
+python-3.6.2
