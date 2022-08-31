@@ -1,0 +1,171 @@
+No diretório raiz fusion, new / file,  criar arquivo .gitignore para ignorar os arquivos que não são importantes para a publicação.
+
+__pycache__
+
+*.*~
+
+*.pyc
+
+.env
+
+.idea
+
+template/*
+
+
+---Observação: template/* não é a pasta em core, essa  é aquela provisória com conteúdo inicial do projeto.
+
+---
+Em fusion/fusion/wsgi.py deixar com essa configuração:
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+from dj_static import Cling, MediaCling
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fusion.settings')
+
+application = Cling(MediaCling(get_wsgi_application()))
+
+
+---
+Enviar para o repositório, no terminal:
+
+git init
+git add .       --> O ponto vai adicionar todos os arquivos.
+git commit -m "Projeto finalizado"
+heroku login
+ ** Precione qualquer tecla.
+
+***Deverá ir até o site do heroku e criar um usuário e senha, se não houver,  para produrir o site. https://www.heroku.com/
+Após logar na página web:
+leandrocf79@hotmail.com
+Senha:
+
+
+---
+Criar na raiz do projeto new / file  runtime.txt e colocar ne a versão atual do python:
+****No terminal digite o comando abaixo para saber a versão correta:
+python -V
+
+No arquivo runtime.txt:
+python-3.6.2
+
+
+Ctrl-S
+
+
+---
+Criar mais um arquivo chamado Procfile   com "P" maiúsculo.
+marcar do tipo Text e ok.
+Agora adicionar o conteúdo relacionado:
+
+web: gunicorn fusion.wsgi --log-file -
+
+Ctrl-S
+
+
+Acima a aplicação web vai usar "gunicorn" que foi instalado para rodar o projeto wsgi que
+está dentro do diretório fusion
+"fusion.wsgi"
+
+---
+git commit -m "Novos arquivos Heroku"
+git status
+
+
+---
+Agora deve criar a aplicação no heroku colocando umas letras após o nome do projeto para diferenciar. 
+Pode por as iniciais do nome "lc" ou "lcf" para não ter domínios iguais.
+
+heroku create fusion.lcf --buildpack heroku/python
+
+Ele vai criar um nome do link, melhor ja criar o projeto com o nome proximo ao que deseja para DNS
+http://django1-lc.herokuapp.com
+
+---
+Em Settings alterar DEBUG para False
+
+git add .
+git commit -m "DEBUG para False"
+git status
+
+*** Publicar:
+git push heroku master
+
+
+---
+Criar as tabelas migrate:
+heroku run python manage.py migrate
+heroku run python manage.py createsuperuser
+usuário: lcf79
+email:
+Password:
+
+
+Agora pode clicar no link gerado pelo terminal e verificar a produção online na web.
+
+Não tem equipe nem serviços cadastrados. Vá no final do link e acrescente /admin/
+Usuário: lcf79
+senha:
+
+
+
+----
+Para voltar ao BD anterior e funcionar localmente pode ir até settings e comentar o BD atual e comentar o anterior:
+
+""" # Esse é LOCAL
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'fusion',
+        'USER': 'Geek',
+        'PASSWORD': 'university',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+"""
+
+
+DATABASES = {
+    'default': dj_database_url.config()
+}
+
+
+
+--- 
+No terminal pode usar o mesmo comando que está em Procfile:
+gunicorn fusion.wsgi --log-file -
+
+Para qualquer modificação:
+git init
+git add .
+git commit -m "Corrigido imagens"
+git status
+
+*** Publicar:
+git push heroku master
+
+
+
+---------
+Para personalizar o Admin pode usar no terminal:
+pip install django-adminlte2
+
+Em settings adicionar em INSTALLED_APPS = [:
+    'django_adminlte',
+    'django_adminlte_theme',
+
+Ctrl+s
+
+No terminal:
+pip freeze > requiriments.txt
+
+git add .
+git commit -m "admin lte2"
+git status
+
+*** Publicar:
+git push heroku master

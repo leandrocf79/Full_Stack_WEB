@@ -1,0 +1,119 @@
+Em core criar forms.py para criar o formulário de contato.
+
+Para facilitar, usar esse conteúdo:
+
+from django import forms
+from django.core.mail.message import EmailMessage
+
+
+class ContatoForm(forms.Form):
+    nome = forms.CharField(label='Nome', max_length=100)
+    email = forms.EmailField(label='E-mail', max_length=100)
+    assunto = forms.CharField(label='Assunto', max_length=100)
+    mensagem = forms.CharField(label='Mensagem', widget=forms.Textarea())
+
+    def send_mail(self):
+        nome = self.cleaned_data['nome']
+        email = self.cleaned_data['email']
+        assunto = self.cleaned_data['assunto']
+        mensagem = self.cleaned_data['mensagem']
+
+        conteudo = f'Nome: {nome}\nE-mail: {email}\nAssunto: {assunto}\nMensagem: {mensagem}'
+
+        mail = EmailMessage(
+            subject=assunto,
+            body=conteudo,
+            from_email='leandrocf79@gmail.com',    # Verificar o email
+            to=['leandrocf79@gmail.com',],
+            headers={'Reply-To': email}
+        )
+        mail.send()
+
+
+---
+Agora corrigir na views.py:
+
+
+from django.views.generic import FormView
+from django.urls import reverse_lazy
+from django.contrib import messages
+
+from .models import Servico, Funcionario
+from .forms import ContatoForm
+
+#Criar contxt para serviços e funcionários
+
+class IndexView(FormView):
+    template_name = 'index.html'
+    form_class = ContatoForm
+    success_url = reverse_lazy('index') # Após dar certo o envio abrirá a página index
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['servicos'] = Servico.objects.order_by('?').all()  # order_by('?') vai embaralhar apresentação a cada acesso, se tirar ele e deixar apenas .all() ficam todos estáticos.
+        context['funcionarios'] = Funcionario.objects.order_by('?').all()
+        return context
+
+    def form_valid(self, form, *args, **kwargs):
+        form.send_mail()
+        messages.success(self.request, 'E-mail enviado com sucesso')
+        return super(IndexView, self).form_valid(form, *args, **kwargs)
+
+    def form_invalid(self, form, *args, **kwargs):
+        messages.error(self.request, 'Erro ao enviar e-mail')
+        return super(IndexView, self).form_invalid(form, *args, **kwargs)
+
+
+
+---
+Em contato.html deverá ser feita algumas alterações:
+
+<form id="contato" method="post" action="{% url 'index' %}"> <!-- Será enviado para index -->
+{% csrf_token %}<!-- Medida de segurança do Django -->
+
+***** NÃO EXCLUIR os blocos para deixar só 1, neste caso é preciso ficar para que cada um seja trabalhado individualmnte.
+nome
+email
+assunto
+mensagem 
+
+---
+Pode agora criar em algum local apropriado da página um lugar para printar a mensagem de enviado ou erro.
+Neste curso foi utilizado em hero.html
+
+      <div class="container">
+        {% if messages %}
+          {% for m in messages %}
+            <div class="alert alert-{{ m.tags }}">
+              <button type="button" class="close" data-dismiss="alert"></button>
+              <strong>{{ m }}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+
+---
+Por ultimo é preciso declarar em settings:
+
+
+
+# Email teste console
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Email produção, heroku não vai enviar email no modo gratuito.
+
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = 'no-reply@fusion.com.br'
+EMAIL_PORT = 587
+EMAIL_USE_TSL = True
+EMAIL_HOST_PASSWORD = 'fusion'    # Senha real do email
+DEFAULT_FROM_EMAIL = 'contato@fusion.com.br'
+"""
+
+LOGOUT_REDIRECT_URL = 'index'   # logoff vai voltar para index.html
+
+
+
+

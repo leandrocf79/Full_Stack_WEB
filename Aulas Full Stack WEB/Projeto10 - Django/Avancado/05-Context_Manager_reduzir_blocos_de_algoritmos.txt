@@ -1,0 +1,150 @@
+Criar usando context e modelo BasedViews, isso vai reduzir as linhas de programação.
+
+Em core/views.py:
+
+
+from django.views.generic import TemplateView
+
+from .models import Servico, Funcionario
+
+
+#Criar contxt para serviços e funcionários
+
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['servicos'] = Servico.objects.order_by('?').all()  # order_by('?') vai embaralhar apresentação a cada acesso, se tirar ele e deixar apenas .all() ficam todos estáticos.    
+        context['funcionarios'] = Funcionario.objects.order_by('?').all()
+        return context
+
+
+---
+Em servicos.html deletar o que não for usar e deixar soemnte:
+
+{% load static %}
+<section id="services" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Nossos Serviços</h2>
+          <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
+        </div>
+        <div class="row">
+
+          {% for s in servicos %}
+          <!-- Services item -->
+          <div class="col-md-6 col-lg-4 col-xs-12">
+            <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+              <div class="icon">
+                <i class="{{ s.icone }}"></i>
+              </div>
+              <div class="services-content">
+                <h3><a href="#">{{ s.servico }}</a></h3>
+                <p>{{ s.descricao }}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+
+---
+Em servicos.html:
+
+
+{% load static %}
+<section id="services" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Nossos Serviços</h2>
+          <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
+        </div>
+        <div class="row">
+
+          {% for s in servicos %}   <!-- Usando FOR  para usar somente 1 conjunto de algoritmos para todos ao invés de 1 para cada serviço-->
+          <!-- Services item -->
+          <div class="col-md-6 col-lg-4 col-xs-12">
+            <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+              <div class="icon">
+                <i class="{{ s.icone }}"></i>  <!-- Usando icone, atributo criado em models.py-->
+              </div>
+              <div class="services-content">
+                <h3><a href="#">{{ s.servico }}</a></h3>   <!-- Acesso a serviços, atributo criado em models.py-->
+                <p>{{ s.descricao }}</p>    <!-- Acesso a descrição, atributo criado em models.py-->
+              </div>
+            </div>
+          </div>
+          {% endfor %}  <!-- Fechando FOR -->
+        </div>
+      </div>
+    </section>
+
+
+---
+No terminal, testar:
+python manage.py runserver
+
+pode entrar na pagina admin e substituir textos em serviços para testar.
+
+Ctrl+c
+
+
+---
+Agora em equipe.html fazer o mesmo, para ajudar pode ir até class funcionario(Base): que está em models.py:
+
+
+{% load static %}
+<section id="team" class="section-padding bg-gray">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Conheça Nossa Equipe</h2>
+          <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
+        </div>
+        <div class="row">
+          {% for f in funcionarios %}
+          <div class="col-lg-6 col-md-12 col-xs-12">
+            <!-- Team Item Starts -->
+            <div class="team-item wow fadeInRight" data-wow-delay="0.2s">
+              <div class="team-img">
+                <img class="img-fluid" src="{{ f.imagem.thumb.url }}" alt="{{ f.nome }}">
+              </div>
+              <div class="contetn">
+                <div class="info-text">
+                  <h3><a href="#">{{ f.nome }}</a></h3>
+                  <p>{{ f.cargo }}</p>
+                </div>
+                <p>{{ f.bio }}</p>
+                <ul class="social-icons">
+                  <li><a href="{{ f.facebook }}"><i class="lni-facebook-filled" aria-hidden="true"></i></a></li>
+                  <li><a href="{{ f.twitter }}"><i class="lni-twitter-filled" aria-hidden="true"></i></a></li>
+                  <li><a href="{{ f.instagram }}"><i class="lni-instagram-filled" aria-hidden="true"></i></a></li>
+                </ul>
+              </div>
+            </div>
+            <!-- Team Item Ends -->
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+
+
+---
+No terminal, testar:
+python manage.py runserver
+
+pode entrar na pagina admin e substituir textos ou imagens em equipes para testar.
+
+Ctrl+c
+
+
+--- 
+Para aprendizagem fazer o mesmo em "Features" ou "Clientes"
+
+1º ir em models.py criar os atributos
+2º ir na views.py para fazer o import e adicionar no contexto
+3º em features.html vai separa 1 bloco apenas e corrigir com FOR para iterar com os recursos para serem impressos na página depois.

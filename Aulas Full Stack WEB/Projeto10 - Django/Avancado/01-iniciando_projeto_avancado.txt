@@ -1,7 +1,7 @@
 Criar o arquivo python para o projeto.
 
 Abrir o terminal e instalar as bibliotecas:
-pip install django psycopg2-binary gunicorn dj-static django-stdimage
+pip install django psycopg2-binary gunicorn dj-static django-stdimage dj-database-url heroku
 
 
 ###
@@ -9,10 +9,15 @@ psycopg2-binary - é para postegresql
 gunicorn - para rodar aplicação
 dj-static - para associar arquivos estáticos
 django-stdimage - ajudar a trabalhar co imagens
+dj-database-url - é para que o heroku leia e utilize o BD
 ###
 
+Deverá ir até o site do heroku e criar um usuário e senha para ser utilizdo no momento que for produrir o site. https://www.heroku.com/
+leandrocf79@hotmail.com
+Senha:
 
-Criar arquivo e salvar as bibliotecas:
+---
+Criar arquivo e salvar as bibliotecas toda vez que instalar alguma coisa:
 pip freeze > requirements.txt
 
 Iniciar projeto, colocar o "espaço ponto":
@@ -75,7 +80,7 @@ Por fim acrescentar itens:
 
 STATIC_URL = '/static/' # Abaixo desse
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/' # Deve por barras, se deixar assim ( media/ ) não exibe imagem na publicação.
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

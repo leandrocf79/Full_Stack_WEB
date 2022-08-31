@@ -1,3 +1,8 @@
+---
+Sempre que fechar o trabalho todo e depois for iniciar, deve abrir o BD intalado no pc também.
+
+
+---
 Models serve para armazenar dados no BD e poder alterar tudo pelo Admin.
 
 Em servicos.html pode numerar cada divisão de serviços para facilitar:

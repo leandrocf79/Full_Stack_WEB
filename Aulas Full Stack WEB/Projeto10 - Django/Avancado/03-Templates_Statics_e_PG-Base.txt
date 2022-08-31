@@ -12,7 +12,8 @@ Criar: core/templates/index.html
 		    scss   <--São arquivos compilados
 *Colar os arquivos já existentes.
 
-
+---
+Sempre que fechar o trabalho todo e depois for iniciar, deve abrir o BD intalado no pc também.
 ---
 Sempre que for usar static colocar no topo da html, antes de qualquer outra coisa na index:
 {% load static %}
