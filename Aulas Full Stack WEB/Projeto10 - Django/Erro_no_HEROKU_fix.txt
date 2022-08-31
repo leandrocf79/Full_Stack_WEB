@@ -1,0 +1,24 @@
+Caso der erro no heroku pelos procedimentos no terminal vá em
+https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli
+
+instale o software e no 
+Painel de configurações do windows/ Sistema/ Sobre. 
+na parte lateral direita tem "Configurações avançadas do sistema"
+
+na aba "Avançado" procure por "Variáveis de Ambiente"
+
+  insira nos dois locais que vão aparecer o seguinte caminho:
+
+heroku
+C:\Program Files\heroku\bin
+
+Fechar e reiniciar o PC.
+
+Isso deve resolver.
+
+---
+Após reiniciar, no terminal do Pycharm digite:
+heroku login
+
+
+;) 
