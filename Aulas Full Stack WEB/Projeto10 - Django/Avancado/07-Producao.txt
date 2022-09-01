@@ -166,7 +166,7 @@ Em settings adicionar em INSTALLED_APPS = [:
 Ctrl+s
 
 No terminal:
-pip freeze > requiriments.txt
+pip freeze > requirements.txt
 
 git add .
 git commit -m "admin lte2"
