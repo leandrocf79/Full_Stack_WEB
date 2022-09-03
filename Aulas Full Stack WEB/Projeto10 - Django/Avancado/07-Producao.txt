@@ -86,7 +86,7 @@ Pode por as iniciais do nome "lc" ou "lcf" para não ter domínios iguais.
 heroku create fusion.lcf --buildpack heroku/python
 
 Ele vai criar um nome do link, melhor ja criar o projeto com o nome próximo ao que deseja para DNS
-http://django1-lc.herokuapp.com
+http://django1-lcf.herokuapp.com
 
 ---
 Em Settings alterar DEBUG para False

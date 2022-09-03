@@ -25,6 +25,23 @@ django-admin startproject fusion .
 
 
 ---
+CRIAR UM ADMIN:
+
+python manage.py shell
+
+from django.contrib.auth.models import User
+
+Exemplo:
+usuario=User.objects.create_user(username='leandrocf79', password='123456', email='leandrocf79@gmail.com', first_name='Leandro', last_name='CF', is_staff=True, is_superuser=True)
+
+usuario
+
+usuario.save()
+
+Fechar terminal.  
+
+
+---
 Criar a aplicação core:
 django-admin startapp core
 

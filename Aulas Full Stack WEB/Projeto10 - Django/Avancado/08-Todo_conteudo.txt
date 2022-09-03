@@ -1,0 +1,1367 @@
+Criar o arquivo python para o projeto.
+
+Abrir o terminal e instalar as bibliotecas:
+pip install django psycopg2-binary gunicorn dj-static django-stdimage dj-database-url heroku
+
+
+###
+psycopg2-binary - é para postegresql
+gunicorn - para rodar aplicação
+dj-static - para associar arquivos estáticos
+django-stdimage - ajudar a trabalhar co imagens
+dj-database-url - é para que o heroku leia e utilize o BD
+###
+
+Deverá ir até o site do heroku e criar um usuário e senha para ser utilizdo no momento que for produrir o site. https://www.heroku.com/
+leandrocf79@hotmail.com
+Senha:
+
+---
+Criar arquivo e salvar as bibliotecas toda vez que instalar alguma coisa:
+pip freeze > requirements.txt
+
+Iniciar projeto, colocar o "espaço ponto":
+django-admin startproject fusion .
+
+
+---
+Criar a aplicação core:
+django-admin startapp core
+
+New / Directory
+*Criar templates (no plural para diferenciar da pasta de apoio template).
+*Criar pasta static
+*Criar arquivo urls.py
+
+
+--------------
+Agora em fusion/settings:
+
+ALLOWED_HOSTS = ['*']
+
+---
+INSTALLED_APPS  acrescentar core:
+'core'
+
+---
+ROOT_URLCONF = 'fusion.urls'
+
+---
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['templates'], # No plural deve ser criado no djando, o que está no singular foi colocado para apoio de conteúdo
+
+---
+Corrigir para o BD correto e configurar demais opções:
+Seguir modelo: https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',  # <--postgresql
+        'NAME': 'fusion', # <-- Alterar nome do BD para o nome do projeto
+        'USER': 'postgres', # <-- Colocar o usuário correto
+        'PASSWORD': '321654', # <-- Colocar senha corretamente
+        'HOST': 'localhost',
+        'port': '5432', # <-- Porta do postgresql
+    }
+}
+
+
+## Para conferir se está correto, tem um link logo acima de DATABASE, abre ele no navegador:
+https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+---
+LANGUAGE_CODE = 'pt-BR'
+TIME_ZONE = 'America/Sao_Paulo'
+
+---
+Por fim acrescentar itens:
+
+STATIC_URL = '/static/' # Abaixo desse
+
+MEDIA_URL = '/media/' # Deve por barras, se deixar assim ( media/ ) não exibe imagem na publicação.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+Ctrl+S
+
+
+-----------
+Em fusion/urls.py:
+
+from django.contrib import admin
+
+from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('core.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+
+Ctrl+S
+
+
+----------
+Em core/urls. Deixar assim para configurar as rotas mais a frente:
+
+from django.urls import path
+
+urlpatterns =[
+    
+]
+
+
+Ctrl+S
+
+
+----------AGORA MUITA ATENÇÃO PARA NÃO TER PROBLEMAS!!!!
+
+Tem que usar um BD ou não vai funcionar nem o teste.
+
+
+Baixar PostgreSQL, fazer usuário e senha ou utilizar uma que já exista. 
+
+*** TEM ESSA SENHA ""DE INSTALÇÃO"" SERÁ SOLICITADA DEPOIS DE UMA SENHA "MASTER" PARA ACESSAR "SERVERS", são 2 senhas então.
+
+https://www.postgresql.org/download/
+
+
+---> Deve criar o Database
+Nome do BD para este projeto, 
+Database: fusion
+Owner: lcf   # Para este curso deixar tudo fusion.
+
+Depois de renomear vai precisar reiniciar, digite no menu iniciar do windows "services.msc",
+procure Prostgresql-x64-(versão) 
+clique com botão direito e reinicie.
+
+Caso deseje pode por para iniciar manualmente no windows.
+
+
+
+
+********************************
+
+
+
+Ver modelos de algoritmos em:
+https://docs.djangoproject.com/en/4.1/topics/class-based-views/intro/
+https://ccbv.co.uk/
+https://ccbv.co.uk/projects/Django/4.0/django.views.generic.base/TemplateView/
+
+
+Em core/views:
+from django.views.generic import TemplateView
+
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+---
+Criar rotas, em urls.py:
+from django.urls import path
+from .views import IndexView
+
+urlpatterns =[
+    path ('', IndexView.as_view(), name='index'),
+]
+
+
+---
+Testar aplicação:
+python manage.py runserver
+
+*** Falta criar a index, portanto, vai encontrar o caminho, mas não a página.
+
+Ctrl+c  # Parar servidor.
+
+Esse conteúdo é o class based view, muito mais fácil de usar que as funções aprendidas anteriormente.
+
+
+
+
+******************************
+
+
+
+
+
+Criar as páginas html e os arquivos estáticos(css,js, img...).
+
+*** 	Para este curso apenas colar o conteúdo já disponibilizado em cada pasta.
+	Pense como se o front-end já estivesse pronto e vai fazer os ajustes para Django e publicação.
+
+---
+Criar: core/templates/index.html
+	    static/ css
+		    fonts
+		    img
+		    js
+		    scss   <--São arquivos compilados
+*Colar os arquivos já existentes.
+
+---
+Sempre que fechar o trabalho todo e depois for iniciar, deve abrir o BD intalado no pc também.
+---
+Sempre que for usar static colocar no topo da html, antes de qualquer outra coisa na index:
+{% load static %}
+
+
+---
+Pode corrigir idioma:
+<html lang="pt-br">
+
+
+---
+Cada entrada "static" deverá ser informada com    "{% static '' %}"  :
+
+Substituir:
+assets/    
+Por:
+{% static '
+
+e depois finalizar o conteúdo com:
+' %}"
+
+
+Antes (    <link rel="stylesheet" href="assets/css/bootstrap.min.css" >  
+Dpois (    <link rel="stylesheet" href= "{% static  'css/bootstrap.min.css'   %}" >  
+
+
+{% static '    <-- É o diretório
+
+css/bootstrap.min.css' %}"    <-- É o caminho para os arquivos dentro do diretório.
+
+Trocar de todos os locais possíveis, verificar abaixo na html se há imagens.
+
+exemplo:
+<a href="index.html" class="navbar-brand"><img src= "{% static  'img/logo.png'  %}"  alt=""></a>    
+
+
+>>> No Pycharm pode usar uma Replace All para substituir tudo de uma vez:
+Ctrl+R
+
+Substituir:
+assets/    
+Por:
+{% static '
+
+Lembrando que ainda vai faltar fechar o linha depois substituindo   "     por     ' %}"
+
+Pode fazer uma nova busca por     {% static '     
+
+e corrigir apenas o final da linha depois.
+
+
+---
+Testar se está tudo correto:
+python manage.py runserver
+
+Ctrl+c
+
+
+
+_____________________
+
+HERANÇA DE TEMPLATES
+
+-------------------------Criar página base, é a página mestre.
+
+templates/base.html
+
+Selecionar todo o conteúdo da index.html e colar em base.html, neste momento serão idênticos.
+
+Configurar base.html para que suas alterações se expanda para todas as outras:
+
+
+Para esta página, base.html, excluir o conteúdo entre  <!-- Navbar End -->    e    <!-- Go to Top Link -->    
+     
+<!-- Navbar End -->
+e
+<!-- Hero Area Start -->
+
+colocar um {% block content %}, é um bloco de conteúdo:
+
+
+      <!-- Navbar End -->
+	{% block content %}
+      <!-- Hero Area Start -->
+
+
+fechar ele logo abaixo de     <!-- Footer Section End -->
+
+
+    <!-- Footer Section End -->
+	{% endblock %}
+    <!-- Go to Top Link -->
+
+
+-----Assim pode excluir o conteúdo interno ao bloco e deixar assim:
+
+
+      <!-- Navbar End -->
+
+      {% block content %}
+
+      <!-- conteúdo excluido da pg base -->
+
+      {% endblock %}
+
+    <!-- Go to Top Link -->
+
+
+*** Sem problema algum pode organizar assim, um ao lado do outro:   {% block content %}   {% endblock %}
+
+
+
+
+
+-------------------Agora em index.html será apagado o oposto:
+
+Apagar tudo que estiver entre:
+{% load static %}
+
+
+      <!-- Hero Area Start -->
+
+**** e deixar assim para extender o conteúdo html:
+
+{% extends 'base.html' %} <!-- PRECISA SER ANTES DE "LOAD STATIC" -->
+{% load static %}
+{% block content %}
+
+      <!-- Hero Area Start -->
+
+
+
+----Repetir no final da index.html e fechar:
+
+Apagar tudo que tiver abaixo de <!-- Footer Section End -->
+
+e acrescentar para fechar o bloco na index:
+
+<!-- Footer Section End -->
+{% endblock %}
+
+
+---
+Testar se está tudo correto:
+python manage.py runserver
+
+Ctrl+c
+
+
+
+
+---------------
+Cuidado onde houver ASPAS dentro das {}
+---------------
+
+
+
+Um erro interessante para se observar:
+
+Precisa observar e fazer uma correção no conteúdo desta página, base.html precisa corrigir rota:
+
+          <!-- Brand and toggle get grouped for better mobile display -->
+Aqui-->   <a href="index.html" class="navbar-brand"><img src="{% static 'img/logo.png' %}" alt=""></a>
+
+Substituir rota em   <a href="index.html" 
+Para isso:
+<a href="{% url 'index' %}"  class="navbar-brand"><im.....
+
+Observar em urls.py que a rota é 'index'
+
+
+
+
+------------------Fragmentar index em partes expecíficas:
+
+Criar uma página hero.html com o conteúdo:
+
+
+{% load static %}
+      <!-- Hero Area Start -->
+
+		<!-- Recortar conteúdo da index.html referênte a isso e colar aqui. -->				
+
+      <!-- Hero Area End -->
+</header>
+<!-- Header Area wrapper End -->
+
+<!-- não precisa fechar -->
+
+
+
+-----
+e na index.html onde houve o recorte colocar:
+      <!-- Hero Area Start -->
+
+        {% include 'hero.html' %}  <!-- O conteúdo recortado está exatamente aqui. -->
+
+      <!-- Hero Area End -->
+
+<!-- Services Section Start -->
+
+
+-----
+Repetir o processo para as demais áreas do site:
+Criar e colocar no topo de todos {% load static %}
+
+
+servicos.html
+{% include 'servicos.html' %}
+
+sobre.html
+{% include 'sobre.html' %}
+
+features.html
+{% include 'feaures.html' %}
+
+equipe.html
+{% include 'equipe.html' %}
+
+precos.html
+{% include 'precos.html' %}
+
+clientes.html
+{% include 'clientes.html' %}
+
+call-to.html
+{% include 'call-to.html' %}
+
+contato.html
+{% include 'contato.html' %}
+
+footer.html
+{% include 'footer.html' %}
+
+
+
+--------------------Para finalizar (opcional):
+
+Pode criar uma página de teste para diversos fins. *** Lembrando que tem que criar rotas em urls.py e views.py :
+
+
+---
+Criar uma classe em Core/templates/views.py:
+
+class TesteViews (TemplateView):
+	template_name = 'teste.html'
+
+
+---
+Em urls.py acrescentar  TesteViews e path para 'teste/':
+
+from django.urls import path
+from .views import IndexView, TesteViews     
+
+urlpatterns =[
+    path ('', IndexView.as_view(), name='index'),
+    path ('teste/', TesteViews.as_view(), name='teste'), # Se alguem digitar teste/ no navegador abre página teste.  
+
+]
+
+
+
+---
+Criar: core/templates/teste.html com o seguinte conteúdo:
+
+____________________________________________________________________
+{% extends 'base.html'  %}  <!-- Chamou o cabeçalho da página -->
+{% load static %}
+{% block content %}
+
+<!-- Pode adicionar conteúdo de teste -->
+
+
+<h1 style="color: blue;"><br><br>Página teste</h1>
+<!-- Pode adicionar conteúdo da página index.html aqui -->
+
+<!-- Footer Section Start -->
+{% include 'footer.html' %}
+<!-- Footer Section End -->
+
+
+<!-- OBJETIVO DO TESTE É COLAR O CONTEÚDO HTML PARA EDIÇÃO -->
+<!-- ***************************************************** -->
+
+
+ <!-- Hero Area Start -->
+<div id="hero-area" class="hero-area-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+          <div class="contents">
+            <h2 class="head-title">Com muito estudo e <br>esforço, you'll be there!</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat! fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat!</p>
+            <div class="header-button">
+              <a href="#" class="btn btn-common">Download Now</i></a>
+              <a href="{% url 'index' %}" class="btn btn-border video-popup">RETORNAR PARA PÁGINA PRINCIPAL </i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+          <div class="intro-img">
+            <img class="img-fluid" src="{% static 'img/intro-mobile.png' %}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- Hero Area End -->
+
+{% endblock %}
+___________________________________________________________________
+
+
+
+Criar páginas
+Erro de carregamento: 404  
+e  
+Erro de processamento: 500
+
+404.html
+500.html
+
+
+*** Lembrando que tem que criar rotas em urls.py e views.py :
+
+
+Em urls.py acrescentar:
+
+from django.urls import path
+from .views import IndexView, TesteViews, Teste404, Teste500
+
+urlpatterns =[
+    path ('', IndexView.as_view(), name='index'),
+    path ('teste/', TesteViews.as_view(), name='teste'), # Se alguem digitar teste/ no navegador abre página teste. http://127.0.0.1:8000/teste/ 
+    path ('404/', Teste404.as_view(), name='404'),
+    path ('500/', Teste500.as_view(), name='500'),
+]
+
+
+
+---
+Em views.py acrescentar:
+
+class Teste404 (TemplateView):
+	template_name = '404.html'
+
+
+
+
+---
+Modelo a ser colado:
+
+{% extends 'base.html'  %}  <!-- Chamou o cabeçalho da página -->
+{% load static %}
+{% block content %}
+
+<h1 style="color: blue;"><br><br>Página teste</h1>
+
+ <!-- Hero Area Start -->
+<div id="hero-area" class="hero-area-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+          <div class="contents">
+            <h2 class="head-title">404 <br>Erro de carregamento</h2>
+              <h1>Tente novamente mais tarde.</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat! fuga nesciunt dolorum nulla magnam veniam sapiente, fugiat!</p>
+            <div class="header-button">
+              <a href="#" class="btn btn-common">Download Now</i></a>
+              <a href="{% url 'index' %}" class="btn btn-border video-popup">RETORNAR PARA PÁGINA PRINCIPAL </i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+          <div class="intro-img">
+            <img class="img-fluid" src="{% static 'img/intro-mobile.png' %}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- Hero Area End -->
+
+{% endblock %}
+
+
+
+
+----------- Preparar para publicar em fase de teste ainda, pode deletar o teste.html e deixar as demais,
+neste novo modelo do Django ele procura pelas páginas com nomes 404 ou 500 altomáticamente sem ter que 
+declará-las: 
+
+Páginas 404 e 500 estão herdando base.
+
+
+Feitos os testes agora deixar "views.py" e "urls.py" exatamente como estava antes, 
+os demais conteúdos pode deixar como comentário FORA DOS COLCHETES ou apagar:
+
+
+from django.views.generic import TemplateView
+
+class IndexView(TemplateView):
+    template_name ='index.html'
+
+
+---
+from django.urls import path
+from .views import IndexView                     TesteViews, Teste404, Teste500   <-- apagar imports !!!
+
+urlpatterns =[
+    path ('', IndexView.as_view(), name='index'),
+]
+
+
+
+---------------PUBLICAR O SITE em teste para exibir erro:
+
+Em settings.py colocar DEBUG = False
+e observar 
+ALLOWED_HOSTS = ['*']
+
+
+No terminal executar:
+python manage.py runserver
+
+Agora veja que ao acessar  http://127.0.0.1:8000/  vai funcionar normalmente, 
+mas ao tentar uma página que não existe vai exibir mensagem de erro:
+
+http://127.0.0.1:8000/abacaxi
+ 
+
+
+
+
+
+****************************************
+
+
+
+
+
+
+---
+Sempre que fechar o trabalho todo e depois for iniciar, deve abrir o BD intalado no pc também.
+
+
+---
+Models serve para armazenar dados no BD e poder alterar tudo pelo Admin.
+
+Em servicos.html pode numerar cada divisão de serviços para facilitar:
+<!-- Services item 1-->
+<!-- Services item 2-->
+...
+
+
+---
+No terminal:
+python manage.py runserver
+http://127.0.0.1:8000/
+
+Observe que cada quadro na aba Services tem 3 coisas:
+1- icone
+2- título
+3- descrição
+
+Ctrl+c    Parar 
+
+
+---
+Em core/models.py criar uma classe abstrata, criar uma classe com cada ícone com seu respectivo nome nos atributos:
+
+
+from django.db import models
+from stdimage.models import StdImageField
+
+# auto_now_add= True coloca data automaticamente
+# auto_now=True  coloca data de atualização
+
+class Base(models.Model):
+    criados = models.DateField('Data de criação', auto_now_add= True) 
+    modificado = models.DateField('Atualização', auto_now=True)
+    ativo = models.BooleanField('Ativo: ', default=True)
+
+    class Meta:
+        abstract = True
+
+# 1- icone:
+# Pode criar tuplas e depois receber o conteúdo abaixo
+class Servico(Base):
+    ICONE_CHOICES = (
+        ('lni-cog', 'Engrenagem'),
+        ('lni-stats-up', 'Gráficos'),
+        ('lni-users', 'Usuário'),
+        ('lni-layers', 'Design'),
+        ('lni-mobile', 'Mobile'),
+        ('lni-rocket', 'Foguete'),
+    )
+    servico = models.CharField('Serviço', max_length=100)
+    descricao = models.TextField('Descrição', max_length=200)
+    icone = models.TextField('Ícone', max_length=13, choices=ICONE_CHOICES)
+
+    class Meta:
+        verbose_name = 'Serviço'
+        verbose_plural = 'Serviços'
+
+    def __str__(self):
+        return self.servico
+
+
+
+# 2- título(Cargo na empresa):
+
+class Cargo(Base):
+    cargo = models.CharField('Cargo', max_length=100)
+
+    class Meta:
+        verbose_name = 'Cargo'
+        verbose_plural = 'Cargos'
+
+    def __str__(self):
+        return self.cargo
+
+
+
+# 3- descrição(Funcionário):
+
+# Vai criar um diretório equipe e por as imagens lá. 480 é o tamanho real da imagem e se precisar cortar --> Crop = pode recortar.
+# Importante por "on_delete=models.CASCADE", se não houver mais o cargo o nome também será excluido.
+# Em "thumbnail" é importante manter o nome do arquivo original. Ao final será dada instrução para criar uma Def para evitar erros de imagens com mesmo nome.
+
+class Funcionario(Base):
+    nome = models.CharField('Nome', max_length=100)
+    cargo = models.ForeignKey('core.Cargo', verbose_name='Cargo', on_delete=models.CASCADE)
+    bio = models.TextField('Bio', max_length=200 )
+    imagem = StdImageField('Imagem', upload_to= 'equipe', variations={'thumb': {'width':480, 'height':480, 'crop': True}})
+
+    facebook= models.CharField('Facebook', max_length=100, default='#')
+    twitter = models.CharField('Twitter', max_length=100, default='#')
+    instagram = models.CharField('Instagram', max_length=100, default='#')
+
+    class Meta:
+        verbose_name = 'Funcionário'
+        verbose_plural = 'Funcionários'
+
+    def __str__(self):
+        return self.nome
+
+
+
+-----------
+Criado "model.py" é necessário fazer o makemigrations:
+python manage.py makemigrations
+
+Agora fazer a migração para o BD:
+python manage.py migrate
+
+Superuser:
+python manage.py createsuperuser
+
+---------
+Em core/admin.py inserir dados para área administrativa:
+
+
+from django.contrib import admin
+from .models import Cargo, Servico, Funcionario
+
+
+@admin.register(Cargo) #Registrar endereço pelo decorator
+class CargoAdmin(admin.ModelAdmin):
+    list_display = ('cargo', 'ativo', 'modificado')
+
+
+@admin.register(Servico)
+class ServicoAdmin(admin.ModelAdmin):
+    list_display = ('servico', 'icone', 'ativo', 'modificado')
+
+
+@admin.register(Funcionario)
+class FuncionarioAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'cargo', 'ativo', 'modificado')
+
+
+Ctrl+S
+
+-----------
+No terminal verificar:
+python manage.py runserver
+
+http://127.0.0.1:8000/admin
+Entrar em serviços e cadastrar Serviço, Descrição e ecolher o ícone a ser usado para cada um, neste site são 6.
+Salvar
+
+Pode ir em cargos e depois em equipe e fazer o mesmo, alterar todos para teste.
+
+Observe que no Projeto foi criado um diretório novo chamdo "media".
+
+
+Ctrl+c
+
+--------------
+Para evitar erros com imagens com mesmo nome pode por abaixo de 
+from django.db import models
+from stdimage.models import StdImageField
+a definição:
+
+import uuid
+
+def get_file_path(_instance, filename):
+	ext = filename.split('.')[-1]
+	filename = f'{uuid.uuid4()}.{ext}'
+	return filename
+
+---Para entender o que o "uuid" faz ir ao terminal e digitar:
+python
+>>> import uuid
+>>> uuid.uuid4()
+
+* A sequência alfanumérica apresentada será o tipo de nome dado para as imagens adicionadas.
+
+---
+Deve alterar agora a linha imagem:
+imagem = StdImageField('Imagem', upload_to =    'equipe',      variations={'thumb': {'width':480, 'height':480, 'crop': True}})
+
+Para:
+imagem = StdImageField('Imagem', upload_to =  get_file_path,   variations={'thumb': {'width':480, 'height':480, 'crop': True}})
+
+
+Devido a isso pode deletar o diretório Equipe criado em media.
+
+---
+Toda mudança em models:
+python manage.py makemigrations
+
+Agora fazer a migração para o BD:
+python manage.py migrate
+
+python manage.py runserver
+
+http://127.0.0.1:8000/admin
+Vá em funcionários e faça os testes.
+
+Próxima aula os dados serão apresentados no template.
+
+Ctrl+c
+
+
+
+
+
+
+
+**************************************
+
+
+
+
+
+
+
+Criar usando context e modelo BasedViews, isso vai reduzir as linhas de programação.
+
+Em core/views.py:
+
+
+from django.views.generic import TemplateView
+
+from .models import Servico, Funcionario
+
+
+#Criar contxt para serviços e funcionários
+
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['servicos'] = Servico.objects.order_by('?').all()  # order_by('?') vai embaralhar apresentação a cada acesso, se tirar ele e deixar apenas .all() ficam todos estáticos.    
+        context['funcionarios'] = Funcionario.objects.order_by('?').all()
+        return context
+
+
+---
+Em servicos.html deletar o que não for usar e deixar soemnte:
+
+{% load static %}
+<section id="services" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Nossos Serviços</h2>
+          <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
+        </div>
+        <div class="row">
+
+          {% for s in servicos %}
+          <!-- Services item -->
+          <div class="col-md-6 col-lg-4 col-xs-12">
+            <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+              <div class="icon">
+                <i class="{{ s.icone }}"></i>
+              </div>
+              <div class="services-content">
+                <h3><a href="#">{{ s.servico }}</a></h3>
+                <p>{{ s.descricao }}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+
+---
+Em servicos.html:
+
+
+{% load static %}
+<section id="services" class="section-padding">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Nossos Serviços</h2>
+          <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
+        </div>
+        <div class="row">
+
+          {% for s in servicos %}   <!-- Usando FOR  para usar somente 1 conjunto de algoritmos para todos ao invés de 1 para cada serviço-->
+          <!-- Services item -->
+          <div class="col-md-6 col-lg-4 col-xs-12">
+            <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
+              <div class="icon">
+                <i class="{{ s.icone }}"></i>  <!-- Usando icone, atributo criado em models.py-->
+              </div>
+              <div class="services-content">
+                <h3><a href="#">{{ s.servico }}</a></h3>   <!-- Acesso a serviços, atributo criado em models.py-->
+                <p>{{ s.descricao }}</p>    <!-- Acesso a descrição, atributo criado em models.py-->
+              </div>
+            </div>
+          </div>
+          {% endfor %}  <!-- Fechando FOR -->
+        </div>
+      </div>
+    </section>
+
+
+---
+No terminal, testar:
+python manage.py runserver
+
+pode entrar na pagina admin e substituir textos em serviços para testar.
+
+Ctrl+c
+
+
+---
+Agora em equipe.html fazer o mesmo, para ajudar pode ir até class funcionario(Base): que está em models.py:
+
+
+{% load static %}
+<section id="team" class="section-padding bg-gray">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Conheça Nossa Equipe</h2>
+          <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
+        </div>
+        <div class="row">
+          {% for f in funcionarios %}
+          <div class="col-lg-6 col-md-12 col-xs-12">
+            <!-- Team Item Starts -->
+            <div class="team-item wow fadeInRight" data-wow-delay="0.2s">
+              <div class="team-img">
+                <img class="img-fluid" src="{{ f.imagem.thumb.url }}" alt="{{ f.nome }}">
+              </div>
+              <div class="contetn">
+                <div class="info-text">
+                  <h3><a href="#">{{ f.nome }}</a></h3>
+                  <p>{{ f.cargo }}</p>
+                </div>
+                <p>{{ f.bio }}</p>
+                <ul class="social-icons">
+                  <li><a href="{{ f.facebook }}"><i class="lni-facebook-filled" aria-hidden="true"></i></a></li>
+                  <li><a href="{{ f.twitter }}"><i class="lni-twitter-filled" aria-hidden="true"></i></a></li>
+                  <li><a href="{{ f.instagram }}"><i class="lni-instagram-filled" aria-hidden="true"></i></a></li>
+                </ul>
+              </div>
+            </div>
+            <!-- Team Item Ends -->
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+
+
+---
+No terminal, testar:
+python manage.py runserver
+
+pode entrar na pagina admin e substituir textos ou imagens em equipes para testar.
+
+Ctrl+c
+
+
+--- 
+Para aprendizagem fazer o mesmo em "Features" ou "Clientes"
+
+1º ir em models.py criar os atributos
+2º ir na views.py para fazer o import e adicionar no contexto
+3º em features.html vai separa 1 bloco apenas e corrigir com FOR para iterar com os recursos para serem impressos na página depois.
+
+
+
+
+
+
+
+
+
+**************************************
+
+
+
+
+
+
+Em core criar forms.py para criar o formulário de contato.
+
+Para facilitar, usar esse conteúdo:
+
+from django import forms
+from django.core.mail.message import EmailMessage
+
+
+class ContatoForm(forms.Form):
+    nome = forms.CharField(label='Nome', max_length=100)
+    email = forms.EmailField(label='E-mail', max_length=100)
+    assunto = forms.CharField(label='Assunto', max_length=100)
+    mensagem = forms.CharField(label='Mensagem', widget=forms.Textarea())
+
+    def send_mail(self):
+        nome = self.cleaned_data['nome']
+        email = self.cleaned_data['email']
+        assunto = self.cleaned_data['assunto']
+        mensagem = self.cleaned_data['mensagem']
+
+        conteudo = f'Nome: {nome}\nE-mail: {email}\nAssunto: {assunto}\nMensagem: {mensagem}'
+
+        mail = EmailMessage(
+            subject=assunto,
+            body=conteudo,
+            from_email='leandrocf79@gmail.com',    # Verificar o email
+            to=['leandrocf79@gmail.com',],
+            headers={'Reply-To': email}
+        )
+        mail.send()
+
+
+---
+Agora corrigir na views.py:
+
+
+from django.views.generic import FormView
+from django.urls import reverse_lazy
+from django.contrib import messages
+
+from .models import Servico, Funcionario
+from .forms import ContatoForm
+
+#Criar contxt para serviços e funcionários
+
+class IndexView(FormView):
+    template_name = 'index.html'
+    form_class = ContatoForm
+    success_url = reverse_lazy('index') # Após dar certo o envio abrirá a página index
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['servicos'] = Servico.objects.order_by('?').all()  # order_by('?') vai embaralhar apresentação a cada acesso, se tirar ele e deixar apenas .all() ficam todos estáticos.
+        context['funcionarios'] = Funcionario.objects.order_by('?').all()
+        return context
+
+    def form_valid(self, form, *args, **kwargs):
+        form.send_mail()
+        messages.success(self.request, 'E-mail enviado com sucesso')
+        return super(IndexView, self).form_valid(form, *args, **kwargs)
+
+    def form_invalid(self, form, *args, **kwargs):
+        messages.error(self.request, 'Erro ao enviar e-mail')
+        return super(IndexView, self).form_invalid(form, *args, **kwargs)
+
+
+
+---
+Em contato.html deverá ser feita algumas alterações:
+
+<form id="contato" method="post" action="{% url 'index' %}"> <!-- Será enviado para index -->
+{% csrf_token %}<!-- Medida de segurança do Django -->
+
+***** NÃO EXCLUIR os blocos para deixar só 1, neste caso é preciso ficar para que cada um seja trabalhado individualmnte.
+nome
+email
+assunto
+mensagem 
+
+---
+Pode agora criar em algum local apropriado da página um lugar para printar a mensagem de enviado ou erro.
+Neste curso foi utilizado em hero.html
+
+      <div class="container">
+        {% if messages %}
+          {% for m in messages %}
+            <div class="alert alert-{{ m.tags }}">
+              <button type="button" class="close" data-dismiss="alert"></button>
+              <strong>{{ m }}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+
+---
+Por ultimo é preciso declarar em settings:
+
+
+
+# Email teste console
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Email produção, heroku não vai enviar email no modo gratuito.
+
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = 'no-reply@fusion.com.br'
+EMAIL_PORT = 587
+EMAIL_USE_TSL = True
+EMAIL_HOST_PASSWORD = 'fusion'    # Senha real do email
+DEFAULT_FROM_EMAIL = 'contato@fusion.com.br'
+"""
+
+LOGOUT_REDIRECT_URL = 'index'   # logoff vai voltar para index.html
+
+
+
+
+***********************************************
+
+
+
+
+Caso der erro no heroku pode usar a sugestão ao final deste arquivo.
+____________________________________________________________________
+Lembre-se de abrir o BD também.
+
+
+No diretório raiz fusion, new / file,  criar arquivo .gitignore para ignorar os arquivos que não são importantes para a publicação.
+
+__pycache__
+
+*.*~
+
+*.pyc
+
+.env
+
+.idea
+
+template/*
+
+
+---Observação: template/* não é a pasta em core, essa  é aquela provisória com conteúdo inicial do projeto.
+
+---
+Em fusion/fusion/wsgi.py deixar com essa configuração:
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+from dj_static import Cling, MediaCling
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fusion.settings')
+
+application = Cling(MediaCling(get_wsgi_application()))
+
+
+---
+Enviar para o repositório, no terminal:
+
+git init
+git add .       --> O ponto vai adicionar todos os arquivos.
+git commit -m "Projeto finalizado"
+heroku login
+ ** Precione qualquer tecla.
+
+***Deverá ir até o site do heroku e criar um usuário e senha, se não houver,  para produrir o site. https://www.heroku.com/
+Após logar na página web:
+leandrocf79@hotmail.com
+Senha:
+
+
+---
+Criar na raiz do projeto new / file  runtime.txt e colocar ne a versão atual do python:
+****No terminal digite o comando abaixo para saber a versão correta:
+python -V
+
+No arquivo runtime.txt:
+python-3.6.2
+
+
+Ctrl-S
+
+
+---
+Criar mais um arquivo chamado Procfile   com "P" maiúsculo.
+marcar do tipo Text e ok.
+Agora adicionar o conteúdo relacionado:
+
+web: gunicorn fusion.wsgi --log-file -
+
+Ctrl-S
+
+
+Acima a aplicação web vai usar "gunicorn" que foi instalado para rodar o projeto wsgi que
+está dentro do diretório fusion
+"fusion.wsgi"
+
+---
+git commit -m "Novos arquivos Heroku"
+git status
+
+
+---
+Agora deve criar a aplicação no heroku colocando umas letras após o nome do projeto para diferenciar. 
+Pode por as iniciais do nome "lc" ou "lcf" para não ter domínios iguais.
+
+heroku create fusion.lcf --buildpack heroku/python
+
+Ele vai criar um nome do link, melhor ja criar o projeto com o nome próximo ao que deseja para DNS
+http://django1-lc.herokuapp.com
+
+---
+Em Settings alterar DEBUG para False
+
+git add .
+git commit -m "DEBUG para False"
+git status
+
+*** Publicar:
+git push heroku master
+
+
+---
+Criar as tabelas migrate:
+heroku run python manage.py migrate
+heroku run python manage.py createsuperuser
+usuário: lcf79
+email:
+Password:
+
+
+Agora pode clicar no link gerado pelo terminal e verificar a produção online na web.
+
+Não tem equipe nem serviços cadastrados. Vá no final do link e acrescente /admin/
+Usuário: lcf79
+senha:
+
+
+
+----
+Para voltar ao BD anterior e funcionar localmente pode ir até settings e comentar o BD atual e comentar o anterior:
+
+""" # Esse é LOCAL
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'fusion',
+        'USER': 'Geek',
+        'PASSWORD': 'university',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+"""
+
+
+DATABASES = {
+    'default': dj_database_url.config()
+}
+
+
+
+--- 
+No terminal pode usar o mesmo comando que está em Procfile:
+gunicorn fusion.wsgi --log-file -
+
+Para qualquer modificação:
+git init
+git add .
+git commit -m "Corrigido imagens"
+git status
+
+*** Publicar:
+git push heroku master
+
+
+
+---------
+Para personalizar o Admin pode usar no terminal:
+pip install django-adminlte2
+
+Em settings adicionar em INSTALLED_APPS = [:
+    'django_adminlte',
+    'django_adminlte_theme',
+
+Ctrl+s
+
+No terminal:
+pip freeze > requiriments.txt
+
+git add .
+git commit -m "admin lte2"
+git status
+
+*** Publicar:
+git push heroku master
+
+
+
+_____________________________________________________________
+ERRO HEROKU:
+Caso der erro no heroku pelos procedimentos no terminal vá em
+https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli
+
+instale o software e no 
+Painel de configurações do windows/ Sistema/ Sobre. 
+na parte lateral direita tem "Configurações avançadas do sistema"
+
+na aba "Avançado" procure por "Variáveis de Ambiente"
+
+  insira nos dois locais que vão aparecer o seguinte caminho:
+
+heroku
+C:\Program Files\heroku\bin
+
+Fechar e reiniciar o PC.
+
+Isso deve resolver.
+
+---
+Após reiniciar, no terminal do Pycharm digite:
+heroku login
+
+
+;) 
+
+
+
+
