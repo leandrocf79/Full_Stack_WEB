@@ -1,0 +1,65 @@
+Erro:
+Caso der erro no heroku pelos procedimentos no terminal vá em
+https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli
+
+instale o software e no 
+Painel de configurações do windows/ Sistema/ Sobre. 
+na parte lateral direita tem "Configurações avançadas do sistema"
+
+na aba "Avançado" procure por "Variáveis de Ambiente"
+
+  insira nos dois locais que vão aparecer o seguinte caminho:
+
+heroku
+C:\Program Files\heroku\bin
+
+Fechar e reiniciar o PC.
+
+Isso deve resolver.
+
+---
+Após reiniciar, no terminal do Pycharm digite:
+heroku login
+
+
+;) 
+
+
+----------------------------------------------------------------------
+Erro:
+OSError: [WinError 123] A sintaxe do nome do arquivo, do nome do diretório ou do rótulo do volume está incorreta: '<frozen importlib._bootstrap>'
+
+Se procurar por ModuleNotFoundError nas mensagens acima no terminal, vai encontrar o erro:
+ModuleNotFoundError: No module named 'django_adminlte'
+
+Neste caso é só verificar 'django_adminlte'  em  settings/ INSTALED_APPS [
+
+* Se não existir, colar lá.
+* Se já existir, então falta instalação do pacote.  pip install django-adminlte2
+
+----------------------------------------------------------------------
+Erro:
+ImportError: cannot import name 'Resampling'
+
+Em models.py estará assim:    from stdimage.models import StdImageField     models estará riscado.
+
+Abre o pgAdmin4 e verifique depois em settings usuário e senha.
+
+---
+CRIAR UM ADMIN:
+
+python manage.py shell
+
+from django.contrib.auth.models import User
+
+Exemplo:
+usuario=User.objects.create_user(username='leandrocf79', password='123456', email='leandrocf79@gmail.com', first_name='Leandro', last_name='CF', is_staff=True, is_superuser=True)
+
+usuario
+
+usuario.save()
+
+Fechar terminal.  
+
+
+----------------------------------------------------------------------
