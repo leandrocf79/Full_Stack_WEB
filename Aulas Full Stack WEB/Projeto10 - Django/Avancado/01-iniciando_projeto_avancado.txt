@@ -25,7 +25,7 @@ django-admin startproject fusion .
 
 
 ---
-CRIAR UM ADMIN:
+CRIAR UM ADMIN, 2 formas abaixo:
 
 python manage.py shell
 
@@ -39,6 +39,15 @@ usuario
 usuario.save()
 
 Fechar terminal.  
+
+------------------ou essa:
+Criar um SUPERUSER:
+python manage.py createsuperuser
+
+Username (leave blank to use 'lcf'):  lcf1979        (pode digitar um nome aqui)
+email:
+senha: 321654    (não vão aparecer os dígitos, mas estão sendo registrados) 
+
 
 
 ---
