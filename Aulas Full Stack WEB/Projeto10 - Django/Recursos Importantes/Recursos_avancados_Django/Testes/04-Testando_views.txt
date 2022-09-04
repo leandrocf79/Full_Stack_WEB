@@ -1,0 +1,65 @@
+Gerar relatório em html, será criada uma pasta automaticamente chamada htmlcov, no terminal:
+coverage html
+
+Para gerar uma documentação do teste:
+cd htmlcov
+ls
+python -m http.server
+
+Abrir links disponíveis na exibição, a página vai ficar em vermelho nos pontos que devem ser testados.
+
+cd ..
+
+Apagar relatório:
+rm -rf htmlcov/
+
+---
+Em test_views.py:
+
+
+from django.test import TestCase
+from django.test import Client
+from django.urls import reverse_lazy
+
+
+class IndexViewTestCase(TestCase):
+
+    def setUp(self):
+        self.dados = {
+            'nome': 'Felicity Jones',
+            'email': 'testandodjango@gmail.com',
+            'assunto': 'Meu assunto',
+            'mensagem': 'Minha mensagem'
+        }
+        self.cliente = Client()
+
+    def test_form_valid(self):
+        request = self.cliente.post(reverse_lazy('index'), data=self.dados)
+        self.assertEquals(request.status_code, 302) # Redirect, mover, é o código 302
+
+    def test_form_invalid(self): # Teste 2: Formulário incompleto para dar erro
+        dados = {
+            'nome': 'Felicity Jones',
+            'assunto': 'Meu assunto'
+        }
+        request = self.cliente.post(reverse_lazy('index'), data=dados)
+        self.assertEquals(request.status_code, 200)
+
+
+
+---
+---Testar ele no terminal:
+coverage run manage.py test
+
+Criar relatório novamente.
+Para gerar uma documentação do teste:
+cd htmlcov/
+ls
+python -m http.server
+
+Abrir links disponíveis na exibição, a página vai ficar em vermelho nos pontos que devem ser testados.
+
+cd ..
+
+Apagar relatório:
+rm -rf htmlcov

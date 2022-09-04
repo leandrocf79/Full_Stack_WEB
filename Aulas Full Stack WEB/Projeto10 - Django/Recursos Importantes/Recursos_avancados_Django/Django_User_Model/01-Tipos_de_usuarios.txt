@@ -1,0 +1,178 @@
+Criar um novo projeto, para este criei com nome djangousermodel
+
+No terminal:
+pip install django
+
+Criar projeto:
+django-admin startproject djangousermodel .       (Usao o espaço ponto)
+
+
+Gerar as tabelas, será criado o BD:
+python manage.py migrate
+
+
+python manage.py shell
+
+from django.contrib.auth.models import User
+
+-----------------
+Para saber mais:
+dir(User)
+help(User)
+O gerenciador:
+from django.contrib.auth.models import UserManager
+dir(UserManager)
+help(UserManager.create)
+help(UserManager.create_user)
+help(UserManager.create_superuser)
+
+
+
+-----------------
+Criar usuário COMUM (NÃO LOGA EM ADMIN) ele não será is_staff(área administrativa) nem is_superuser
+ja o superuser receber esses 2 metodos como True
+
+Criar um usuário teste:
+python manage.py shell
+
+>>> from django.contrib.auth.models import User
+
+>>> usuario=User.objects.create_user(username='teste', password='123456', email='teste@gmail.com')
+>>> usuario
+
+>>> usuario.save()
+
+***  Para consultar:
+ret=User.objects.all()
+ret
+ret[0]
+ret[0].username
+ret[0].password       (Vai exibir a senha criptografada)
+ret[0].first_name
+
+
+*********                      Update usuário:   **************
+user=User.objects.get(pk=1)
+user
+
+user.first_name='Testando'
+user.last_name='da Silva'
+user.save()
+
+
+Outraforma:
+ret2=User.objects.get(id=1)    ou (pk=1) 
+ret2
+ret2=first_name 
+
+=======
+Pode criar um usuário com todos os dados diretamente, acima foi só um exemplo:
+leandro=User.objects.create_user(username='leandro', password='123456', email='leandro@gmail.com', first_name='Leandro', last_name='CF')
+leandro
+
+ret[1].first_name
+ret[1].last_name
+
+Outra forma:
+lcf =User.objects.get(pk=2)
+lcf
+lcf.first_name
+
+
+Fechar o terminal.
+
+
+-------------------------
+python manage.py runserver
+
+http://127.0.0.1:8000/admin
+
+Testar usuários, NÃO VÃO PODER LOGAR por ser usuário comum ele não será is_staff(área administrativa) nem is_superuser.
+
+Ctrl+C para sair no terminal.
+
+---------------------------
+
+Criar usuário que pode logar em admin, PODE ACESSAR, MAS NÃO É ADMINISTRADOR:
+
+python manage.py shell
+
+from django.contrib.auth.models import User
+
+lcf79=User.objects.create_user(username='lcf79', password='123456', email='lcf79@gmail.com', first_name='Leandro', last_name='CF', is_staff=True)
+
+lcf79
+
+lcf79.save()
+
+Fechar terminal.
+
+
+----------------
+Abre novamente:
+
+python manage.py runserver
+
+http://127.0.0.1:8000/admin
+
+Testar usuários, NÃO VÃO PODER LOGAR por ser usuário comum ele não será is_staff(área administrativa) nem is_superuser.
+
+Ctrl+C para sair no terminal.
+
+
+
+---------------
+CRIAR UM ADMIN:
+
+python manage.py shell
+
+from django.contrib.auth.models import User
+
+leandrocf79=User.objects.create_user(username='leandrocf79', password='123456', email='leandrocf79@gmail.com', first_name='Leandro', last_name='CF', is_staff=True, is_superuser=True)
+
+leandrocf79
+
+leandrocf79.save()
+
+Fechar terminal.
+
+---
+Abre novamente:
+
+python manage.py runserver
+
+http://127.0.0.1:8000/admin
+
+Logar: leandrocf79
+Senha: 123456
+
+Ctrl+C para sair no terminal.
+
+
+---------------------------------
+Update alguem como superusuário:
+
+python manage.py shell
+
+from django.contrib.auth.models import User
+
+user=User.objects.get(pk=3)
+
+user
+
+user.is_superuser=True
+
+user.save()
+
+
+---
+Sair do terminal e entrar novamente:
+
+python manage.py runserver
+
+http://127.0.0.1:8000/admin
+
+Logar: 
+Senha: 123456
+
+Ctrl+C para sair no terminal.

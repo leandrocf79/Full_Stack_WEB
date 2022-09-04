@@ -1,0 +1,72 @@
+Gerar relatório em html, será criada uma pasta automaticamente chamada htmlcov, no terminal:
+coverage html
+
+Para gerar uma documentação do teste:
+cd htmlcov
+ls
+python -m http.server
+
+Abrir links disponíveis na exibição, a página vai ficar em vermelho nos pontos que devem ser testados.
+
+cd ..
+
+Apagar relatório:
+rm -rf htmlcov/
+
+---
+Em test_forms.py:
+
+
+from django.test import TestCase
+
+from core.forms import ContatoForm
+
+
+class ContatoFormTestCase(TestCase):
+
+    def setUp(self):				# chamada
+        self.nome = 'Felicity Jones'
+        self.email = 'felicity@gmail.com'
+        self.assunto = 'Um assunto qualquer'
+        self.mensagem = 'Uma mensagem qualquer'
+
+        self.dados = {   
+            'nome': self.nome,
+            'email': self.email,
+            'assunto': self.assunto,
+            'mensagem': self.mensagem
+        }
+
+        self.form = ContatoForm(data=self.dados)  # ContatoForm(request.POST)
+
+    def test_send_mail(self):			
+        form1 = ContatoForm(data=self.dados)    # teste criando 2 formulários e verificar se o retorno é igual.
+        form1.is_valid()
+        res1 = form1.send_mail()
+
+        form2 = self.form			# teste criando 2 formulários e verificar se o retorno é igual.
+        form2.is_valid()
+        res2 = form2.send_mail()
+
+        self.assertEquals(res1, res2)		# retorno
+
+
+
+
+---
+---Testar ele no terminal:
+coverage run manage.py test
+
+Criar relatório novamente.
+Para gerar uma documentação do teste:
+cd htmlcov/
+ls
+python -m http.server
+
+Abrir links disponíveis na exibição, a página vai ficar em vermelho nos pontos que devem ser testados.
+
+cd ..
+
+Apagar relatório:
+rm -rf htmlcov
+

@@ -1,0 +1,81 @@
+Gerar relatório em html, será criada uma pasta automaticamente chamada htmlcov, no terminal:
+coverage html
+
+Para gerar uma documentação do teste:
+cd htmlcov
+ls
+python -m http.server
+
+Abrir links disponíveis na exibição, a página vai ficar em vermelho nos pontos que devem ser testados.
+
+cd ..
+
+Apagar relatório:
+rm -rf htmlcov
+
+---
+Em test_models.py:
+
+
+import uuid
+from django.test import TestCase
+from model_mommy import mommy
+
+from core.models import get_file_path
+
+
+class GetFilePathTestCase(TestCase):
+
+    def setUp(self):                             # chamada
+        self.filename = f'{uuid.uuid4()}.png'
+
+    def test_get_file_path(self):                # teste
+        arquivo = get_file_path(None, 'teste.png')    # Vai verificar se está criando o nome do arquivo com o tamanho correto, 40 caracteres.
+        self.assertTrue(len(arquivo), len(self.filename))
+
+
+class ServicoTestCase(TestCase):
+
+    def setUp(self):				# chamada
+        self.servico = mommy.make('Servico')
+
+    def test_str(self):  			# teste
+        self.assertEquals(str(self.servico), self.servico.servico)
+
+
+class CargoTestCase(TestCase):
+
+    def setUp(self):
+        self.cargo = mommy.make('Cargo')
+
+    def test_str(self):
+        self.assertEquals(str(self.cargo), self.cargo.cargo)
+
+
+class FuncionarioTestCase(TestCase):
+
+    def setUp(self):
+        self.funcionario = mommy.make('Funcionario')
+
+    def test_str(self):
+        self.assertEquals(str(self.funcionario), self.funcionario.nome)
+
+
+
+---
+---Testar ele no terminal:
+coverage run manage.py test
+
+Criar relatório novamente.
+Para gerar uma documentação do teste:
+cd htmlcov
+ls
+python -m http.server
+
+Abrir links disponíveis na exibição, a página vai ficar em vermelho nos pontos que devem ser testados.
+
+cd ..
+
+Apagar relatório:
+rm -rf htmlcov
+

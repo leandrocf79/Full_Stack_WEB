@@ -1,0 +1,95 @@
+Criar um sistema de testes para testar o projeto. No final deste arquivo tem o inicio dos testes.
+
+Serve para corrigir problemas antes de publicar o site na web.
+
+***Criar um diretório chamado testes, nele iremos colocar nossos testes para ficar mais organizado. Profissional.
+Será criado cada arquivo teste separado.
+
+Criar um arquivo vazio chamado  __init__.py  para o Python reconhecer todo o conteúdo.
+Criar também para testar a views e models:
+__init__.py
+test_models.py
+test_views.py
+test_forms.py
+
+
+
+###IMPORTANTE: sempre usar test_  e depois um nome, é assim que o gerenciador vai procurar.
+
+-------------------------------------------------------
+Esse modelo abaixo é só um teste do teste rsrs...
+---
+from django.test import TestCase
+
+def add_num(num):
+    return num+1
+
+class SimplesTestCase(TestCase):
+    #Vai rodar todas as vezes
+    def setUp(self):
+        self.numero = 41
+        #print('Iniciando o TestCase em tests.py')
+
+    #Testar a unidade de código
+    # Esse abaixo é o teste. IMPORTANTE: sempre usar test_  e depois um nome, é assim que o gerenciador vai procurar.
+    def test_add_num(self):
+        valor = add_num(self.numero)
+        self.assertTrue(valor==42)
+
+"""
+add_num vale 1
+numero = 41
+self.assertTrue(valor==42)
+"""
+
+# Para testar digitar no terminal: 
+python manage.py test
+
+Se tiver 3 testes aparecerão 3 pontos, 10 testes, 10 pontos.
+Se falhar vai aparecer um F de Fail.
+-------------------------------------------------------
+
+
+Baixar bibliotecas de testes:
+pip install model_mommy coverage
+
+Guardar:
+pip freeze > requirements.txt
+
+Criar um arquivo na raiz do projeto fusion:
+new file
+.coveragerc
+selecionar texto e OK
+
+Nele colocar o conteúdo abaixo para testar somente o que estiver dentro do projeto e omitir esses abaixo:
+
+[run]
+source = .
+
+omit =
+    */__init__.py
+    */settings.py
+    */manage.py
+    */wsgi.py
+    */apps.py
+    */urls.py
+    */admin.py
+    */migrations/*
+    */tests/*
+
+
+---Testar ele no terminal:
+coverage run manage.py test
+
+Ver relatório:
+coverage report
+
+Gerar relatório em html, será criada uma pasta automaticamente chamada htmlcov:
+coverage html
+
+Para gerar uma documentação do teste:
+cd htmlcov/
+ls
+python -m http.server
+
+Abrir links disponíveis na exibição, a página vai ficar em vermelho nos pontos que devem ser testados.
