@@ -1,0 +1,123 @@
+Criar telas de login.
+
+
+Em djangoum3/urls.py:
+
+from django.contrib import admin
+from django.urls import path, include   #include para adicionar rotas
+from django.views.generic.base import TemplateView  #Uma view genérica
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('contas/', include('django.contrib.auth.urls')),  # Adicionando rotas do Django
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+]
+
+
+
+---
+Para visualizar:
+
+python manage.py shell
+from django.urls import get_resolver
+from pprint import pprint          <--- Facilita a visualização de forma compacta.
+help(pprint)      
+
+pprint(get_resolver().url_patterns[0].url_patterns)   <-- Vai exibir as rotas disponíveis para configurar
+
+Para este momento o que interessa é Login e Logout.
+ <URLPattern 'login/' [name='login']>,
+ <URLPattern 'logout/' [name='logout']>,
+
+
+---
+No diretório principal criar um diretório templates com um arquivo chamado base.html com o conteúdo abaixo:
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Geek University</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit-no">
+    <link rel="icon" href="https://www.geekuniversity.com.br/static/images/favicon.4fcb819d32bf.ico">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://getbootstrap.com/docs/4.0/examples/sign-in/signin.css" rel="stylesheet">
+</head>
+<body class="text-center">
+    {% block content %}{% endblock %}
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+</html>
+
+
+
+#####################
+No diretório principal, dentro do diretório templates, criar um arquivo chamado index.html com o conteúdo abaixo:
+Esse inde.html é apenas para teste. Pode por um index.html real de uso.
+
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Geek University</h1>
+        {% if user.is_anonymous %}     <!--     Se for anônimo entra em login -->
+           <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+        {% else %}
+            <div class="alert alert-primary" role="alert">
+                Seja bem-vindo(a) {{ user.get_full_name }}!
+            </div>
+            <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+
+#####################
+Criar a página de login.
+Criar um diretório dentro de templates chamado registration (tem que ser escrito assim para o Django reconhecer),
+criar um login.html com o conteúdo abaixo:
+
+{% extends 'base.html' %}
+{% block content %}
+    <form class="form-signin" method="post" autocomplete="off">
+        {% csrf_token %}
+        <img class="mb-4" src="https://cdn.pixabay.com/photo/2021/11/01/13/17/login-6760338_960_720.png" alt="" width="172" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Informe seus dados</h1>
+
+        <label for="username" class="sr-only">E-mail</label>
+        <input type="email" id="username" name="username" class="form-control" placeholder="Informe seu e-mail" required autofocus>
+
+        <label for="password" class="sr-only">Senha</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Informe sua senha" required>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Acessar</button>
+        <p class="mt-5 mb-3 text-muted">&copy; {% now 'Y'%}</p>
+    </form>
+{% endblock %}
+
+
+
+
+#####################
+Agora em settings.py, na última linha, precisa direcionar, após usuário fazer login para onde tem que ir.
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+
+
+-------
+Antes de testar observar se criou a pasta template no diretório raiz(principal) e se está escrito templates em:
+TEMPLATES = [
+    {
+        'DIRS': ['templates'],   <-------------
+
+
+---
+Agora testar.
+No terminal:
+
+python manage.py runserver
+
+Ctrl+C

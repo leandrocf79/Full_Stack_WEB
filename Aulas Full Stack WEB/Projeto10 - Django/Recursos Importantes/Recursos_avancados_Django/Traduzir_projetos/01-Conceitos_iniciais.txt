@@ -1,0 +1,13 @@
+Nesta parte do curso será utilizado o projeto fusion.
+
+
+https://docs.djangoproject.com/en/4.1/topics/i18n/translation/
+
+Veja que o Django fará algumas otimizações para não carregar o maquinário de internacionalização.USE_I18N = False
+
+Por padrão essa internacionalização já vem True se for usar os pacotes de tradução.
+
+O Django NÃO vai traduzir os textos, isso fica por conta do desenvolvedor. O django vai criar as variações de idiomas.
+
+
+

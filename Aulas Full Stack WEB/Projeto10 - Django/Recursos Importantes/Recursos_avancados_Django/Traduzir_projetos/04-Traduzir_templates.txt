@@ -1,0 +1,99 @@
+As modificações serão destacadas por setas.
+
+Inserir {% load i18n %}  em TODAS as páginas que houver tradução e
+
+ onde tiver o texto usar:    {% trans 'texto a ser traduzido' %}
+
+
+{% extends 'base.html' %}
+{% load i18n %} <!--  <----------   -->
+{% load static %}
+{% block content %}
+    <!-- Hero Area Start -->
+     <div id="hero-area" class="hero-area-bg">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+              <div class="contents">
+                <h2 class="head-title">404<br>{% trans 'Página não Encontrada' %}</h2> <!--  <----------   -->
+                <p>{% trans 'Infelizmente a página que você procura não está disponível.' %}</p>  <!--  <----------   -->
+                <div class="header-button">
+                  <a href="{% url 'index' %}" class="btn btn-common">{% trans 'Volte para a página principal' %}</i></a> <!--  <----------   -->
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+              <div class="intro-img">
+                <img class="img-fluid" src="{% static 'img/intro-mobile.png' %}" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- Hero Area End -->
+{% endblock %}
+
+_____________________________________
+Pronto, é só isso, os textos já estão preparados para serem traduzidos.
+
+
+
+---
+Traduzir hero.html:
+
+
+{% load i18n %}
+{% load static %}
+<div id="hero-area" class="hero-area-bg">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+              <div class="contents">
+                <h2 class="head-title">{% trans 'Com a Fusion sua empresa poderá ir mais longe' %}<br>{% trans 'Nós da Fusion fazemos mais por você.' %}</h2>
+                <p>{% trans 'Você irá mais longe. Nós não estudamos na Geek University para ganhar pouco dinheiro!' %}</p>
+                <div class="header-button">
+                  <a href="#" class="btn btn-common">{% trans 'Saiba mais' %}</i></a>
+                  <a href="#" class="btn btn-border video-popup">{% trans 'Entre em contato' %}</i></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+              <div class="intro-img">
+                <img class="img-fluid" src="{% static 'img/intro-mobile.png' %}" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        {% if messages %}
+          {% for m in messages %}
+            <div class="alert alert-{{ m.tags }}">
+              <button type="button" class="close" data-dismiss="alert"></button>
+              <strong>{{ m }}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+</header>
+<!-- Header Area wrapper End -->
+
+
+
+____________________________________________
+Chamar o idioma:
+python manage.py makemessages -l es
+
+####Após todo o trabalho de tradução, Pode usar o Poedit, utilizar o comando para compilar:
+python manage.py compilemessages
+
+Todas as alterações de idiomas devem ser compiladas depois.
+
+
+---
+python manage.y runserver
+
+Sair no terminal:
+Ctrl+C
+

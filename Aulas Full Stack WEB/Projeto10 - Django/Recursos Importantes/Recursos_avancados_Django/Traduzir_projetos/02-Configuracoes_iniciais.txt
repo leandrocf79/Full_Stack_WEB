@@ -1,0 +1,40 @@
+No terminal:
+pip install textblob
+
+Para verificar funcionamento do textblob pode fazer como descrito abaxixo.
+Ainda no terminal abrir o Python:
+python
+from textblob import TextBlob
+texto= TextBlob("Com boa vontade as coisas vão melhorando")
+
+texto.translate(to='es')
+texto.translate(to='en')
+texto.translate(to='fr')
+texto.translate(to='zh-CN')
+texto.translate(to='ar')
+texto.translate(to='ru')
+print(texto.translate(to='zh-CN'))
+
+
+Para instalar os demais recursos necessários no windows precisa ir 
+na "Microsoft Store" e baixar o termninal do Linux (Ubuntu terminal).
+**Para instalar diretamente no Linux é só abrir o terminal Ctrl + Alt + T
+
+No terminal Ubuntu:
+$ sudo apt install linuxbrew-wrapper
+Vai solicitar a senha de usuário.
+
+Verificar se existem pendências:
+$ brew update
+$ brew upgrade
+
+Instalar o gettext:
+$ brew install gettext
+
+Linkar ele:
+$ brew link gettext --force
+
+Precisa instalar mais um pacote, editor de tradução, acessar a página
+https://poedit.net/
+baixar e instalar.
+

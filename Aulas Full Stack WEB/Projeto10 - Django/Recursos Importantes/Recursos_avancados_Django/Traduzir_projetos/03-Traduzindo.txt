@@ -1,0 +1,274 @@
+No diretório raiz, principal, no mesmo que tem manage.py, vai criar um diretório chamado locale.
+
+Abre o projeto, na ultima linha em settings.py:
+
+
+MIDDLEWARE = [
+    'django.middleware.locale.LocaleMiddleware',   #Vai automatizar a detecção de linguagem pelo navegador.
+
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),  #Especificando que em locale ficam as traduções
+)
+
+
+
+---
+Adicionar em core/views.py:
+
+from django.utils.translation import gettext as _
+from django.utils import translation
+
+
+##############################################################################
+Adicionar conteúdo aqui também, sinalizado pelo seta:
+
+
+
+from django.views.generic import FormView
+from django.urls import reverse_lazy
+from django.contrib import messages
+from django.utils.translation import gettext as _
+from django.utils import translation
+
+from .models import Servico, Funcionario
+from .forms import ContatoForm
+
+
+class IndexView(FormView):
+    template_name = 'index.html'
+    form_class = ContatoForm
+    success_url = reverse_lazy('index')
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        lang = translation.get_language() # <------------------------------
+        context['servicos'] = Servico.objects.order_by('?').all()
+        context['funcionarios'] = Funcionario.objects.order_by('?').all()
+        context['lang'] = lang # <------------------------------lang vem do HEAD da index <html lang="pt-br">, se já tiver usado djando está no base.html. 
+								"""Criar a variável de contexto. 
+								Deve ficar da seguinte forma a aprtir de agora: <html lang="{{ lang }}"> 
+								"""
+
+        translation.activate(lang) # <------------------------------Ativar lang.
+        return context
+
+#Se for traduzir algo aqui mesmo, siga o modelo _()  , import foi usado o underline --> import gettext as _  
+
+    def form_valid(self, form, *args, **kwargs):
+        form.send_mail()
+        messages.success(self.request, _('E-mail enviado com sucesso'))  #<---O conteúdo será traduzido.
+        return super(IndexView, self).form_valid(form, *args, **kwargs)
+
+    def form_invalid(self, form, *args, **kwargs):
+        messages.error(self.request, _('Erro ao enviar e-mail'))    #<---O conteúdo será traduzido.
+        return super(IndexView, self).form_invalid(form, *args, **kwargs)
+
+
+##############################################################################
+
+Por questão de facilitar o entendimento do algoritmo prefiro o modelo abaixo, 
+mas é muito comum o modelo acima:
+-----------------------------------------------------------------
+Uma outra forma é fazer a importação assim:			|
+from django.utils.translation import gettext			|
+								|
+e usar assim:							|
+messages.error(self.request, gettext('Erro ao enviar e-mail'))	|
+-----------------------------------------------------------------
+##############################################################################
+
+
+---
+Tradução recomendada em forms.py e models.py
+from django.utils.translation import gettext_lazy as _
+
+Para todos os textos TRADUZIVEIS acrescentar _()
+
+---Em forms.py:
+
+from django import forms
+from django.core.mail.message import EmailMessage
+from django.utils.translation import gettext_lazy as _
+
+
+class ContatoForm(forms.Form):
+    nome = forms.CharField(label=_('Nome'), max_length=100)
+    email = forms.EmailField(label=_('E-mail'), max_length=100)
+    assunto = forms.CharField(label=_('Assunto'), max_length=100)
+    mensagem = forms.CharField(label=_('Mensagem'), widget=forms.Textarea())
+
+    def send_mail(self):
+        nome = self.cleaned_data['nome']
+        email = self.cleaned_data['email']
+        assunto = self.cleaned_data['assunto']
+        mensagem = self.cleaned_data['mensagem']
+
+        n = _('Nome')
+        e = _('E-mail')
+        a = _('Assunto')
+        m = _('Mensagem')
+
+        conteudo = f'{n}: {nome}\n{e}: {email}\n{a}: {assunto}\n{m}: {mensagem}'  #Recurso utilizado para traduzir nesta área. Muito bom!!!
+
+        mail = EmailMessage(
+            subject=assunto,
+            body=conteudo,
+            from_email='contato@fusion.com.br',
+            to=['contato@fusion.com.br',],
+            headers={'Reply-To': email}
+        )
+        mail.send()
+
+
+
+#######################
+Em models.py:
+
+
+import uuid
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from stdimage.models import StdImageField
+
+
+def get_file_path(_instance, filename):
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+    return filename
+
+
+class Base(models.Model):
+    criados = models.DateField(_('Criação'), auto_now_add=True)
+    modificado = models.DateField(_('Atualização'), auto_now=True)
+    ativo = models.BooleanField(_('Ativo?'), default=True)
+
+    class Meta:
+        abstract = True
+
+
+class Servico(Base):
+    ICONE_CHOICES = (
+        ('lni-cog', _('Engrenagem')),
+        ('lni-stats-up', _('Gráfico')),
+        ('lni-users', _('Usuários')),
+        ('lni-layers', _('Design')),
+        ('lni-mobile', _('Mobile')),
+        ('lni-rocket', _('Foguete')),
+    )
+    servico = models.CharField(_('Serviço'), max_length=100)
+    descricao = models.TextField(_('Descrição'), max_length=200)
+    icone = models.CharField(_('Icone'), max_length=12, choices=ICONE_CHOICES)
+
+    class Meta:
+        verbose_name = _('Serviço')
+        verbose_name_plural = _('Serviços')
+
+    def __str__(self):
+        return self.servico
+
+
+class Cargo(Base):
+    cargo = models.CharField(_('Cargo'), max_length=100)
+
+    class Meta:
+        verbose_name = _('Cargo')
+        verbose_name_plural = _('Cargos')
+
+    def __str__(self):
+        return self.cargo
+
+
+class Funcionario(Base):
+    nome = models.CharField(_('Nome'), max_length=100)
+    cargo = models.ForeignKey('core.Cargo', verbose_name=_('Cargo'), on_delete=models.CASCADE)
+    bio = models.TextField(_('Bio'), max_length=200)
+    imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 480, 'height': 480, 'crop': True}})
+
+# Nomes de redes sociais não será interesssante traduzir.
+
+    facebook = models.CharField('Facebook', max_length=100, default='#')
+    twitter = models.CharField('Twitter', max_length=100, default='#')
+    instagram = models.CharField('Instagram', max_length=100, default='#')
+
+    class Meta:
+        verbose_name = _('Funcionário')
+        verbose_name_plural = _('Funcionários')
+
+    def __str__(self):
+        return self.nome
+
+##############################################################################
+
+Todas as alterações de idiomas devem ser compiladas depois.
+
+Agora escolher o idioma a ser traduzido, "es" para espanhol.
+
+No terminal:
+python manage.py makemessages -l es
+
+####Após todo o trabalho de tradução utilizar o comando para compilar:
+python manage.py compilemessages
+
+
+Se abrir o diretório locale vai encontrar o arquivo agurdando a tradução que pode ser feita manulamente ou utilizar o Poedit.
+
+Abrir o Poedit clicar em Edit a Translation
+ir até o diretório que está salvo o projeto, exemplo: fusion/locale/LC_MESSAGES/django.po
+
+clicar em abrir. Neste momento será carregado todo o conteúdo a ser traduzido.
+
+Agora para facilitar ainda mais, clicar sobre a palavra para ser traduzida e sobre a para sugerida no PRE-TRANSLATION.
+
+
+
+***Cuidado com as traduções, veja se inicia com letras maiúsculas onde deve e se está no mesmo tempo verbal.
+Exemplo:
+português: Atualização
+espanhol: actualizar    Neste caso deve ser corrigido para Actuzlización
+
+Após as traduções clicar em salvar no Poedit.
+
+_______________
+Vai dar 10 traduçoes gratuitas ou pode pagar 1x na vida 
+
+Pro
+personal license
+R$ 139
+ONE-TIME PAYMENT (Valor em 06/09/2022)  
+_______________
+
+###
+Pode ainda usar o google tradutor que é gratuito, mas sempre de olho se é a tradução correta e 
+se inicia com letras maiúsculas onde deve e se está no mesmo tempo verbal. 
+Neste caso terá que Ctrl+C e Ctrl+V em todas as palavras, esse Poedit vai poupar isso em grandes quantidades
+de traduções a serem feitas, bastando ler e clicar sobre o conteúdo.
+
+###
+ UM RECURSO EXTRA QUE PODE SER USADO AINDA DE FORMA GRATUITA:
+
+Para facilitar o trabalho, em vez de ir até o arquivo .../locale/LC_MESSAGES/django.po e inserir em cada 
+local a palavra traduzida, pode então, usar o modo abaixo.
+
+Com o Poedit e o Google tradutor abertos pode clicar na palavra a ser traduzida em Poedit e colar a tradução do google.
+
+-----------------------------------------
+Resumo:
+Chamar o idioma:
+python manage.py makemessages -l es
+
+####Após todo o trabalho de tradução utilizar o comando para compilar:
+python manage.py compilemessages
+
+Todas as alterações de idiomas devem ser compiladas depois.
+
+-----------------------------------------
+python manage.y runserver
+
+Nesse conteúdo não foram alterados os textos das páginas, mas o de envio de email. 
+O navegador se tiver em espanhol exibirá a frase traduzida após o envio de email:
+   Email enviado con éxito
+
+Sair no terminal:
+Ctrl+C
