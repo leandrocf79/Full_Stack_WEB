@@ -10,4 +10,21 @@ Por padrão essa internacionalização já vem True se for usar os pacotes de tr
 O Django NÃO vai traduzir os textos, isso fica por conta do desenvolvedor. O django vai criar as variações de idiomas.
 
 
+Não será utilizado esse modelo abaixo, vale de aprendizdo.
 
+No terminal:
+pip install textblob
+
+Para verificar funcionamento do textblob pode fazer como descrito abaxixo.
+Ainda no terminal abrir o Python:
+python
+from textblob import TextBlob
+texto= TextBlob("Com boa vontade as coisas vão melhorando")
+
+texto.translate(to='es')
+texto.translate(to='en')
+texto.translate(to='fr')
+texto.translate(to='zh-CN')
+texto.translate(to='ar')
+texto.translate(to='ru')
+print(texto.translate(to='zh-CN'))
