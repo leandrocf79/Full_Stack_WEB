@@ -1,16 +1,29 @@
-Para iniciar um projeto já existente que foi baixado da web, ou ainda, que teve o diretório
-do projeto copiado para outro local.
+Para iniciar um projeto já existente que foi baixado da web por exemplo, ou ainda, que teve o diretório
+do projeto copiado para outro local, crie 2 arquivos, sendo 1 para iniciar novo projeto e outro para comparar conteúdos.
+
 1º Tente abrir o projeto e iniciar ele com o comando:
 
 Iniciar projeto, exemplo, fusion, colocar o "espaço ponto":
 django-admin startproject fusion .
-django-admin startproject core
 
+# django-admin startproject core
+
+*** VERIFIQUE se os arquivos e diretório core foram criados em outro local. Abra os diretórios. Qualquer coisa só corrigir Ctrl+c e Ctrl+v. 
+
+
+_____
 2º Se não der certo, pode abrir o Pycharm novamente e criar um projeto sobrepondo com mesmo nome.
 	Deverá instalar todas as bibliotecas utilizadas( pip install ...)
 	Salvar em: pip freeze > requirements.txt
 	Iniciar projeto, colocar o "espaço ponto": django-admin startproject fusion .
 Ou seja, fazer todo procedimento como projeto novo para utilizar o ja existente.
+
+
+django-admin startproject fusion .
+# django-admin startproject core
+*** VERIFIQUE se os arquivos e diretório core foram criados em outro local. Abra os diretórios. Qualquer coisa só corrigir Ctrl+c e Ctrl+v. 
+
+
 Verifique tanbém a versão do python:
 	Criar na raiz do projeto new / file  runtime.txt e colocar nele a versão atual do python:
 ****No terminal digite o comando abaixo para saber a versão correta:
@@ -21,9 +34,46 @@ python-3.6.2
 
 Ctrl-S
 	
+VERIFICAR o conteúdo se está igual ao original.
+Veja settings.py
+
+Pode conferir:
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
 
 
-------------------------
+
+
+------------------------------------------------------------------
+
+
+No terminal, sempre que alterar algo:
+python manage.py makemigrations
+python manage.py migrate
+
+Caso precise corrigir o BD em localhost pode apagar e inserir dados novamente:
+ls
+rm db.sqlite3
+ls
+cd core
+ls
+cd migrations
+
+Veja que deve ter as migrations, apagá-las:
+rm 00*           ***Vai apagar todos os arquivos que começam com 00
+cd ..
+cd ..
+
+Isso vai zerar o BD e começar novamente:
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+
+
+-----------------------------------------------------------------------------
 Erro:
 Caso der erro no heroku pelos procedimentos no terminal vá em
 https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli
@@ -51,6 +101,9 @@ heroku login
 ;) 
 
 
+
+
+
 ----------------------------------------------------------------------
 Erro:
 OSError: [WinError 123] A sintaxe do nome do arquivo, do nome do diretório ou do rótulo do volume está incorreta: '<frozen importlib._bootstrap>'
@@ -62,6 +115,9 @@ Neste caso é só verificar 'django_adminlte'  em  settings/ INSTALED_APPS [
 
 * Se não existir, colar lá.
 * Se já existir, então falta instalação do pacote.  pip install django-adminlte2
+
+
+
 
 ----------------------------------------------------------------------
 Erro:
@@ -94,6 +150,10 @@ python manage.py createsuperuser
 Username (leave blank to use 'lcf'):  lcf1979        (pode digitar um nome aqui)
 email:
 senha: 321654    (não vão aparecer os dígitos, mas estão sendo registrados)
+
+
+
+
 
 
 ----------------------------------------------------------------------
