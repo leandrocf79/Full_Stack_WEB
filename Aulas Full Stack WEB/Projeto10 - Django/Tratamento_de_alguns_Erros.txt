@@ -1,3 +1,29 @@
+Para iniciar um projeto já existente que foi baixado da web, ou ainda, que teve o diretório
+do projeto copiado para outro local.
+1º Tente abrir o projeto e iniciar ele com o comando:
+
+Iniciar projeto, exemplo, fusion, colocar o "espaço ponto":
+django-admin startproject fusion .
+django-admin startproject core
+
+2º Se não der certo, pode abrir o Pycharm novamente e criar um projeto sobrepondo com mesmo nome.
+	Deverá instalar todas as bibliotecas utilizadas( pip install ...)
+	Salvar em: pip freeze > requirements.txt
+	Iniciar projeto, colocar o "espaço ponto": django-admin startproject fusion .
+Ou seja, fazer todo procedimento como projeto novo para utilizar o ja existente.
+Verifique tanbém a versão do python:
+	Criar na raiz do projeto new / file  runtime.txt e colocar nele a versão atual do python:
+****No terminal digite o comando abaixo para saber a versão correta:
+No terminal: python -V
+
+No arquivo runtime.txt:
+python-3.6.2
+
+Ctrl-S
+	
+
+
+------------------------
 Erro:
 Caso der erro no heroku pelos procedimentos no terminal vá em
 https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli
@@ -46,7 +72,7 @@ Em models.py estará assim:    from stdimage.models import StdImageField     mod
 Abre o pgAdmin4 e verifique depois em settings usuário e senha.
 
 ---
-CRIAR UM ADMIN:
+CRIAR UM ADMIN, 2 formas abaixo:
 
 python manage.py shell
 
@@ -61,5 +87,58 @@ usuario.save()
 
 Fechar terminal.  
 
+------------------ou essa:
+Criar um SUPERUSER:
+python manage.py createsuperuser
+
+Username (leave blank to use 'lcf'):  lcf1979        (pode digitar um nome aqui)
+email:
+senha: 321654    (não vão aparecer os dígitos, mas estão sendo registrados)
+
 
 ----------------------------------------------------------------------
+Para alguns erros possíveis tentar isso abaixo:
+
+Abrir projeto, para este exemplo será djangoum2:
+pip install django
+
+django-admin startproject djangoum2 .       (usar espaço e ponto)
+
+django-admin startproject core
+
+
+Em settings configurar o padrão:
+
+Agora tentar:
+python manage.py runserver 
+
+
+Caso ainda não funcione:
+******Lembre-se que toda vez que alterar algo em models.py tem que ir no terminal e:
+
+python manage.py makemigrations
+E migrate para gerar as tabelas:
+python manage.py migrate
+
+
+E toda vez que alterar alguma biblioteca:
+pip freeze > requirements.txt
+
+---
+Verifique a versão do python tambem:
+
+Criar na raiz do projeto new / file  runtime.txt e colocar nele a versão atual do python:
+****No terminal digite o comando abaixo para saber a versão correta:
+python -V
+
+No arquivo runtime.txt:
+python-3.6.2
+
+
+Ctrl-S
+
+#####################################
+
+
+
+
