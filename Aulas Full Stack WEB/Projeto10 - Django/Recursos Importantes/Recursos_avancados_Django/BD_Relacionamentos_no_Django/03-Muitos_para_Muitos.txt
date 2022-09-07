@@ -1,0 +1,173 @@
+Observe onde houver setas, Muitos para Muitos.
+
+Exemplo, Uber, uma frota de ônibus etc.
+
+
+
+Em models.py:
+
+
+from django.db import models
+from django.contrib.auth import get_user_model    # <-----------------Relacionamento Muitos para Muitos
+
+
+class Chassi(models.Model):
+    numero = models.CharField('Chassi', max_length=16, help_text='Máximo 16 caracteres') #  Máximo 16 caracteres -> Vai ajudar a saber a quantidade de dígitos para o admin que estiver inserindo dados. 
+
+    class Meta:
+        verbose_name = 'Chassi'
+        verbose_name_plural = 'Chassis'
+
+    def __str__(self):
+        return self.numero
+
+
+class Montadora(models.Model):     # <--Relacionamento Um para Muitos
+    nome = models.CharField('Nome', max_length=50)
+
+    class Meta:
+        verbose_name = 'Montadora'
+        verbose_name_plural = 'Montadoras'
+
+    def __str__(self):
+        return self.nome
+
+
+def set_default_montadora():
+    return Montadora.objects.get_or_create(nome='Padrão')[0]  # (objeto, boolean)
+
+
+class Carro(models.Model):
+   
+"""
+    # OneToOneField                                  # USAR: on_delete=models.CASCADE)
+    Cada carro só pode se relacionar com um chassi
+    e cada chassi só pode se relacionar com um carro.
+
+    # ForeignKey (One to Many)                       # USAR: on_delete=models.CASCADE)
+    Cada carro tem uma montadora mas uma montadora
+    pode 'montar' vários carros.
+
+
+    # ManyToMany                               # <-----------------  
+    Um carro pode ser dirigido por vários motoristas
+    e um motorista pode dirigir diversos carros.
+"""
+
+    chassi = models.OneToOneField(Chassi, on_delete=models.CASCADE)       # OneToOneField -> Cada chassi só pode estar relacionado a um carro apenas.
+    montadora = models.ForeignKey(Montadora, on_delete=models.SET(set_default_montadora))   # <-ForeignKey aqui já fica um para muitos, Uma montadora pode ter Muitos carros.
+
+    motoristas = models.ManyToManyField(get_user_model())    # <----------------- ManyToManyField
+
+    modelo = models.CharField('Modelo', max_length=30, help_text='Máximo 30 caracteres')      #  Máximo 30 caracteres -> Será exibido abaixo da caixa.
+    preco = models.DecimalField('Preço', max_digits=8, decimal_places=2) # exemplo: 99999999,99
+
+    class Meta:
+        verbose_name = 'Carro'
+        verbose_name_plural = 'Carros'
+
+    def __str__(self):     # <--Para retornar, por exemplo, Ford Ranger, Fiet Uno
+        return f'{self.montadora} {self.modelo}'
+
+
+
+
+
+-----
+Em core/admin.py:
+
+
+from django.contrib import admin
+
+from .models import Chassi, Carro, Montadora 
+
+
+@admin.register(Montadora)          # <--Montadora
+class MontadoraAdmin(admin.ModelAdmin):
+    list_display = ('nome',)   # <-- Montadora só tem nome, caso queira por outro atributo, por exemplo, cnpj, é só acrescentar e sempre usar a vírgula.
+
+
+@admin.register(Chassi)
+class ChassiAdmin(admin.ModelAdmin):
+    list_display = ('numero',)   # list_display aguarda uma tupla por ter colocado vírgula. Pode ser acrescentado vários itens.
+
+
+@admin.register(Carro)
+class CarroAdmin(admin.ModelAdmin):
+    list_display = ('montadora', 'modelo', 'chassi', 'preco', 'get_motoristas')  # <--Montadora foi acrescentada para ser exibido junto.
+
+    def get_motoristas(self, obj):
+        return ', '.join([m.username for m in obj.motoristas.all()])
+
+    get_motoristas.short_description = 'Motoristas'
+
+
+
+-----
+No terminal, sempre que alterar algo:
+python manage.py makemigrations
+python manage.py migrate
+
+---
+python manage.py runserver
+
+
+Criar vários usuários e carros para testar.
+
+Na parte Modificar Carro:
+Escolha chassi, montadora e   SEGURE Ctrl  e escolha duas opções de nomes de Motoristas 
+para vincular ao mesmo carro.
+
+Coloque então um mesma pessoa para dirigir também outro carro.
+
+
+Sair no terminal:
+Ctrl+c
+
+
+
+---------------------------
+Um recurso de pesquisa interessante para se usar e saber o que o Django está fazendo:
+python manage.py shell
+
+-----
+from core.models import Carro
+carros = Carro.objects.all()
+carros
+
+carro1= carros.first()
+carro1
+
+print(carros.query)
+
+
+
+*****  Quem são os motoristas deste carro?
+
+driver= carro1.motoristas.all()
+driver
+
+
+*** Quantos carros tem?
+>>> car1 = carro1.id           
+>>> car1
+ou 
+carros.pk
+ou
+carros.id
+
+-----
+carro2= carros.last()
+carro2
+
+driver2= carro2.motoristas.all()
+
+print(carro2.query)
+
+Tem várias opções como 'last_login' etc
+
+
+>>> carros3 = Carro.objects.filter(motoristas__in = driver2).distinct()
+>>> carros3
+
+-----------------

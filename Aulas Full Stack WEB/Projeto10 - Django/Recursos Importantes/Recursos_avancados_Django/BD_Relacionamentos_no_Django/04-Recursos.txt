@@ -1,0 +1,106 @@
+Se observar a classe Chassi e Montadora não têm nenhuma chave estrangeira, entidade forte.
+
+
+Já a classe Carro depende de outras classes, entidade fraca.
+
+
+
+No terminal:
+
+python manage.py shell
+
+from django.db import models
+dir(models)
+
+Nomes com todas as letras maiúsculas são constantes, não deve ser alterados.
+
+Obseve que a opção CASCADE SEMPRE VAI DAR CERTO (... on_delete=models.CASCADE), 
+
+se usar (..., on_delete=models.SET_DEFALT, default=1) ao deletar montadora o carro vai 
+receber o nome de outra montadora.. Não faz muito sentido isso para este caso, mas se for o caso tem um exemplo abaixo.
+
+
+
+#################
+Usando  (...,  on_delete=models.SET_DEFALT, default=1)
+
+em models deve ser criada então uma  def para substitui o nome da montadora sem excluir os carros.
+
+def set_default_montadora():
+	return Montadora.objects.get_or_create(nome='Padrão') [0]   # objeto, boolean
+
+
+
+
+No terminal, sempre que alterar algo:
+python manage.py makemigrations
+python manage.py migrate
+
+
+---
+No terminal faça o teste de criar 2x um montadora que ainda não existe.
+
+python manage.py shell
+
+
+from core.models import Montadora
+resultado = Montadora.objects.get_or_create(nome='Volkswagen')
+resultado
+
+*** Vai retornar TRUE
+
+Ao tentar criar novamente:
+resultado = Montadora.objects.get_or_create(nome='Volkswagen')
+resultado
+
+*** Vai retornar FALSE POIS JÁ EXISTE.
+
+
+
+resultado = Montadora.objects.get_or_create(nome='Volkswagen')[0]         ** [0]  É PARA PEGAR SOMENTE ESSE OBJETO
+resultado
+
+--------
+python manage.py runserver
+
+Apagar uma montadora na página e veja que o nom e será substituiído pelo nome "Padrão"
+
+
+
+
+###################################
+Montar uma lista de motoristas.
+
+Em admin.py:
+
+
+@admin.register(Carro)
+class CarroAdmin(admin.ModelAdmin):
+    list_display = ('montadora', 'modelo', 'chassi', 'preco', 'get_motoristas')     # De 'motoristas' para 'get_motoristas'
+	
+		# Criar uma definição para get_motoristas:
+
+    def get_motoristas(self, obj):
+        return ', '.join([m.username for m in obj.motoristas.all()])   #   (', '.join) separar por vírgulas.      (m) de Motorista
+
+    get_motoristas.short_description = 'Motoristas'    # Vai exibir esse nome na página de admin.  Vai trocar "get_motoristas" por "Motoristas"
+
+
+
+***Agora vai exibir os nomes dos motoristas na página de admin.
+
+
+
+------
+No terminal verificar o que foi feito:
+
+python manage.py shell
+
+from core.models import Carro
+
+carro1 = Carro.objects.get(pk=1)
+carro1
+
+resultado = [m.username for m in carro1.motoristas.all()]
+resultado       *** Vai exibir a lista com os usuários deste carro
+
