@@ -1,0 +1,19 @@
+Para iniciar o servidor redis vá até a pasta onde ele está e inicie o terminal linux dentro da pasta.
+
+No terminal linux:
+
+$ /redis-server
+
+Clicar enter e DEIXAR ABERTO. 
+
+
+-----
+No terminal do pycharm:
+
+python manage.py migrate
+
+python manage.py runserver
+
+Abrir navegador, agora pode por um nome na sala e copiar o link para uma outra página em modo privado e
+entrar na mesma sala para enviar mensagens.
+
