@@ -1,0 +1,68 @@
+ WebSocket é uma interação do navegador com a aplicação para permitir uma comunicação realtime.
+
+
+Em chat/urls.py:
+
+
+from django.urls import path
+
+from .views import IndexView, SalaView
+
+
+urlpatterns = [
+    path('', IndexView.as_view(), name='index'),
+    path('chat/<str:nome_sala>/', SalaView.as_view(), name='sala'),
+]
+
+
+
+
+-----
+Em chat criar um arquivo chamado routing.py:  (Rota expecífica do channels)
+
+
+
+from django.urls import re_path
+
+from .consumers import ChatConsumer   # Vai conectar o navegador e a aplicação
+
+websocket_urlpatterns = [
+    re_path(r'ws/chat/(?P<nome_sala>\w+)/$', ChatConsumer),
+]
+
+
+
+
+
+********
+Em realtime/urls.py:
+
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('', include('chat.urls')),
+    path('admin/', admin.site.urls),
+]
+
+ 
+
+-----
+Ainda em realtime criar um arquivo também chamado routing.py: 
+
+
+
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+
+from chat.routing import websocket_urlpatterns
+
+
+application = ProtocolTypeRouter({
+    'websocket': AuthMiddlewareStack(
+        URLRouter(
+            websocket_urlpatterns
+        )
+    ),
+})
