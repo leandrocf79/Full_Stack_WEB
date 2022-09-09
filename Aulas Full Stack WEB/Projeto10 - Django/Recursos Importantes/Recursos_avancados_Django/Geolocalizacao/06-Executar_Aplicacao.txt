@@ -1,0 +1,19 @@
+Tudo preparado agora para executar aplicação, no terminal:
+
+python manage.py runserver
+
+
+Observe agora que o Yelp está fazendo a busca, é o buscador no lado esquerdo da tela,
+Clique em "Buscador Geek". para fazer buscas aleatórias
+
+A localidade, mapa, só aparece se encontrar cidade.
+
+
+
+Tente digitar:
+Pizzaria
+
+Goiânia
+
+Neste caso os dados inseridos pelo usuário irão substituir a busca randômica.
+

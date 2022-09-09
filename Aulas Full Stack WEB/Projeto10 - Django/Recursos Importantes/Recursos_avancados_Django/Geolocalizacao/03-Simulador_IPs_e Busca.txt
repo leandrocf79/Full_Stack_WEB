@@ -1,0 +1,77 @@
+Aqui será gerado um utilitário para gerar IP em localizações fictícias para testar o programa.
+
+
+Criar em core/utils.py:
+
+
+import requests
+from random import randint   			# para gerar IP randomico
+from django.conf import settings        	# Buscar a API que está em settings.py
+from django.contrib.gis.geoip2 import GeoIP2	# Importar as classees
+from django.contrib.gis.geoip2 import geoip2
+
+YELP_SEARCH_ENDPOINT = 'https://api.yelp.com/v3/businesses/search'      # Para fazer as buscas com os parâmetros desenvolvidos aqui
+
+
+def yelp_search(keyword=None, location=None):
+    headers = {"Authorization": "Bearer " + settings.YELP_API_KEY}
+
+    if keyword and location:
+        params = {'term': keyword, 'location': location}
+    else:
+        params = {'term': 'Pizzaria', 'location': 'São Paulo'}
+
+    r = requests.get(YELP_SEARCH_ENDPOINT, headers=headers, params=params)
+
+    return r.json()
+
+
+def get_client_data():
+    g = GeoIP2()
+    ip = get_random_ip()  # Recebe o número de IP do Gerador abaixo, próxima definição.
+    try:
+        return g.city(ip)
+    except geoip2.errors.AddressNotFoundError:
+        return None
+
+
+def get_random_ip():					# Gerador randomico de IP
+    return '.'.join([str(randint(0, 255)) for x in range(4)])
+
+
+
+
+
+---------------------------------
+Testar essa programação no terminal:
+
+python manage.py shell
+
+---
+from core.utils import get_random_ip
+
+get_random_ip()           --> Gera números de IP
+get_random_ip()
+get_random_ip()
+
+
+
+---
+# Aqui vai importar todos os dados do cliente:
+
+from core.utils import get_client_data
+
+retorno = get_client_data()
+retorno
+
+get_client_data()
+get_client_data()
+get_client_data()
+
+
+---
+# Aqui vai trazer dados expecíficos se a API estiver criada corretamente:
+
+from core.utils import yelp_search
+yelp_search(keyword='Brasilian Food', location='New York')
+
