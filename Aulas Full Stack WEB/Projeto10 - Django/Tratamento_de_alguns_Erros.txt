@@ -1,3 +1,23 @@
+Caso tenha instalado alguma biblioteca por engano desistale tudo e instale novamente.
+No terminal:
+
+pip unistall -r requirements.txt
+y
+y
+...
+
+Instalar todas as biblioteca novamente, exemplo:
+
+pip install django social-auth-app-django django-bootstrap4
+
+pip freeze > requirements.txt
+
+Verifique agora:
+python manage.py runserver
+
+
+
+---------------------------------------
 Para iniciar um projeto já existente que foi baixado da web por exemplo, ou ainda, que teve o diretório
 do projeto copiado para outro local, crie 2 arquivos, sendo 1 para iniciar novo projeto e outro para comparar conteúdos.
 
