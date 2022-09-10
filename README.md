@@ -5,5 +5,5 @@ https://www.jdoodle.com/
 No diretório Básico foi utilizado o SQLite, no Intermediário MySQL, no Avançado PostgreSQL e nos recursos do Django, em RealTime, usado o Redis.
 #
 
-If you want to help this repository send a pix to my email: leandrocf79@gmail.com
+If you want to help this repository buy me a coffee, pix me with my email: leandrocf79@gmail.com
 
