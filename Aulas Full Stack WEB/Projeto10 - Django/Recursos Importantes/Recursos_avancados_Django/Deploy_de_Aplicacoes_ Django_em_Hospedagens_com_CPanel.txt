@@ -1,0 +1,293 @@
+As publicações neste curso foram feitas usado Deploy no Heroku que pode ser limitado para algumas coisas,
+para teste tudo bem, mas não recomendado para uso profissional.
+
+Antes de iniciar um projeto é bom verificar hospedagem web que trabalham com Cpanel e oferece suporte para Python.
+
+É comum encontrar Cpanel com suporte PHP.
+
+Terá que contartar qualquer hospedagem que dê suporte a Python.
+
+Após contratar a hospedagem tem que ir onde estiver gerenciando o domínio e colocar no sevidor Master e Slave
+os DNS que foram informados na contratação da hospedagem.
+
+
+Exemplo de hospedagem:
+https://www.geekuniversity.com.br/host/
+
+###################################################
+
+Para esta aula será utilizado o projeto fusion.
+
+
+Veja no requirements que foi alterada a versão do Django:
+
+Django==2.2.19         <----------------
+django-adminlte2==0.4.1
+django-stdimage==5.0.1
+Pillow==6.1.0
+progressbar2==3.43.1
+psycopg2-binary==2.8.3
+python-utils==2.3.0
+pytz==2019.2
+six==1.12.0
+sqlparse==0.3.0
+static3==0.7.0
+whitenoise==5.2.0
+
+
+
+VEJA AS VERSÕES EM:
+https://www.djangoproject.com/download/
+
+---------------------------------
+No terminal:
+python --version
+
+Caso precise:
+pip uninstall django
+
+pip install django==2.2.19 
+ 
+pip freeze > requirements.txt
+
+
+---------------
+Faça o cadastro e CONFIRA em CPanel em Software se tem a opção "Setup Python APP", se não tiver não servirá para o Django.
+
+Contrate o Cpanel, após pagamento, fazer login.
+
+https://cpanel.net/
+
+
+Procure por "SSL/TLS Status"
+
+Selecione todas as opções, na data desta aula são 3. Clique em "Run AutoSSL"
+
+Após isso veja se já aparece o "s" em https na página do projeto.
+
+
+---
+Volte na página principal e configure "Contas de email".
+
+Crie um email para no_replay e outro para contato. Sugiro utilizar a mesma senha.
+
+Verifique na página do CPanel a caixa de email para saber se está tudo correto.
+
+
+Coloque esse email e senha no final em settings.py:
+
+...
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Email teste console
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# Email produção
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = 'noreply@geekhodl.com.br'   	# <--------- Email do CPanel
+EMAIL_PORT = 587
+EMAIL_USE_TSL = True
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'geekhodl_pass'     	# <--------- Senha
+DEFAULT_FROM_EMAIL = 'contato@geekhodl.com.br'  # <--------- Email de contato criado também no CPanel. 
+
+LOGOUT_REDIRECT_URL = 'index'
+
+
+-------
+Na página ainda vá em BD Postgre e crie um, escolha um nome para o BD,
+usuário e senha que deverão ser declarados no projeto em:
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',	# <--------- BD em utilização
+        'NAME': 'geekhodl_site',	# <--------- Nome do BD
+        'USER': 'geekhodl_user',	# <--------- Usuário do BD
+        'PASSWORD': 'geekhodl_pass', 	# <--------- Senha do BD
+        'HOST': 'localhost',
+        'PORT': '5432', 	# <--------- Porta padrão
+    }
+}
+
+
+
+
+-------
+Na página CPanel em Software na opção "Setup Python APP" crie uma aplicação Python
+
+Selecione a versão do Python recomendada pelo site.
+
+Raiz do aplicativo: sistema        (qualquer nome)
+Deixar os outros em branco, URL pode deixar em branco, não precisa criar sub-domínio.
+
+Clicar em "CRIAR"
+
+Algumas informações serão preenchidas automaticamente.
+
+
+Agora carregue a página fusion na web.
+Não vai estar aparecendo ainda.
+
+
+--------
+Verifique wsgi.py:
+
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fusion.settings')
+
+application = get_wsgi_application()
+
+
+
+--------
+Vá até o projeto e crie um arquivo de compactação rar, zip... e salve uma cópia todo o projeto nele.
+
+Em CPanel procure por "Gerenciador de arquivos" / sistema (aqui está app Python que foi criada) abra e 
+clique em "Carregar", procure o arquivo ZIP e selecione ele. Assim que carregar totalmente a barra
+
+fica verde, clique em (Voltar para "/home...). 
+
+
+
+
+
+Cique agora no projeto compactado e procure na barra superior a opção "Extrair". 
+Pode deletar o arquivo zip após descompactar.
+
+Vá em passenger.wsgi.py e procure na barra superior a opção "Editar" e delete a def que contem " It works!".
+
+Vai sobrar algo assim:
+
+import os
+import sys
+
+sys.psth.insert(0, os.path.dirname(__file__))
+
+
+#Acrescente os nome do projeto:
+
+import fusion.wsgi
+
+application = fusion.wsgi.application     # Veja em settings.py: WSGI_APPLICATION = 'fusion.wsgi.application'
+
+
+---Clique em "Salvar alterações".
+
+
+
+
+-----------
+Novamente ir até a página CPanel em Software na opção "Setup Python APP". Clicar no desenho de lápis para editar.
+
+Em "Configuration files" tem 2 caixas. 
+
+1- Na caixa +ADD escreva: requirements.txt    ( ele está dentro de "sistema")
+
+Clique acima desta caixa em ">Run Pip Installv" para instalar os módulos.
+
+
+2- na caixa >Run Script coloque
+o endereço completo : /home8/geekhodl/   <---Esse endereço está na caixa acima em "Passenger log file"
+e acrescente : sistema/manage.py migrate
+
+--> VAI FICAR ASSIM:  /home8/geekhodl/sistema/manage.py migrate         (COM ESPAÇO MESMO e depois migrate)
+
+Clique em "Run Script"
+
+Observe se houve algum erro.
+
+
+--
+2- na caixa >Run Script coloque
+Agora:  /home8/geekhodl/sistema/manage.py collectstatic --no-input         (COM ESPAÇO MESMO e depois --no-input)
+
+Clique em "Run Script"
+
+Observe se houve algum erro.
+
+
+---No topo clicar em REINICIAR aplicação.
+
+
+
+-----------
+Agora carregue a página fusion na web. Pronto!
+
+Vá na aba Contato e envie uma mensagem real para testar formulário de contato.
+
+Vá em CPanel e abre o email para verificar se recebeu.
+
+
+
+------------
+Agora carregue a página fusion na web e acrescente admin
+para abrir a administração do Django com usuário e senha criados no terminal com "create superuser"
+
+************>>>    MAS vamos dizer que ainda não tenha esse acesso.   <<<
+
+
+Criar o 1º usuário apenas.
+
+
+Na página do CPanel procure em Software na opção "Gerenciador de arquivos" / sistema
+
+Procure na barra superior e clique em  "+Pasta", nomeie com  su.py   (su de Super User) clique em criar.
+
+---
+Selecione esse arquivo su.py  e na barra superior e clique em  "Editar" / Edite:
+
+
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fusion.settings")
+
+import django
+
+django.setup()
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+		**** Senha: 'geekhodl_pass'	       	 colocar aqui a mesma senha do email e BD
+User.object.create_superuser('LCF79', 'leandrocf79@gmail.com', 'geekhodl_pass' )
+
+
+**Clicar em Salvar alterações. 
+
+--
+Precisa declar isso.
+Novamente ir até a página CPanel em Software na opção "Setup Python APP"
+
+--
+2- na caixa >Run Script coloque ((( su.py )))
+
+Em:  /home8/geekhodl/sistema/su.py        
+
+Clique em "Run Script"
+
+Observe se houve algum erro.
+
+
+---No topo clicar em REINICIAR aplicação.
+
+
+Agora RECARREGE a página fusion na web e acrescente admin
+para abrir a administração do Django com usuário e senha criados no CPanel.
+
+Neste modelo foi:
+Usuário: LCF79
+Senha:   geekhodl_pass
+
+Agora logado fica fácil criar outros usuários.
+
