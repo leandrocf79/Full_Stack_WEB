@@ -1,3 +1,22 @@
+Antes mesmo de ter algum erro verifique se a versão atual do Django é LTS. OFERECE SUPORTE A LONGO PRAZO.
+PARA PROJETOS REAIS É O RECOMENDADO.
+
+
+****No terminal digite o comando abaixo para saber a versão correta instalada:
+python -V
+
+Pesquise na web sobre a versão que foi retornada.
+
+Se for o caso:
+pip uninstall django
+
+Exemplo:
+pip install django==2.2.9      (versão LTS)
+
+
+
+
+----------------------------------------
 Caso tenha instalado alguma biblioteca por engano desistale tudo e instale novamente.
 No terminal:
 
@@ -218,7 +237,11 @@ python-3.6.2
 Ctrl-S
 
 #####################################
+INSTALLED_APPS = [
+    'core',
+    'bootstrap4',
 
+    'django.contrib.humanize',   # Ajuda na configuração de pontuação em valores financeiros.
 
 
 
