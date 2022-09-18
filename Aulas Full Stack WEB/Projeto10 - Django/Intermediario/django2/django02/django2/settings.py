@@ -142,7 +142,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_URL = 'media/'     # Serve para qualquer coisa que faça upload, será criado dentro de mídia.
+MEDIA_URL = '/media/'     # Serve para qualquer coisa que faça upload, será criado dentro de mídia.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 """
