@@ -28,7 +28,7 @@ import os
 from django.core.wsgi import get_wsgi_application
 from dj_static import Cling, MediaCling
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fusion.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'jogosloterica.settings')
 
 application = Cling(MediaCling(get_wsgi_application()))
 
@@ -91,12 +91,31 @@ http://django1-lcf.herokuapp.com
 ---
 Em Settings alterar DEBUG para False
 
+
 git add .
 git commit -m "DEBUG para False"
 git status
 
+
 *** Publicar:
+// create heroku app and push to heroku
+
+heroku create
 git push heroku master
+
+
+ERRO HEROKU:
+Caso der erro no heroku pelos procedimentos, verifique o BD correto em uso e veja no final deste arquivo como corrigir.
+
+
+
+@@ Se der erro no push:
+
+git checkout -b tempbranch
+
+E depois faça o push:
+
+git push heroku tempbranch
 
 
 ---
@@ -151,6 +170,9 @@ git commit -m "Corrigido imagens"
 git status
 
 *** Publicar:
+// create heroku app and push to heroku
+
+heroku create
 git push heroku master
 
 
@@ -173,6 +195,9 @@ git commit -m "admin lte2"
 git status
 
 *** Publicar:
+// create heroku app and push to heroku
+
+heroku create
 git push heroku master
 
 
