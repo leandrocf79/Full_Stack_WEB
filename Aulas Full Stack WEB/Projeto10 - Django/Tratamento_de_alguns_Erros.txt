@@ -35,6 +35,18 @@ Verifique agora:
 python manage.py runserver
 
 
+---------------------------------------
+
+@@ Se der erro no push:
+
+git checkout -b tempbranch
+
+E depois faça o push:
+
+git push heroku tempbranch
+
+
+
 
 ---------------------------------------
 Para iniciar um projeto já existente que foi baixado da web por exemplo, ou ainda, que teve o diretório
