@@ -1,0 +1,160 @@
+	
+		PHP
+
+https://app.infinityfree.net/
+Cadastar e criar domínio.
+
+
+Baixar FileZila e instalar.
+
+No topo lado E abaixo de "Arquivos" tem um icone de "Gerenciador de Sites"
+
+Abrir
+
+https://app.infinityfree.net/accounts/epiz_32726408/ftpDetails
+
+pegar o FTP HOSTNAME:
+ftpupload.net
+
+
+e colar em Host no FileZila.
+ Pode add a porta 21 ou deixar em branco.
+
+Manter:
+Criptografia: FTP explícito
+Tipo de logon: Normal
+
+
+No site infnitfree ainda pegar o usuário e senha e passar para o FileZila
+
+FTP USERNAME:
+epiz_32726408
+
+FTP PASSWORD:
+****
+
+e Clique em OK.
+
+
+Agora voltar lá no icone e clicar na seta para baixo.
+
+Vai logar e veja que na versão paga é possível arrastar e soltar o conteúdo.
+Na versão free:
+
+Enviando arquivos da aplicação via File Manager por usar aq versão free.
+
+1 ) No site infityfree clicar em "File Mananger"
+https://app.infinityfree.net/accounts/epiz_32726408
+Vai abrir o Gerenciador de Arquivos do Infityfree.
+
+OU
+2 ) pode usar "Online File Manager"
+https://cpanel.epizy.com/panel/indexpl.php?id=52c94d377ab75bdb9d3a229e3003b5bb5aa83a98
+
+
+Usando a opção 1:
+Lembrando que na versão free todos os recursos ficam públicos na pasta "htdocs", então não tem segurança.
+
+Acessar a pasta "htdocs" apagar os 2 arquivos existentes e o trabalho criado
+pegar todos os recursos html, stact com css, js e outro e fazer o Upload atravez do icone na parte
+inferir esquerda da página.
+
+Uma configuração interesante a fazer:
+Ir até https://cpanel.epizy.com/panel/index.php
+https://cpanel.epizy.com/panel/indexpl.php?id=b57f05a6eac490d300301d9ac49e992b81a5d2e2
+
+em "Alter PHP Config" / Alter PHP Directives e alterar "Display Errors" ON
+
+ 
+Neste momento se atualizar a página vai mostrar que o erro é o BD que não foi configurado ainda.
+http://www.leandrocf79.epizy.com/
+
+
+Para evitar erros de versões de PHP.
+Ir até https://cpanel.epizy.com/panel/index.php
+https://cpanel.epizy.com/panel/indexpl.php?id=b57f05a6eac490d300301d9ac49e992b81a5d2e2
+
+"Select PHP Version"
+e modificar para a versão utilizada no desenvolvimento dos html que estão com extensão .php
+
+Agora para o BD.
+"MySQL Database"
+
+Criar um nome, leandrocf79, e retornar no Cpanel em "phpMyAdmin"
+"Conect Now"
+
+Criar as tabelas. Para esse exercício usar:
+
+CREATE TABLE tb_status (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  status varchar(25) NOT NULL
+);
+
+INSERT INTO tb_status (status) VALUES ('pendente');
+INSERT INTO tb_status (status) VALUES ('realizado');
+
+CREATE TABLE tb_tarefas (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id_status int(11) NOT NULL DEFAULT '1',
+  tarefa text NOT NULL,
+  data_cadastrado datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+BD pronto para receber os registros.
+
+
+
+Precisa configurar os dados do BD no html
+Vá em "htdocs" 
+http://filemanager.ai/new/#/c/185.27.134.11/epiz_32726408/eyJ0IjoiZnRwIiwiYyI6eyJ2IjowLCJwIjoiTk9VZ3lyNG83bjF1In19
+
+No arquivo conexão e Edit o endereço para:
+
+***No topo do site tem os dados
+http://185.27.134.10/db_structure.php?db=epiz_32726408_leandrocf79
+
+####   Servidor: sql201.epizy.com »Banco de dados: epiz_32726408_leandrocf79
+
+Usuário e senha da conta!! https://app.infinityfree.net/accounts/epiz_32726408
+
+####   
+USERNAME
+epiz_32726408
+
+PASSWORD
+**********
+
+
+Disso:
+	private $host = 'sql201.epizy.com';
+	private $dbname = 'epiz_32726408_leandrocf79';
+	private $user = 'root';
+	private $pass = '';
+
+Para isso:
+	private $host = 'localhost';
+	private $dbname = 'php_com_pdo';
+	private $user = 'epiz_32726408';
+	private $pass = ' SENHA CORRETA ';
+
+
+
+ATUALIZAR A PÁGINA:
+http://www.leandrocf79.epizy.com/?i=1
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
