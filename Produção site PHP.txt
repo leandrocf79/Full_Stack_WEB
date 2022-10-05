@@ -1,6 +1,9 @@
 	
 		PHP
 
+Pode criar páginas com extenção html, php...
+
+
 https://app.infinityfree.net/
 Cadastar e criar domínio.
 
@@ -56,7 +59,7 @@ Usando a opção 1:
 Lembrando que na versão free todos os recursos ficam públicos na pasta "htdocs", então não tem segurança.
 
 Acessar a pasta "htdocs" apagar os 2 arquivos existentes e o trabalho criado
-pegar todos os recursos html, stact com css, js e outro e fazer o Upload atravez do icone na parte
+pegar todos os recursos html, stact com css, js e outros e fazer o Upload atravez do icone na parte
 inferir esquerda da página.
 
 Uma configuração interesante a fazer:
@@ -138,11 +141,43 @@ Para isso:
 	private $dbname = 'php_com_pdo';
 	private $user = 'epiz_32726408';
 	private $pass = ' SENHA CORRETA ';
+---
+Para isso criar um modelo salvo com extensão conexao.php com o seguinte conteúdo:
+
+<?php
+
+class Conexao {
+
+	private $host = 'sql201.epizy.com';
+	private $dbname = 'epiz_32726408_leandrocf79';
+	private $user = 'epiz_32726408';
+	private $pass = 'NOUgyr4o7n1u';
+
+	public function conectar() {
+		try {
+
+			$conexao = new PDO(
+				"mysql:host=$this->host;dbname=$this->dbname",
+				"$this->user",
+				"$this->pass"				
+			);
+
+			return $conexao;
+
+
+		} catch (PDOException $e) {
+			echo '<p>'.$e->getMessege().'</p>';
+		}
+	}
+}
+
+?>
 
 
 
+---
 ATUALIZAR A PÁGINA:
-http://www.leandrocf79.epizy.com/?i=1
+http://www.leandrocf79.epizy.com/
 
 
 
