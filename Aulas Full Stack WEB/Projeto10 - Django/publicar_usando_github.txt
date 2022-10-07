@@ -10,7 +10,7 @@ Clicar em "Add .gitgnore: Python" e " Add a licence: MIT Licence"
 
 Criar o repositório.
 
-Criar Branch com nome de master
+Criar Branch com nome de master se for o caso, senão deixa main mesmo.
 
 No icone verde "Code"
 Agora copiar o link de clone do projeto em "Clone with SSH"
