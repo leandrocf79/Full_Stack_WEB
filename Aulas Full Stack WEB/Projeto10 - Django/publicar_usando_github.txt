@@ -1,0 +1,119 @@
+Tenha o gitbranch instalado no pc.
+
+
+No controlador de versões github criar um repositório, pode ser público ou privado.
+
+Iniciar o repositório com o arquivo Readme.
+
+
+Clicar em "Add .gitgnore: Python" e " Add a licence: MIT Licence"
+
+Criar o repositório.
+
+Criar Branch com nome de master
+
+No icone verde "Code"
+Agora copiar o link de clone do projeto em "Clone with SSH"
+ele se inicia com git@github.com:pyth....
+
+
+No terminal do projeto colar o link completo:
+
+git init
+
+git clone it@github.com:pyth....
+
+git@github.com:leandrocf79/django_heroku.git
+
+Agora pode navegar até o diretório django_heroku
+
+ ****** Conferir esssa parte para usar no pycharm, os códigos são para o terminal do linux
+python
+cd django_heroku
+ls
+
+criar um ambeinte virtual,é só digitar venv no terminal:
+
+venv
+pipenv install django gunicorn
+
+Ativar o ambiente virtual:
+pipenv shell
+
+Para testar:
+django-admin --help
+
+django-adimn startproject jogosloterica .
+ls
+
+django-adimn startapp core
+
+Testar:
+python manage.py runserver
+
+
+Sair com Ctrl+c
+
+
+$sudo apt-get install heroku
+
+Criar aplicação se não existir:
+$ heroku create jogosloterica-lcf
+
+
+Verificar no site do heroku em dashboard
+https://dashboard.heroku.com/apps
+
+Clicar na aplicação criada e vá na aba Settings/ Add builbpack
+e selecionar python
+
+Vá no menu Deploy e clique no icone do github para conectar
+
+selecione o usuáio e digite o nome do repositório  "django_heroku" clique em search
+
+conect
+
+"master"
+Enable Automatic Deploy
+
+
+No pycharm:
+
+Abrir o projeto e  Clicar no nome RAIZ do projeto e  ctrl+alt+a  
+vai add os arquivos no manage.py
+
+ctrl+k
+vai abrir janela de commit para enviar para o servidor.
+
+Na telinha preta digite algo: projeto finalizado
+
+
+No icone verde "Code"
+Selecione uma opção para por o link HTML do github:
+https://github.com/leandrocf79/django_heroku.git
+
+
+
+na parte inferior clique em commit in push
+commit
+
+
+Se for agora no repositório do GtiHub e atualizar a página poderá ver todos os arquivos commited
+
+No site heroku/Overview/Active será possível ver a criação:
+https://dashboard.heroku.com/apps/jogosloterica-lcf/activity/builds/7b029b36-bb99-4530-ac7b-88a4141db630
+
+Vai mostrar algumas mensagens de erro, NÃO IGNORAR, seguir o que se pede.
+
+Exemplo que apareceu e deve ser executado no terminal do pycharm:
+heroku config:set DEBUG_COLLECTSTATIC=1
+
+
+Lá no heroku pode fazer o processo manual em Deply Branch
+https://dashboard.heroku.com/apps/jogosloterica-lcf/deploy/github
+
+Após realizado, no topo lado direito clicar no Open App
+
+Vai ter mensagem de erro e o comando a ser executado.
+ push novamente e pronto.
+
