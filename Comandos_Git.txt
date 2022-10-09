@@ -7,10 +7,18 @@ Resumo:
 $ git init
 $ git add Arquivo.txt  
 $ git commit -m "first commit"    
-$ git remote add origin https://github.com/leandrocf79/Full_Stack_WEB 
+$ git remote add origin https://github.com/leandrocf79/NOME DO REPOSITÓRIO.git 
 $ git push -u origin master
 
 ************************************************
+se der erro:
+
+git pull origin master --allow-unrelated-histories
+git add .
+git commit -m "Finalizado"
+git push origin master
+
+
 
 
 ### CASO "git push" DER ERRO, vá ao final deste conteúdo, tem uma explicação. ###
