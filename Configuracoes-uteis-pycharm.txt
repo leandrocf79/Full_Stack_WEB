@@ -1,0 +1,19 @@
+Tirar marcação de palavras que não são escritas em inglês:
+
+File/ settings/ digitar "typo" /inspections / spelling  (desmarcar)
+
+Apply / Ok
+
+
+
+Tirar inicialização altomatica de projeto:
+
+File/ settings/ Appearance & Behavior/ System Settings / Reopen last project on startap (desmarcar)
+
+Apply / Ok
+
+
+
+
+
+
