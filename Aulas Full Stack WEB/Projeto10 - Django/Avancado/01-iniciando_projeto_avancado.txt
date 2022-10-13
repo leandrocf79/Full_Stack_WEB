@@ -1,4 +1,4 @@
-Criar o arquivo python para o projeto.
+﻿Criar o arquivo python para o projeto.
 
 Abrir o terminal e instalar as bibliotecas:
 pip install django psycopg2-binary gunicorn dj-static django-stdimage dj-database-url heroku
@@ -25,32 +25,6 @@ django-admin startproject fusion .
 
 
 ---
-CRIAR UM ADMIN, 2 formas abaixo:
-
-python manage.py shell
-
-from django.contrib.auth.models import User
-
-Exemplo:
-usuario=User.objects.create_user(username='leandrocf79', password='123456', email='leandrocf79@gmail.com', first_name='Leandro', last_name='CF', is_staff=True, is_superuser=True)
-
-usuario
-
-usuario.save()
-
-Fechar terminal.  
-
-------------------ou essa:
-Criar um SUPERUSER:
-python manage.py createsuperuser
-
-Username (leave blank to use 'lcf'):  lcf1979        (pode digitar um nome aqui)
-email:
-senha: 321654    (não vão aparecer os dígitos, mas estão sendo registrados) 
-
-
-
----
 Criar a aplicação core:
 django-admin startapp core
 
@@ -62,6 +36,8 @@ New / Directory
 
 --------------
 Agora em fusion/settings:
+
+import os
 
 ALLOWED_HOSTS = ['*']
 
@@ -112,6 +88,44 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 Ctrl+S
+
+
+
+
+---________________________________________
+
+python manage.py migrate
+
+
+
+
+CRIAR UM ADMIN, 2 formas abaixo:
+
+python manage.py shell
+
+from django.contrib.auth.models import User
+
+Exemplo:
+usuario=User.objects.create_user(username='leandrocf79', password='123456', email='leandrocf79@gmail.com', first_name='Leandro', last_name='CF', is_staff=True, is_superuser=True)
+
+usuario
+
+usuario.save()
+
+Fechar terminal.  
+
+------------------ou essa:
+Criar um SUPERUSER:
+python manage.py createsuperuser
+
+Username (leave blank to use 'lcf'):  lcf1979        (pode digitar um nome aqui)
+email:
+senha: 321654    (não vão aparecer os dígitos, mas estão sendo registrados) 
+
+
+
+
+
 
 
 -----------
