@@ -1,0 +1,41 @@
+﻿"""
+Criar um adminiostrador do projeto:
+
+No terminal digite:
+$ python manage.py createsuperuser
+
+* (deixe em branco para usar "nome alual")
+* Email
+* Password
+
+Depois que acessar pode adicionar quantos admin quiser e selecionar as permissões de usuário.
+
+
+Vá em admin.py no diretório principal:
+
+from django.contrib import admin
+from .models import Produto, cliente
+
+# se quiser criar uma parte em admin para nome, preço e estoque:
+class PordutoAdmin(admin.modelAdmin):
+	list_display = ('nome', 'preco', 'estoque')
+
+# se quiser criar uma classe para clientes:
+class ClienteAdmin(admin.modelAdmin):
+	list_display = ('nome', 'sobrenome', 'email')	
+
+# essa parte é obrigatória:
+# admin.site.register(Produto)
+# admin.site.register(Cliente)
+
+admin.site.register(Produto, ProdutoAdmin)
+admin.site.register(Cliente, ProdutoAdmin)
+
+
+e depois:
+$ python manage.py runserver
+
+Volte la no acesso de admin no navegador e atualiza a página.
+
+Se clicar em banco de dados já vai ter os registros iniciais lá.
+"""

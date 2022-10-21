@@ -1,4 +1,4 @@
-Customizar a página de admin no Django.
+﻿Customizar a página de admin no Django.
 
 
 Abrir um projeto existente ou criar um novo.
@@ -55,6 +55,7 @@ pip install django-adminlte2
 Agora em settings.py precisa acrescentar itens:
 
 INSTALLED_APPS = [
+	# Área de login 
     'django_adminlte',		# Colocar no topo para sobreescrever o conteúdo abaixo.
     'django_adminlte_theme',
 
@@ -90,7 +91,7 @@ segue o modelo abaixo onde é possível alterar 100% o conteúdo.
 -----------
 Na raiz do projeto criar templates.
 
-Em adminc/templates
+No PROJETO adminc/templates
 
 
 Existe um diretório oculto que interessa para essa aula, é onde os ambientes virtuais são criados.
@@ -104,7 +105,8 @@ Acessar o diretório com o nome do projeto e /lib/Python3.6.2/site-packges
 Neste local é onde ficam todas as bibliotecas instaladas.
 
 Diretório django/contrib/admin/templates/admin
-Copiar essa última pasta chamada "admin"
+
+@@@@@ Copiar essa última pasta chamada "admin", apenas essa!!
 
 Agora ir até o projeto e colar ela dentro de "templates"
 
@@ -112,7 +114,7 @@ Esses são os templates do Django.
 
 
 -----
-Em templates/base_site.html apenas acrescentar     | LCF
+Na ""raiz do prjeto"" templates/base_site.html apenas acrescentar     | LCF
 
 
 
@@ -150,14 +152,16 @@ No terminal Ctrl+c para sair.
 Atenção: Utilizando essa forma acima não tem a necessidade de declarar isso em settings.py:
 
 INSTALLED_APPS = [
-    'django_adminlte',		# Colocar no topo para sobreescrever o conteúdo abaixo.
+    'django_adminlte',	#  JÁ EXISTE LÁ. Recorta e cola no topo para sobreescrever o conteúdo abaixo.
     'django_adminlte_theme',
 
 Pode apagar se quiser, a preferência é dos templates do projeto.
 
 
 
+#####################################################
 
+NA RAIZ do projeto criar templates, fora de qualquer app ou projeto e colar as duas pastas reservadas dentro.
 
 #####################################################
 Em templates/base_login.html alterar a mensagem padrão, cor ou qualquer outra coisa:
@@ -331,6 +335,7 @@ University --	alterar pada  " XYZ e você "
 
 Depois confira aqui:
 
+NA RAIZ do projeto/ templates/adminlte/ _main_header.html
 
 
 {% load adminlte_helpers i18n %}
