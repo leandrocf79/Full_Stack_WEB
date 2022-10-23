@@ -19,6 +19,16 @@ git commit -m "Finalizado"
 git push origin master
 
 
+--------------------------------------------------
+Clone Repository:
+
+git clone https://github.com/ArviSRFSDFSDFSDFSDFngo.git .
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+--------------------------------------------------
+
 
 
 ### CASO "git push" DER ERRO, vá ao final deste conteúdo, tem uma explicação. ###
