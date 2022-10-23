@@ -44,6 +44,14 @@ Avançado/variáveis de ambiente
 e cole nos dois
 
 
+#### ERRO SCRIPT ####
+Abra o Power Shell Admin
+cole o camando abaixo/enter e reinicie o pycharm
+
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+
+Teste agora no terminal do pycharm:
+python -V
 
 
 
