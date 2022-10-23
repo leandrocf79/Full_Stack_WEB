@@ -1,4 +1,4 @@
-Tirar marca��o de palavras que n�o s�o escritas em ingl�s:
+Tirar marcação de palavras que não são escritas em inglês:
 
 File/ settings/ digitar "typo" /inspections / spelling  (desmarcar)
 
@@ -6,12 +6,42 @@ Apply / Ok
 
 
 
-Tirar inicializa��o altomatica de projeto:
+Tirar inicialização altomatica de projeto:
 
 File/ settings/ Appearance & Behavior/ System Settings / Reopen last project on startap (desmarcar)
 
 Apply / Ok
 
+
+
+Procure o local do pip
+C:\Users\lcf\AppData\Local\Programs\Python\Python310\Scripts
+
+depois vá no Pycherm em: File > Settings > Project > Project Interpreter 
+
+e cole, apply.
+
+
+#### ERRO PIP ####
+Procure o local do pip:
+C:\Users\lcf\AppData\Local\Programs\Python\Python310\Scripts
+
+Abra o pycharm e cole:
+File / Settings / Path Variables / +   
+colar e OK
+
+
+#### ERRO PYTHON ####
+python : O termo 'python' não é reconhecido como nome de cmdlet
+
+Procure o local de instalação do Python e copie o caminho.
+
+C:\Users\lcf\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.10
+
+
+Clique com botão direito do mouse em "Este computador"/ propriedades/ Config. avançadas do sistema/
+Avançado/variáveis de ambiente
+e cole nos dois
 
 
 
