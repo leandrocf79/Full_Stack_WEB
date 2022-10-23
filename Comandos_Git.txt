@@ -24,6 +24,9 @@ Clone Repository:
 
 git clone https://github.com/ArviSRFSDFSDFSDFSDFngo.git .
 pip install -r requirements.txt
+pip install virtualenv
+pip freeze > requirements.txt
+python -m venv
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
