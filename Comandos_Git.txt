@@ -33,11 +33,9 @@ linux:
 source venv/bin/activate
 
 pip install -r requirements.txt
-pip install virtualenv
 pip freeze > requirements.txt
 python manage.py makemigrations
 python manage.py migrate
-pip freeze > requirements.txt
 Se for o caso:
 python manage.py createsuperuser
 python manage.py runserver
