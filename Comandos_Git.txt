@@ -18,6 +18,9 @@ git add .
 git commit -m "Finalizado"
 git push origin master
 
+***TROCAR DE REPOSITÓRIO, mas continuar usando 'origin':
+$git remote rm origin
+$ git remote add origin https://github.com/leandrocf79/NOME DO REPOSITÓRIO.git 
 
 --------------------------------------------------
 Clone Repository:
