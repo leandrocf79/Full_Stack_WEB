@@ -1,4 +1,4 @@
-Paginação com Django.
+﻿Paginação com Django.
 
 Criar novo projeto chamado dpag.
 
@@ -141,7 +141,7 @@ STATIC_URL = '/static/'
 
 
 
-
+########################### TemplateView não aceita paginação
 
 ------
 Em models.py:
@@ -180,12 +180,12 @@ class ProdutoAdmin(admin.ModelAdmin):
 
 --------------------------------
 No terminal:
-python mmanage.py makemigrations
-python mmanage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 
-python mmanage.py createsuperuser
+python manage.py createsuperuser
 
-python mmanage.py runserver
+python manage.py runserver
 
 Entrar na área administrativa e cadastrar uns 10 produtos para testar.
 http://localhost:8000/admin
@@ -216,7 +216,7 @@ class IndexListView(ListView):
 
 
 -------------------
-Em core/templates/index.html:
+Em core/templates/index.html:  página exemplo
 
 
 {% load bootstrap4 %}
