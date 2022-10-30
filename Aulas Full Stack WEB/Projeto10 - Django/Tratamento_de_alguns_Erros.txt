@@ -1,3 +1,12 @@
+*****************
+Se for abrir projeto baixado e precisar ativar venv:
+venv\scripts\activate
+
+Vai ter que usar esse comando toda vez que for usar o terminal
+*****************
+
+
+
 Antes mesmo de ter algum erro verifique se a versão atual do Django é LTS. OFERECE SUPORTE A LONGO PRAZO.
 PARA PROJETOS REAIS É O RECOMENDADO.
 
