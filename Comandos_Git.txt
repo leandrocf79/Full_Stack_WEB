@@ -15,6 +15,8 @@ se der erro:
 $ git remote set-url origin https://git.heroku.com/ecommerce-lcf.git  (para atualizar, se precisar pode remover e recriar)
 git remote remove origin
 
+$ git remote add origin https://github.com/leandrocf79/NOME DO REPOSITÓRIO.git 
+
 
 git pull origin master --allow-unrelated-histories
 git add .
