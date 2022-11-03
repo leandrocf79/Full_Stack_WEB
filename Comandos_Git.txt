@@ -12,7 +12,9 @@ $ git push -u origin master
 
 ************************************************
 se der erro:
-git remote set-url origin https://git.heroku.com/ecommerce-lcf.git
+$ git remote set-url origin https://git.heroku.com/ecommerce-lcf.git  (para atualizar, se precisar pode remover e recriar)
+git remote remove origin
+
 
 git pull origin master --allow-unrelated-histories
 git add .
