@@ -12,7 +12,8 @@ $ git push -u origin master
 
 ************************************************
 se der erro:
-$ git remote set-url origin $ git remote add origin https://github.com/leandrocf79/NOME DO REPOSITÓRIO.git 
+$ git remote set-url origin 
+$ git remote add origin https://github.com/leandrocf79/NOME DO REPOSITÓRIO.git 
   (para atualizar, se precisar pode remover e recriar)
 git remote remove origin
 
