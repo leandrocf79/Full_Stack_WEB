@@ -1,0 +1,313 @@
+http://adrianacerdeira.info/recursos_cursos/index.php?page=php
+
+
+Minhas Novidades e Canais
+Newsletter - cadastre-se para receber as novidades
+https://www.subscribepage.com/Cbbrnewsletter
+
+Computer Buddy BR
+http://adrianacerdeira.info/
+
+Perfil Udemy
+https://www.udemy.com/user/adrianacerdeira
+Cupons de Desconto
+A nova política de cupons da Udemy não permite mais criar cupons vitalícios, eles agora têm validade de no máximo 30 dias. Por isso, minha estratégia de cupons foi alterada. Para ficar por dentro e continuar recebendo os cupons com as promoções de 5 dias com melhor preço, por favor inscreva-se no Newsletter.
+
+No meu site, os links são sempre para os cupons. Então você sempre terá acesso aos cupons acessando os cursos pelo link dos Cursos Online.
+
+Mídia Social
+Grupo de Alunos meus no Facebook
+https://www.facebook.com/groups/computerbuddybr - Junte-se e troque ideias com outros alunos e fique sabendo dos novos cursos
+
+Página no Facebook
+@ComputerBuddyBR - Siga e fique sabendo das novidades
+
+Página no Twitter
+@ComputerBuddyBR - Siga e fique sabendo das novidades
+
+Canais de Vídeo com Live
+YouTube Canal
+https://www.youtube.com/channel/UCZlfNVcgEXy-KzlTWEBP1kw
+YouTube Live
+https://www.youtube.com/channel/UCZlfNVcgEXy-KzlTWEBP1kw/live
+
+Stock de Animações
+Shutterstock
+https://www.shutterstock.com/g/Adriana+Cerdeira?utm_medium=email&utm_source=ctrbreferral-link
+
+Adobe Stock - Menos opções neste devido à política Adobe
+https://stock.adobe.com/contributor/208358500/Adriana%20Cerdeira
+
+Ambiente de Trabalho
+Editores de texto
+Notepad++
+https://notepad-plus-plus.org/
+
+Sublime Text
+https://www.sublimetext.com/
+
+VSCode Online
+https://vscode.dev/
+
+VSCode Download
+https://code.visualstudio.com/
+
+Brackets
+http://brackets.io/
+
+Codepen - Teste seus sites
+https://codepen.io
+
+JSBin - Teste seus sites
+https://jsbin.com/
+
+Ambiente de teste de código PHP online
+https://www.runphponline.com/
+
+Codewars - Pratique programação
+https://www.codewars.com
+
+Navegadores
+Chrome
+
+https://www.google.com/chrome/
+Chrome Canary
+
+https://www.google.com/chrome/canary/
+Firefox
+
+https://www.mozilla.org/pt-BR/firefox/
+Firefox Developer
+
+https://www.mozilla.org/pt-BR/firefox/channel/desktop/
+Documentação e Aprendizagem
+
+Tabless
+https://tableless.com.br - Dicas de CSS e de diagramação de sites sem usar tabelas
+
+Site do Maujor
+http://www.maujor.com - O Maujor é um craque da Web e dá umas dicas e explicações muito boas
+
+Documetação Mozilla Developer Network
+https://developer.mozilla.org/pt-BR/docs/Tools
+
+Stack Overflow
+https://pt.stackoverflow.com - Plataforma de comunidade para fazer perguntas e dar respostas
+
+DevDocs
+https://devdocs.io - Documentação de vária linguagens
+
+HTML5Doctor
+http://html5doctor.com - Dicas ótimas e posts com notícias
+
+World Wide Consortium
+https://www.w3.org
+
+W3 Schools
+https://www.w3schools.com - Documentação
+
+Can I Use
+https://caniuse.com
+
+Referência para o atributo rel
+Tipos de links para o atributo rel: https://developer.mozilla.org/pt-PT/docs/Web/HTML/Tipos_de_hiperligacao
+
+Referência para códigos Unicode e HTML Dec Code
+Alt-Codes: https://www.alt-codes.net/music_note_alt_codes.php
+Lista Incompleta de tipos MIME
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+
+Zen Garden
+http://csszengarden.com
+
+ECMAScript 2019
+https://www.ecma-international.org/ecma-262/10.0/index.html
+
+Histórico de Sites
+Way Back Machine - Para ver histórico de sites
+http://web.archive.org
+
+Para atributos de Idiomas
+Tabela com os códigos de Idiomas Lingoes
+http://www.lingoes.net/en/translator/langcode.htm
+
+Tabela com os códigos de Idiomas Para baixar
+https://gist.github.com/JamieMason/3748498
+
+Validadores para testar sites:
+Web Vitals
+https://web.dev
+
+Validador página Google
+https://developers.google.com/speed/pagespeed/insights
+
+Velocidade da página - Google
+https://developers.google.com/speed/pagespeed/insights
+
+Bom para Mobile - Google
+https://search.google.com/test/mobile-friendly
+
+Testador de Sites
+https://testmysite.withgoogle.com
+
+Validador de página W3C
+https://validator.w3.org/ - HTML Validation service
+
+Teste Google para sites
+https://testmysite.thinkwithgoogle.com/intl/pt-br
+
+Geradores
+Gerador de Box Shadow
+https://www.cssmatic.com/box-shadow
+
+Gerador de Gradiente
+https://cssgradient.io
+
+Gerador de texto - Lorem Ipsum
+http://lipsum.com/
+
+Gerador de imagem - Lorem Pixel
+http://lorempixel.com/
+
+Gerador de favicon - Favicon.cc
+https://www.favicon.cc/
+
+Gerador de favicon - Favicon-generator
+https://www.favicon-generator.org/
+
+Gerador de prefixos - Autoprefixer
+https://autoprefixer.github.io/
+
+Fontes
+Descobrir que fonte é de uma imagem
+https://www.myfonts.com/WhatTheFont
+
+Google Fonts
+https://www.google.com/fonts
+
+Fontawesome - fonte de ícones
+https://fontawesome.com/?from=io
+
+Bancos de Imagens
+Grátis:
+Pixabay
+http://pixabay.com
+
+Pexels
+http://pexels.com
+
+Unsplash
+http://unsplash.com
+
+Freeimages
+https://pt.freeimages.com
+
+Pagos:
+Bigstockphoto
+https://www.bigstockphoto.com/pt
+
+iStockphoto
+https://www.istockphoto.com/br
+
+Adobe Stock
+https://stock.adobe.com
+
+Depositphotos
+https://pt.depositphotos.com
+
+Shutterstock
+https://www.shutterstock.com
+
+Offset
+https://www.offset.com
+
+Flaticon
+https://www.flaticon.com
+
+Freepik
+https://www.freepik.com
+
+Cores
+Explicação W3C Contraste de Cores para Acessibilidade
+https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html
+
+Disco de Cores Adobe
+https://color.adobe.com
+
+Tabelas de cores com nome
+https://www.quackit.com/css/css_color_codes.cfm
+
+Paletas de Cores
+https://colorhunt.co/
+
+Extensão para capturar cor para Chrome e Firefox
+http://colorzilla.com
+
+Gerador de Gradientes Colorzilla
+http://www.colorzilla.com/gradient-editor
+
+Frameworks
+Bootstrap
+https://getbootstrap.com/
+
+Foundation
+https://foundation.zurb.com
+
+jQuery
+https://jquery.com/
+
+Hospedagem e FTP
+Github
+https://github.com/features#hosting/
+
+Core FTP
+http://www.coreftp.com/
+
+Filezilla
+https://filezilla-project.org/
+
+Ferramentas de Desenvolviento JS
+Tabela de Compatibilidade JS
+http://kangax.github.io/compat-table/es6/
+
+Babel - polyfilling
+https://babeljs.io/
+
+HTML5 please - polyfilling
+https://html5please.com/
+
+Polyfill - Crie polyfill para JavaScript
+https://polyfill.io/
+
+Lista de Comandos para Linha de Comandos
+Referência Windows para Prompt de Comando
+https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands
+
+Lista dos comandos mais usados Prompt de Comando com explicação
+https://devcontent.com.br/artigos/windows/principais-comandos-prompt
+
+Lista de comandos do terminal Mac ou Linux
+https://www.hostinger.com.br/tutoriais/comandos-linux
+
+Lista de comandos do terminal Mac ou Linux
+https://www.livrosdelinux.com.br/tabela-de-comandos/
+
+Diferenças do Shell Bash no Linux para o Mac OS X
+https://terminalroot.com.br/2017/04/diferencas-do-shell-bash-no-linux-para-o-mac-os-x.html
+
+JSON para testar AJAX
+JSON Test - transforma várias funcionalidades em JSON
+http://teamaqua.github.io/JSONTest/
+
+JSON Placeholder - Objetos JSON para testar AJAX
+https://jsonplaceholder.typicode.com/
+
+Random User - Um API para a geração de dados de usuários aleatórios para teste
+https://randomuser.me/
+
+Servidores Virtuais
+XAMPP
+https://www.apachefriends.org/
+
+WAMPP
+http://www.wampserver.com/

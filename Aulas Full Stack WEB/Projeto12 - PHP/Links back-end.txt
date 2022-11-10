@@ -1,0 +1,217 @@
+http://adrianacerdeira.info/recursos_cursos/index.php?page=php
+
+
+Minhas Novidades e Canais
+Newsletter - cadastre-se para receber as novidades
+https://www.subscribepage.com/Cbbrnewsletter
+
+Computer Buddy BR
+http://adrianacerdeira.info/
+
+Perfil Udemy
+https://www.udemy.com/user/adrianacerdeira
+Cupons de Desconto
+A nova política de cupons da Udemy não permite mais criar cupons vitalícios, eles agora têm validade de no máximo 30 dias. Por isso, minha estratégia de cupons foi alterada. Para ficar por dentro e continuar recebendo os cupons com as promoções de 5 dias com melhor preço, por favor inscreva-se no Newsletter.
+
+No meu site, os links são sempre para os cupons. Então você sempre terá acesso aos cupons acessando os cursos pelo link dos Cursos Online.
+
+Mídia Social
+Grupo de Alunos meus no Facebook
+https://www.facebook.com/groups/computerbuddybr - Junte-se e troque ideias com outros alunos e fique sabendo dos novos cursos
+
+Página no Facebook
+@ComputerBuddyBR - Siga e fique sabendo das novidades
+
+Página no Twitter
+@ComputerBuddyBR - Siga e fique sabendo das novidades
+
+Canais de Vídeo com Live
+YouTube Canal
+https://www.youtube.com/channel/UCZlfNVcgEXy-KzlTWEBP1kw
+
+YouTube Live
+https://www.youtube.com/channel/UCZlfNVcgEXy-KzlTWEBP1kw/live
+
+Stock de Animações
+Shutterstock
+https://www.shutterstock.com/g/Adriana+Cerdeira?utm_medium=email&utm_source=ctrbreferral-link
+
+Adobe Stock - Menos opções neste devido à política Adobe
+https://stock.adobe.com/contributor/208358500/Adriana%20Cerdeira
+
+Ambiente de Trabalho
+Editores de texto
+Notepad++
+https://notepad-plus-plus.org/
+
+Sublime Text
+https://www.sublimetext.com/
+
+Atom
+https://atom.io/
+
+Brackets
+http://brackets.io/
+
+IDEs
+PHPStorm - JetBrains
+https://www.jetbrains.com/phpstorm/
+
+Eclipse e Eclipse PHP Tools (Instale primeiro o Elipse depois o tools)
+https://www.eclipse.org/downloads/
+https://www.eclipse.org/pdt/
+
+Netbeans
+https://netbeans.org/
+
+Komodo
+https://www.activestate.com/products/komodo-ide/
+
+Aptana
+http://www.aptana.com/
+
+Ambiente de testes
+Ambiente de teste de código PHP online
+https://www.runphponline.com/
+
+Ambiente de teste de código PHP online
+https://www.runphponline.com/
+
+Ambiente de teste de código PHP online - Write PHP Online
+http://www.writephponline.com/
+
+Codewars - Pratique programação
+https://www.codewars.com
+
+Navegadores
+Chrome
+https://www.google.com/chrome/
+
+Chrome Canary
+https://www.google.com/chrome/canary/
+
+Firefox
+https://www.mozilla.org/pt-BR/firefox/
+
+Firefox Developer
+https://www.mozilla.org/pt-BR/firefox/channel/desktop/
+
+Plug-ins para Atom
+php-cs-fixer
+https://atom.io/packages/php-cs-fixer
+
+linter-php
+https://atom.io/packages/linter-php
+
+atom-autocomplete-php
+https://atom.io/packages/atom-autocomplete-php
+
+atom-html-preview
+https://atom.io/packages/atom-html-preview
+
+Sublime-Style-Column-Selection
+https://atom.io/packages/sublime-style-column-selection
+
+linter-eslint
+https://atom.io/packages/linter-eslint
+
+atom-beautify
+https://atom.io/packages/atom-beautify
+
+atom-ternjs
+https://atom.io/packages/atom-ternjs
+
+autoclose-html
+https://atom.io/packages/autoclose
+
+emmet
+https://atom.io/packages/emmet
+
+csslint
+https://atom.io/packages/csslint
+
+linter
+https://atom.io/packages/linter
+
+linter-jshint
+https://atom.io/packages/linter-jshint
+
+pigments
+https://atom.io/packages/pigments
+
+language-ejs
+https://atom.io/packages/language-ejs
+
+Gerenciadores de Bases de Dados
+Table Plus- Qualquer sistema
+https://tableplus.com
+
+Querious - Mac
+https://www.araelium.com/querious
+
+Sequel Pro - Mac
+http://sequelpro.com/
+
+Documentação e Aprendizagem
+PHP Net
+https://www.php.net/ - Documentação oficial PHP e Download
+
+Manual PHP
+https://www.php.net/ - Manual da Documentação oficial PHP
+
+Padrões PSR
+https://www.php-fig.org/ - Padrões de Codificação
+
+Manual MySQL
+https://dev.mysql.com/doc/refman/8.0/en/ - Padrões de Codificação
+
+Manual MariaDB
+https://mariadb.org/documentation/ - Padrões de Codificação
+
+Documetação Mozilla Developer Network
+https://developer.mozilla.org/pt-BR/docs/Tools
+
+Stack Overflow
+https://pt.stackoverflow.com - Plataforma de comunidade para fazer perguntas e dar respostas
+
+DevDocs
+https://devdocs.io - Documentação de vária linguagens
+
+Explicação sobre o funcionamento dos Floats em programação
+https://devdocs.io - Documentação de vária linguagens
+
+Hospedagem e FTP
+Github
+https://github.com/features#hosting/
+
+Core FTP
+http://www.coreftp.com/
+
+Filezilla
+https://filezilla-project.org/
+
+Lista de Comandos para Linha de Comandos
+Referência Windows para Prompt de Comando
+https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands
+
+Lista dos comandos mais usados Prompt de Comando com explicação
+https://devcontent.com.br/artigos/windows/principais-comandos-prompt
+
+Lista de comandos do terminal Mac ou Linux
+https://www.hostinger.com.br/tutoriais/comandos-linux
+
+Lista de comandos do terminal Mac ou Linux
+https://www.livrosdelinux.com.br/tabela-de-comandos/
+
+Diferenças do Shell Bash no Linux para o Mac OS X
+https://terminalroot.com.br/2017/04/diferencas-do-shell-bash-no-linux-para-o-mac-os-x.html
+
+Servidores Virtuais
+XAMPP
+https://www.apachefriends.org/
+
+WAMPP
+http://www.wampserver.com/
+
+MAMP
+https://www.mamp.info/
