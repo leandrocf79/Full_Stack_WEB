@@ -1,0 +1,31 @@
+Baixar o XAMPP
+instalar e copiar o caminho do PHP
+
+C:\xampp\php
+
+**Neste momento não vai encontrar.
+
+----------
+Vá em Meu computador/ Configurações avançadas do sistema / aba Avançãdo 
+/ Variáveis de Ambiente
+
+Procurar por "path", abrir e colar:
+C:\xampp\php
+
+
+-----
+F5   na área de trabalho
+-----
+Abra o terminal do windows e digite:
+php -v
+
+
+
+pronto!
+
+
+
+
+
+
+
