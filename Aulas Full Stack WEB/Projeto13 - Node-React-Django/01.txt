@@ -1,0 +1,26 @@
+Para usar o react tem que baixar o Node.js
+
+https://nodejs.org/en/download/
+Instalar.
+
+
+No terminal verificar versões:
+node -v
+npm -v
+npx -v
+
+npx create-react-app
+
+y
+
+Baixar e instalar
+
+No terminal do pycharm vai ser melhor para usar o comando por já estar dentro do projeto:
+yarn start
+
+
+
+
+
+
+.
