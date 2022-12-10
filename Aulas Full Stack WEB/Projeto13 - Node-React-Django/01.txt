@@ -4,7 +4,7 @@ https://nodejs.org/en/download/
 Instalar.
 
 
-No terminal verificar versıes:
+No terminal verificar vers√µes:
 node -v
 npm -v
 npx -v
@@ -15,8 +15,9 @@ y
 
 Baixar e instalar
 
-No terminal do pycharm vai ser melhor para usar o comando por j· estar dentro do projeto:
+No terminal do pycharm vai ser melhor para usar o comando por j√° estar dentro do projeto:
 yarn start
+
 
 
 
