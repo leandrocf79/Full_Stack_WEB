@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gerador de números aleatórios</title>
+  <!-- Adicione o link para o Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container mt-5">
+
+
+            <h2>Escolha o seu tipo de jogo</h2>
+    <ul class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+            <a href="megasena.html" class="nav-link">MEGA SENA</a>
+        </li>
+        <li class="nav-item">
+            <a href="quina.html" class="nav-link ">QUINA</a>
+        </li>
+        <li class="nav-item">
+            <a href="duplasena.html" class="nav-link">DUPLA SENA</a>
+        </li>
+                <li class="nav-item">
+            <a href="lotofacil.html" class="nav-link">LOTOFÁCIL</a>
+        </li>
+                <li class="nav-item">
+            <a href="lotomania.html" class="nav-link">LOTOMANIA</a>
+        </li>
+
+
+    </ul>
+
+
+
+    <!-- Cria um botão -->
+    <button class="btn btn-primary" id="generate" style="background: #a91c88">LOTOFÁCIL (15 - 25) </button>
+
+    <div id="results"></div>
+
+    <script>
+      // Obtém o botão
+      const button = document.getElementById('generate');
+      // Obtém o elemento para exibir os resultados
+      const resultsEl = document.getElementById('results');
+
+      // Adiciona um event listener para o clique no botão
+      button.addEventListener('click', () => {
+        // Cria um array vazio para armazenar os números gerados
+        const numbers = [];
+
+        // Enquanto o array tiver menos de 6 elementos, gera um novo número
+        while (numbers.length < 15) {
+          // Gera um número aleatório entre 1 e 50
+          const number = Math.floor(Math.random() * 25) + 1;
+
+          // Verifica se o número já está presente no array
+          if (!numbers.includes(number)) {
+            // Adiciona o número ao array
+            numbers.push(number);
+          }
+        }
+
+        // Classifica o array em ordem crescente
+        numbers.sort((a, b) => a - b);
+
+        // Exibe os números gerados
+        resultsEl.innerHTML = '<h4 class="mt-3">Números gerados:</h4>';
+        resultsEl.innerHTML += '<div class="alert alert-primary">' + numbers.join(', ') + '</div>';
+      });
+    </script>
+  </div>
+
+
+  
+
+            <footer style=" margin-top: auto;" >
+            <div class="container" style="padding: 20px;" ><!-- usar style="clear: both;" para separar dos demais-->
+                <div class="row">
+                    <div class="col-12">
+                        <div style=" margin: 0 auto;" class="col-12">
+                            &copy; Todos os direitos reservados - leandrocf79@gmail.com
+                        </div>
+
+                                          <!--exemplo exibindo somente o ícone-->
+            <a href="https://www.linkedin.com/in/leandrocf79-80b93b199/" class="text-secondary ml-2">
+              <i class="bi bi-linkedin"></i>
+            </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+</body>
+</html>
