@@ -1,0 +1,29 @@
+
+Acessar:
+https://chocolatey.org/install
+
+Abrir terminal ou o Power Shell
+
+digite:
+Get-ExecutionPolicy
+ veja o tipo de restrição.
+
+
+
+Run 
+Get-ExecutionPolicy 
+If it returns Restricted, then run 
+
+Set-ExecutionPolicy AllSigned 
+or 
+Set-ExecutionPolicy Bypass -Scope Process.
+
+** O ideal é usar a restrição Bypass. Verifique agora: Get-ExecutionPolicy
+
+Cole no terminal e instale:
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+Digite:
+choco install python3 git nodejs vccode
+
+se pedir confirmação digite: A
