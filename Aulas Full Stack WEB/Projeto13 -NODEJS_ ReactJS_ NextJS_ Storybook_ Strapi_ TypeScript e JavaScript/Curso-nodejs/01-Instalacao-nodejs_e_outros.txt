@@ -27,3 +27,24 @@ Digite:
 choco install python3 git nodejs vccode
 
 se pedir confirmação digite: A
+
+Após tudo instalado se quiser testar versão:
+node --version
+
+------------
+Instalar o visual studio:
+https://code.visualstudio.com/
+
+Abrir extenções ou Ctrl+Shift+X
+
+Adicionar:
+OM Extension Pack
+
+
+
+
+
+
+
+
+.
