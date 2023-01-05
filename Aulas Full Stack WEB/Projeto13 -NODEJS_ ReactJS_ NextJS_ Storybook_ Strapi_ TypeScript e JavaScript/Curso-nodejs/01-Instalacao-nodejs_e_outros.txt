@@ -35,13 +35,157 @@ node --version
 Instalar o visual studio:
 https://code.visualstudio.com/
 
+É interessante logar nele para sempre deixar sincronizado. 
+Quando logar em outro lugar ele ja entra com as configurações pessoais.
+
+
+
+Quando for RUM os códigos se não funcionar veja na parte inferior E o interpretador e selecioná-lo.(igual o pycharm)
+
+
+Caso seja preciso remover mensagens chatas do windows no Visual studio:
+Vá em Painel de controle do WINDOWS em Aplicativos e Recursos (Aliases de execução de app)
+
+E desativar tudo se quiser ou somente os do python
+
+
+
+	########## OPCIONAL ###########
 Abrir extenções ou Ctrl+Shift+X
 
 Adicionar:
 OM Extension Pack
 
 
+	########## OPCIONAL ###########
 
+All my extensions are here: 
+https://marketplace.visualstudio.com/items?itemName=omthemes.om-extension-pack
+
+Pode criar suas teclas de atalho para utilizar.
+Deixar o no github para ser usado quando logar no Visual Studio Code
+Arquivo anexo:
+VSCode settings.json - keybindings.json.zip
+
+Em SETTINGS (icone engrenagem), dentro dele tem outro Settings
+Tem um icone de json no canto superior D e fica ente um triangulo e 2 retangulos colados como quadrado. 
+*** Tirar o número 3 de python3 para ser utilizado no windows.
+
+
+
+A outra configuração é em Keyboard Shotcuts (Ctrl+k ou S) e acessar o mesmo icone anteiror para colar as configurações.
+
+
+Pode substituir pelos arquivos baixados do link anterior.
+
+
+
+Se não tiver usando Linux pode excluir o "zsh" e também o "x-terminal-emulator" dos recursos
+outros recursos com erro podem ser instalados manulamente ou removidos os nomes no arquivo
+
+
+
+
+
+
+
+
+
+__________Essas serão as extenções instaladas:
+
+
+CSS Formatter
+Formatter for CSS
+Martin Aeschlimann
+
+ESLint
+169ms
+Integrates ESLint JavaScript into VS Code.
+Microsoft
+
+EditorConfig for VS Code
+444ms
+EditorConfig Support for Visual Studio Code
+EditorConfig
+
+Code Runner
+736ms
+Run C, C++, Java, JS, PHP, Python, Perl, Ruby, Go, Lua, Groovy, PowerShell, CMD, BASH, F#, C#, VBScript, TypeScript, CoffeeScript, Scala, Swift, Julia, Crystal, OCaml, R, AppleScript, Elixir, VB.NET, Clojure, Haxe, Obj-C, Rust, Racket, Scheme, AutoHotkey, AutoIt, Kotlin, Dart, Pascal, Haskell, Nim,
+Jun Han
+
+4
+Jupyter
+755ms
+Jupyter notebook support, interactive programming and computing that supports Intellisense, debugging and more.
+Microsoft
+
+YAML
+YAML Language Support by Red Hat, with built-in Kubernetes syntax support
+Red Hat
+
+Live Server
+197ms
+Launch a development local Server with live reload feature for static & dynamic pages
+Ritwick Dey
+
+Code Spell Checker
+198ms
+Spelling checker for source code
+Street Side Software
+
+IntelliCode
+AI-assisted development
+Microsoft
+
+Python
+IntelliSense (Pylance), Linting, Debugging (multi-threaded, remote), Jupyter Notebooks, code formatting, refactoring, unit tests, and more.
+Microsoft
+Install
+
+Docker
+Makes it easy to create, manage, and debug containerized applications.
+Microsoft
+Install
+
+Material Icon Theme
+Material Design Icons for Visual Studio Code
+Philipp Kief
+Install
+
+[Deprecated] Bracket Pair Colorizer 2
+A customizable extension for colorizing matching brackets
+CoenraadS
+Install
+
+Git Graph
+View a Git Graph of your repository, and perform Git actions from the graph.
+mhutchie
+Install
+
+colorize
+A vscode extension to help visualize css colors in files.
+kamikillerto
+Install
+
+Apollo GraphQL
+Rich editor support for GraphQL client and server development that seamlessly integrates with the Apollo platform
+Apollo GraphQL
+Install
+
+Reload
+Add reload button to status bar right bottom
+natqe
+Install
+
+Brazilian Portuguese - Code Spell Checker
+Brazilian Portuguese dictionary extension for VS Code.
+Street Side Software
+Install
+
+Om Theme (A Darker Dracula Theme)
+This theme is based on Official Dracula Theme, Just a little darker (with and without italic).
+omthemes
+Install
 
 
 
