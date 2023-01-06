@@ -1,0 +1,11 @@
+Iniciando um projeto:
+
+Crie uma pasta para o projeto onde quiser no proprio sistema operacional.
+No VScode na aba File / Open Folder
+
+Abra o terminal com:
+
+Ctrl+ '
+
+npx create-react-app projeto
+ 
