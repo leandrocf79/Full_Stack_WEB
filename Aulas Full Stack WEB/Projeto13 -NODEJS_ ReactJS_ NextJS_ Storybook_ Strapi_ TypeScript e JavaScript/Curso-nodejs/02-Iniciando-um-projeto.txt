@@ -1,5 +1,8 @@
 Iniciando um projeto:
 
+**Atenção aqui**
+	Se já tiver o GitBash instalado no pc não precisa deixar a extenção ativa no VScode. Senão vai dar erro. Pode desativar
+
 Crie uma pasta para o projeto onde quiser no proprio sistema operacional.
 No VScode na aba File / Open Folder
 
@@ -7,5 +10,42 @@ Abra o terminal com:
 
 Ctrl+ '
 
-npx create-react-app projeto
+ou vá em na aba view / terminal.
+
+npx create-react-app .       (usar o ponto para não criar nova pasta)
+
  
+**Se der erro VEJA SE A EXTENÇÃO DO GITBASH está ativa depois apague o arquivo gerado e repita lá no terminal, 
+deverá CRIAR VÁRIOS ARQUIVOS. Demora um pouquinho.
+
+
+--------------
+Agora iniciar o projeto:
+
+npm start
+
+Permitir acesso no windows. Ir até o navegador.
+
+ Local:            http://localhost:3000
+  On Your Network:  http://192.168.0.6:3000
+
+------------
+Para execurar teste:
+npm test
+
+
+-----
+RESUMO para iniciar projeto:
+
+Crie uma pasta para o projeto onde quiser no proprio sistema operacional.
+No VScode na aba File / Open Folder
+
+No terminal:
+npx create-react-app .
+npm start
+
+
+
+
+.
+
