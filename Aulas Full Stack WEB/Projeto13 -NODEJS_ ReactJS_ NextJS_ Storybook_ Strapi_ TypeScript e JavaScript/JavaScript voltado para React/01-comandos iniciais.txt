@@ -1,0 +1,111 @@
+Pode treinar os comando direto no navegador:
+
+F12 ou inspecionar elemento.
+Vá na aba CONSOLE.
+
+Caso tenha alguma coisa escrita pode clicar naquele ícone de proibido (circulo com risco) vai limpar a tela.
+
+Agora sim! JavaScript!!
+
+
+JavaScrit é case sensitive, ou seja, Nome ou nome ou NOME são variaveis diferentes.
+
+
+Muito bom para testar erros usando direto no console.
+
+Digite:
+
+var a = 20;
+a
+*Enter
+
+alert("Bem vindo!")
+
+*Enter
+-------------
+
+var nome;
+nome= "Leandro";
+
+nome
+
+---------------
+var x = 15;
+
+alert(a + x);
+
+--------------
+Observe as aspas:
+
+alert("O valor de x foi: " + x );
+
+alert("O valor de 'x' foi: " + x );
+
+
+
+alert('O valor de "x" foi: ' + x );
+
+--------------
+
+alert(nome+ a+a);
+   --> leandro1515
+
+
+
+b=a+a
+;
+
+c=b/a;
+c
+
+
+alert(nome+ b);
+
+alert(nome+" "+b+" "+a+nome);
+
+alert("Meu nome é "+nome+" e tenho "+b+" anos.")
+
+var sobrenome="CF";
+
+alert("Meu nome é "+nome+" "+sobrenome)
+-----------
+
+Para exibir resultado direto no console:
+console.log(b);
+
+digite apenas:
+nome;     e dê enter.
+
+agora teste com:
+console.log(nome);
+
+veja como exibe de forma diferente.
+
+
+----------------
+prompt("Digite sua idade: ");
+
+
+---------------------
+var idade = prompt("Digite sua idade: ");
+idade
+
+-------------------
+document. Serve para modificar conteúdo da página.
+window. serve para o navegador.
+
+document.write("<h1>Aprendendo <br><br> linguagem JavaScript<h1>")
+
+
+--------------
+Inseir imagens, CUIDADOS COM AS ASPAS:
+
+document.write("<img src='https://www.google.com/google.jpg'>")
+
+------------
+document.write("<strong> Letras em negrito</strong>")
+
+
+
+
+.
