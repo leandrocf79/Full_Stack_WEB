@@ -106,6 +106,56 @@ document.write("<img src='https://www.google.com/google.jpg'>")
 document.write("<strong> Letras em negrito</strong>")
 
 
+------------
+ARRAY:
+
+var lista=['Leandro','Jujubinha','Louise','Karen', 'Karen', 5, 77 ];
+
+lista
+lista.length 
+lista[1]
+lista[2]
+
+Para encontrar a posição de um item:
+-1 indica ERRO.
+
+lista.indexOf('Karen');          <-- Com a letra "O" em maiúsculo.
+lista.indexOf(5);
+lista.join(',');
+lista.join(' / ');
+
+Remover último da lista:
+lista.pop();
+lista;
+
+Remover PRIMEIRO da lista:
+lista.shift();
+lista;
+
+
+ALTERAR um valor expecífico da lista:
+lista.indexOf('Louise');    <-- RETORNOU POSIÇÃO 1
+
+lista[1]= 'Louise PM';
+
+Acrescentar valor no final da lista:
+lista.push('Diana')
+lista
+
+
+-------------//  -1 indica ERRO.
+
+if(lista.indexOf('Diana') > -1){
+  alert("Esse item está na lista.")
+}else{
+  alert('Não encontrado item na lista.')
+}
+
+
+-------------
+
+
+
 
 
 .
