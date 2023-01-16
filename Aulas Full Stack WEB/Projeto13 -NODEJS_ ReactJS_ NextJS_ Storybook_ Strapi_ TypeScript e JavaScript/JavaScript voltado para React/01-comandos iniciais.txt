@@ -300,7 +300,7 @@ const planeta = "Marte";
 planeta
 
 Tente alterar:
-planeta = "jupter";
+planeta = "jupiter";
 
 
 
