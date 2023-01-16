@@ -143,7 +143,7 @@ lista.push('Diana')
 lista
 
 
--------------//  -1 indica ERRO.
+----//  -1 indica ERRO.
 
 if(lista.indexOf('Diana') > -1){
   alert("Esse item está na lista.")
@@ -152,7 +152,156 @@ if(lista.indexOf('Diana') > -1){
 }
 
 
--------------
+----------------
+
+
+localStorage = salva localmente no pc mesmo que o navegador seja fechado.
+sessionStorage = apaga os arquivos do pc quando o navegador for fechado.
+
+setItem = para inserir
+getItem = para chamar
+removeItem = para remover
+
+*** ATENÇÃO: No fireFox deu erro, mas no Chrome foi.
+
+		     Chave  e    Valor
+
+localStorage.setItem("nome",   "Leandrocf79"); // Mesmo que desligar o pc ainda estará salvo.
+
+localStorage.getItem("nome"); // para chamar o valor de "nome"
+
+localStorage.removeItem("nome"); 
+
+---
+Crie:
+
+localStorage.setItem("nome",   "Leandro");
+localStorage.setItem("sobrenome",   "cf79");
+
+exibir:
+
+localStorage.getItem("nome");
+localStorage.getItem("sobrenome");
+
+-------------Um outro modo mais fácil:
+
+localStorage.nome="Elvis";
+
+
+localStorage.sobrenome="Presley";
+
+Agora exibir:
+
+localStorage.nome
+localStorage.sobrenome
+
+a = localStorage.nome + localStorage.sobrenome
+localStorage.removeItem("nome"); 
+localStorage.removeItem("sobrenome"); 
+
+-----
+localStorage.lista = ["Beatles", 1970];
+localStorage.lista 
+
+
+----------Lembrando que com sessionStorage serão apagadas todas as informações quando fechar o navegador.
+
+sessionStorage.lista2 = ["Biquine Cavadão", "80'" ];
+sessionStorage.lista2 
+
+
+----------------------------
+----------------------------
+----------------------------
+
+Diferença entre var, let e const
+
+1º) VAR
+
+var nome = 'Leandro';
+
+if(nome == 'Leandro'){
+	var idade =19;
+	console.log("Leandro tem "+idade+" anos.");
+}
+
+
+--> veja que se quiser acessar idade que está dentro do if
+basta digitar idade.
+
+Tente:
+idade
+
+
+----------------
+
+2º) LET
+
+Agora se usar let veja que não será possível chamar o que está dentro de if.
+
+if(nome == 'Leandro'){
+	
+	let sobrenome = "CF";
+	
+	console.log("Leandro "+sobrenome+" tem "+idade+" anos.");
+
+}
+
+Tente:
+sobrenome
+idade
+
+
+
+-----------------usando VAR
+var lista = [32,543,54,876,98];
+
+for(var i in lista){
+	console.log(lista[i]);
+}
+
+Digite apenas "i"
+vai mostrar o indice que parou:
+i
+
+
+
+-----------------usando LET
+
+var lista = [32,543,54,876,98];
+
+for(let b in lista){
+	console.log(lista[b]);
+}
+
+Digite apenas "b"
+vai mostrar o indice que parou:
+b
+
+
+
+---------Veja que se LET estiver fora ele pode ser chamado dentro de um escopo de um if
+
+let filme = "Guardiões da galáxia";
+
+var nota =10;
+
+if(nota==10){
+	console.log("O filme "+filme+" é ótimo.")
+}
+
+
+
+----------------------CONST
+Cria uma variável constante, imutável.
+
+const planeta = "Marte";
+
+planeta
+
+Tente alterar:
+planeta = "jupter";
+
 
 
 
