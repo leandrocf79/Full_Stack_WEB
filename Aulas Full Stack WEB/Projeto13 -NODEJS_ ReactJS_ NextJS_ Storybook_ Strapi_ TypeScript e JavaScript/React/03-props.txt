@@ -1,0 +1,53 @@
+App.js
+-----------
+
+
+
+import React from "react";
+
+
+//Para mais de uma tag e props
+
+const Bemvindos = () => {
+  return(
+    <div>
+      <h2>Passando várias tags</h2>
+    </div>
+  );
+}
+
+function App(){
+  return(
+    <><div>
+
+      <Bemvindo />
+
+      <h1> <Bemvindo/> </h1>
+      <h2>&copy; leandrocf79@gmail.com</h2>
+    </div>
+    <div>
+      <Bemvindos/>
+    </div></>
+  )
+}
+
+export default App;
+
+
+
+
+
+
+-------------------index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+

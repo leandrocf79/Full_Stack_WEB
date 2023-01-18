@@ -1,0 +1,173 @@
+# LEMBRE-SE SEMPRE:
+
+
+Instale as versões LTS. Essas versões terão suporte por mais tempo.
+
+
+https://nodejs.org/en/download/
+
+
+
+Pra verificar versão instalada vá no terminal e digite:
+node -v
+
+
+
+Gegenciador de pacotes, utilizado para instalar bibliotecas:
+npm -v
+
+
+
+Para saber mais sobre React
+
+https://pt-br.reactjs.org/docs/getting-started.html
+
+
+
+Instalar VS Code
+
+https://code.visualstudio.com/
+
+-----------------
+
+
+
+
+Escolha uma para para iniciar o projeto React
+
+O nome desta pasta deve ser limpo, sem acentos.
+
+
+Pode usar o terminal da IDE ou
+
+
+*******Para abrir o terminal já dentro desta pasta digite cmd onde aparece o caminho a pasta.
+
+Exemplo:
+
+D:\GitHub\Full_Stack_WEB\React\01-primeira-aula-de react
+
+Apague e simplesmente digite:
+cmd
+e entrer
+
+** O terminal já estará com o endereço da pasta.
+
+
+Iniciar um projeto com nome de "meuapp":
+npx create-react-app meuapp
+
+**Vão aparecer 2 comandos após instalar:
+cd meuapp
+yarn start ou  npm start
+
+
+---------------------------------
+Abrir o VSCode
+
+Na aba File / Open Folder
+
+Na ba Terminal
+npm start
+
+Baixar extenções que ajudam no desenvolvimento.
+No canto direito da IDE tem um icone de 4 quadrados e 1 deles subindo.
+
+Entrar e baixar:
+
+Color Highlight     para exibir amostra cores de cores quando por cod em hexadecimal
+Dracula Theme       ajuda a colorir todo o código para facilitgar visualização.
+styled-components 
+React-Native/React/Redux snippets for es6/es7
+vscode-icons
+
+
+
+Será manipulado apenas o conteúdo da pasta SRC
+
+Configuração mínima para funcionar:
+
+Pode apagar dentro de SRC todos os arquivos menos
+App.js e index.js
+
+
+Em index.js pode tirar os imports desnecessários, vai ficar assim:
+---------------------
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+
+
+
+---------------------------------
+Em App.js:
+
+export default function App(){
+  return(
+    <div>
+      <h1>Bem vindos ao sistema</h1>
+      <h2>&copy; leandrocf79@gmail.com</h2>
+    </div>
+  )
+}
+
+
+
+ou melhor:
+
+
+
+import React from "react";
+
+function App(){
+  return(
+    <div>
+      <h1>Bem vindos ao sistema</h1>
+      <h2>&copy; leandrocf79@gmail.com</h2>
+    </div>
+  )
+}
+
+export default App;
+
+
+
+
+
+
+
+----------------------------------------------
+--------------------------------------------
+-----------------------------------------
+Props é como se fosse um atributo. Pode ser passado para outro componente receber.
+São 2 componentes: 
+
+state e class 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
