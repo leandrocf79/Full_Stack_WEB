@@ -5,3 +5,8 @@ https://nodejs.org/en/download/
 
 Pra verificar versão instalada vá no terminal e digite:
 node -v
+
+Gegenciador de pacotes, utilizado para instalar bibliotecas:
+npm -v
+
+https://pt-br.reactjs.org/docs/getting-started.html
