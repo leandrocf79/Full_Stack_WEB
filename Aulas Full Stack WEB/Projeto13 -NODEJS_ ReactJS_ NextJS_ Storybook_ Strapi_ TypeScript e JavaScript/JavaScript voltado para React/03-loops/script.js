@@ -1,3 +1,5 @@
+//Visualize no navegador. F12
+
 
 // while
 document.write('while');

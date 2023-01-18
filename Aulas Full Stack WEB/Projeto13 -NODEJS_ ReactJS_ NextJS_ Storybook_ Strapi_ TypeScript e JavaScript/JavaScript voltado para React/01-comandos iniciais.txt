@@ -63,7 +63,7 @@ alert(nome+ b);
 
 alert(nome+" "+b+" "+a+nome);
 
-alert("Meu nome é "+nome+" e tenho "+b+" anos.")
+alert("Meu nome é "+nome+" e tenho "+b+" anos.")   //MAIS A FRENTE SERÁ MOSTRADA UMA FORMA MELHOR DE FAZER A CONCATENAÇÃO
 
 var sobrenome="CF";
 
@@ -302,7 +302,114 @@ planeta
 Tente alterar:
 planeta = "jupiter";
 
+-------------------CONCATENAÇÃO MELHORADA-----------------------
 
+let nome = "Leandro";
+let sobrenome = 'CF';
+let idade = '44';
+
+*****Muita atenção nas aspas INVERTIDAS, vai usar o sinal crase:
+
+let pessoa = ` Meu nome é ${nome} ${sobrenome} e tenho ${idade} anos. `;
+
+
+---------------------
+
+---------------------
+Desconstruir:
+
+const funcionario = {
+	nome: "Leandro",
+	sobrenome:"CF",
+	idade:44,
+	cargo:"Desenvolvedor"
+}
+
+
+Veja:
+funcionario
+cargo
+
+
+Agora faça:
+let {cargo} = funcionario;
+cargo
+
+let {nome} = funcionario;
+let {sobrenome} = funcionario;
+let {idade} = funcionario;
+
+
+Chamar varios itens:
+let {idade, cargo} = funcionario;
+
+
+
+------
+Trocar nome da variavel:
+
+let {idade:age}= funcionario;
+
+age
+
+--------------Não confundir trocar o valor da varial com a do OBJETO. Houve uma falha na aula aqui. 
+age=99;
+age
+
+idade=99;
+idade
+
+Vai exibir 99, mas se chamar 
+funcionario
+ainda está com 44.
+
+
+
+Para alterar isso tem 2 formas:
+
+Busque a posição dos itens:
+
+let { 0:primeironome, 2:suaidade } = funcionario;
+
+
+------outra forma:
+
+let [ nome, sobrenome, idade]=funcionario;
+
+
+
+-------------------------------
+-------------------------------spread operator
+Juntando arrays:
+
+
+let primeiros = [1,2,3];
+primeiros
+
+
+Acrescentar primeiros detro de numeros,
+tem que usar os 3 pontos chamados de  "spread operator":
+
+let numeros = [ ...primeiros,4,5,6,7];
+numeros
+
+
+-----------
+let pessoas={
+	nome: "Elvis",
+	idade: 27,
+	cargo: "cantor"
+};
+
+pessoas;
+
+
+let novaPessoa = {
+	...pessoas,
+	anoAtual: 2023,
+	cidade: "California"
+};
+novaPessoa;
 
 
 

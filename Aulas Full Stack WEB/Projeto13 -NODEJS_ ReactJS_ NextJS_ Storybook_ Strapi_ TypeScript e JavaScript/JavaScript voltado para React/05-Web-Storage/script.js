@@ -1,3 +1,6 @@
+//Visualize no navegador. F12
+
+
 //var nome = localStorage.nome;
 //console.log(nome);
 

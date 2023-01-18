@@ -1,3 +1,5 @@
+//Visualize no navegador. F12
+
 
 
 //FUNÇÃO ENTRAR ( 1º método)
