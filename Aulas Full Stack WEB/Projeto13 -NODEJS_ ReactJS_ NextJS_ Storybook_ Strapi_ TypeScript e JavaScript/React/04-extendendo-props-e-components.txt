@@ -5,6 +5,92 @@ App.js
 
 
 
+import React from "react";
+
+
+//PROPS E COMPONENT
+
+const Equipe = (props) => { // Aqui vai receber os dados de App e será exibido em Sobre.
+  return(
+//    <div>
+//      <h4>  {props.nome}    </h4> // RETORNA PARA O USUÁRIO DIRETAMENTE. Modo 1
+ //   </div>
+
+ //<Sobre nome={props.nome} cargo={props.cargo}  idade={props.idade}/> // outra forma de passar props. Passar somente dados relevantes. MODO 2
+
+
+
+
+ // Passar dados por outro COMPONENT, em vez de 'nome'. Usar outra coisa, exemplo username.  MODO 3
+  <div>
+    <Sobre username={props.nome} role={props.cargo} age={props.idade}/> 
+
+    <Social Lk={props.linkedin} fb={props.facebook}/>
+  </div>
+  );
+}
+
+const Sobre = (props) => { // Aqui ficou responsável por exibir para o usuário 
+  return(
+
+   // <h3>Olá, meu nome é {props.nome} e sou {props.cargo}</h3>   // MODO 2 
+
+   // MODO 3
+    <div>
+      <hr></hr>
+       <h3>Olá, meu nome é {props.username}, sou {props.role} e tenho {props.age} anos.</h3>   <br></br>
+    
+       <h5>Nome: {props.username}</h5>
+       <h5>Cargo: {props.role}</h5>
+       <h5>Idade: {props.age}</h5>
+
+       
+    </div>
+  ); 
+}
+
+const Social = (props) =>{
+  return(
+    <div>
+      <a>Instagram </a>
+      <a href= {props.fb} >Facebook </a>
+      <a target="_blank"  rel="noopener noreferrer"   href=  {props.Lk} > Linkedin </a>
+    </div>
+
+//target="_blank"       - Para abrir os links em uma nova aba
+//rel="noopener noreferrer"     - Isso evita que a página atual perca o controle sobre a nova aba
+  );
+}
+
+
+
+
+
+function App(){ //Aqui  em App será a entrada dos dados
+  return(
+    <div>
+      <h1>Conheça a equipe:</h1>
+      <Equipe nome="LeandroCF" cargo="Dev" idade="44" facebook ="https://pt-br.facebook.com"/>
+
+      <Equipe 
+      nome="J. Morrison" 
+      cargo="cantor" 
+      idade="27"  
+      linkedin = "https://www.linkedin.com" />
+
+    </div>
+  )
+}
+
+export default App;
+
+
+
+
+
+
+
+
 
 
 
