@@ -1,0 +1,128 @@
+props = são estáticas.
+states = são estados dinâmicos em que é possível trocar o valor sem atualizar a página.
+
+
+render() = Responsável por colocar as informações na tela.
+
+
+Pode ser escrito de formas diferentes o mesmo código:
+
+
+____________________________________
+class App extends Component {
+  render() {
+    return(
+    <h1>Olá ReactJS</h1>
+    );
+  }
+}
+ 
+export default App;
+____________________________________
+
+ou assim, são a mesma coisa.
+____________________________________
+import React from "react";
+ 
+const App = () => {
+  return( 
+    <h1>Olá ReactJS</h1>
+  );
+};
+ 
+export default App;
+____________________________________
+
+
+
+
+
+
+
+-------------------App.js
+
+
+
+import React, {Component} from "react";
+
+// super(props); - Acessa todas as informações
+
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      nome: "Leandro",
+      contador: 0
+    };
+    this.aumentar= this.aumentar.bind(this);
+    this.diminuir= this.diminuir.bind(this);
+
+  }
+
+// this.aumentar= this.aumentar.bind(this);  Serve para this.setState poder ser usado
+
+
+aumentar(){
+  console.log("Aumentou");
+  
+
+  let state = this.state;
+  state.contador += 1;
+  state.nome="Você define o limite.";
+  this.setState(state);
+}
+
+diminuir(){
+  let state = this.state;
+  if(state.contador === 0){
+    alert("Não poderá usar valores negativos aqui");
+    return;
+  }
+
+  state.contador -= 1;
+  this.setState(state);
+}
+
+
+
+  render(){
+    return(
+      <div>
+        {this.state.nome}
+
+        <h3> 
+          <button onClick={this.diminuir}> - </button>         
+          {this.state.contador} 
+          <button onClick={this.aumentar}> + </button> 
+        </h3>
+      </div>
+
+    );
+  }
+}
+
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+-------------------index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+

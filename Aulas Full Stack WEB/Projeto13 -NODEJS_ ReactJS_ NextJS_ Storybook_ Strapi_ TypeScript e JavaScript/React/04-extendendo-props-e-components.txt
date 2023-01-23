@@ -86,10 +86,136 @@ export default App;
 
 
 
+----------------------------------------------
+Usando Component para fazer o mesmo acima, mais fácil.
+
+Vai funcionar perfeitamente assim, mas será melhorado a seguir, será renderizado em outro componente
+----------------------------------------------
+1)
 
 
 
 
+import React,  { Component }  from "react";
+
+
+/* Equipe extende de Component
+  Método render() vai usar return para renderizar na tela. Nele será escrito o cod jsx
+
+*/
+class Equipe extends Component{
+  render(){
+    return(
+      <div>
+        <h4> Nome: { this.props.nome } </h4>
+        <h4> Sobrenome: { this.props.sobrenome} </h4>
+        <h4> Cargo: { this.props.cargo} </h4>
+        <hr></hr>
+      </div>
+    );
+  }
+}
+
+
+
+
+
+function App(){ 
+  return(
+    <div>
+      <h1> Component </h1>
+        <Equipe 
+        nome="Leandro" 
+        sobrenome="CF" 
+        cargo="Programador"/>
+
+        <Equipe nome="Janis" sobrenome="Joplin" cargo="Cantora" />
+
+    </div>
+  )
+}
+
+export default App;
+
+
+
+
+
+-----------------------------------
+Modo 2
+-----------------------------------
+2)
+
+
+
+
+
+
+import React,  { Component }  from "react";
+
+
+/* Equipe extende de Component
+  Método render() vai usar return para renderizar na tela. Nele será escrito o cod jsx
+*/
+
+class Equipe extends Component{
+  render(){
+    return(
+      <div>
+        <Sobre name={ this.props.nome } lastname={this.props.sobrenome} position={ this.props.cargo} />
+        <Social linkd={this.props.linkedin} fb={this.props.facebook}/>
+        <hr></hr>
+      </div>
+    );
+  }
+}
+
+
+const Social =(props) => {
+  return(
+    <div>
+      <a>Instagram </a>
+      <a href= {props.fb} >Facebook </a>
+      <a target="_blank"  rel="noopener noreferrer"   href=  {props.linkd} > Linkedin </a>
+    </div>
+  );
+}
+
+
+class Sobre extends Component {
+  render(){
+    return(
+      <div>
+        <h4> Nome: { this.props.name } </h4>
+        <h4> Sobrenome: { this.props.lastname} </h4>
+        <h4> Cargo: { this.props.position} </h4>
+                
+      </div>
+    );
+  }
+}
+
+
+
+
+function App(){ 
+  return(
+    <div>
+      <h1> Component </h1>
+        <Equipe 
+        nome="Leandro" 
+        sobrenome="CF" 
+        cargo="Programador"/>
+
+        <Equipe nome="Janis" sobrenome="Joplin" cargo="Cantora" linkedin = "https://www.linkedin.com"/>
+
+
+
+    </div>
+  )
+}
+
+export default App;
 
 
 
