@@ -1,0 +1,15 @@
+import speech_recognition as sr
+
+# Cria um objeto de reconhecimento de fala
+r = sr.Recognizer()
+
+# Lê o arquivo de áudio
+audio_file = sr.AudioFile('audio.wav')
+
+with audio_file as source:
+    # Chama o método de reconhecimento de fala
+    audio = r.record(source)
+    # Reconhece a fala
+    speech = r.recognize_google(audio)
+
+print(speech)

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	<title></title>
+</head>
+<body>
+
+<button onclick="startDictation()">Start Dictation</button>
+
+<select id="language-select" onchange="selectLanguage(this.value)">
+  <option value="pt-br">Portuguese (Brazil)</option>
+  <option value="en-us">English (US)</option>
+  <option value="es-es">Spanish (Spain)</option>
+  <option value="es-419">Spanish (Latin America)</option>
+</select>
+
+    <p id="transcription"></p>
+
+
+<script>
+  var recognition;
+  var selectedLanguage;
+
+        function startDictation() {
+    if (window.hasOwnProperty('webkitSpeechRecognition')) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.lang = selectedLanguage;
+
+      document.getElementById("language-select").style.display = "block";
+
+    }
+  }
+
+  function selectLanguage(language) {
+    selectedLanguage = language;
+    recognition.lang = selectedLanguage;
+    recognition.start();
+    recognition.onresult = function(e) {
+      document.getElementById('transcription').textContent = e.results[0][0].transcript;
+      recognition.stop();
+    };
+    recognition.onerror = function(e) {
+      recognition.stop();
+    }
+  }
+</script>
+
+
+
+</body>
+</html>
