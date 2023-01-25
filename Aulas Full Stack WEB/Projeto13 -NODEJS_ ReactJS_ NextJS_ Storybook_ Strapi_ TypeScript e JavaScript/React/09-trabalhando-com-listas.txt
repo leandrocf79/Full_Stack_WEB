@@ -1,0 +1,157 @@
+Nesse primeiro momento ficou assim como abaixo, 
+depois será colocado em arquivo separado
+
+import React, {Component} from "react";
+
+
+
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      feed: [
+        {id: 1, username: 'Leandro', curtidas: 10, comentarios: 5},
+        {id: 2, username: 'Renato Russo', curtidas: 1560, comentarios: 5566},
+        {id: 3, username: 'Elvis', curtidas: 130, comentarios: 75},
+      ]
+    };
+
+
+  }
+
+//será usado uma função anônima para usar o feed
+
+// foi passado <div key={item.id}> para garantir o id de cada usuário nas curtidas e comentários
+  render(){
+    return(
+      <div>
+        {this.state.feed.map( (item) => {
+
+          return(
+            <div key={item.id}>
+              <h3>{item.username}</h3>
+              <a> {item.curtidas} curtidas / {item.comentarios} comentários  </a>
+            </div>
+          );
+
+        } )}
+        
+      </div>
+
+    );
+  }
+}
+
+
+export default App;
+
+---------------------------------------------------
+Separando o conteudo do feed e corrigindo o PLURAL EM  1 CURTIDA || 2 CURTIDAS
+---------------------------------------------------
+
+Em SRC criar um diretório chamdo components
+sub-pasta chamada feed
+dentro de feed / index.js
+
+
+
+import React, {Component} from "react";
+
+class Feed extends Component{
+    render(item){
+        return(
+            <div key={this.props.id}>
+                <h3>Usuário: {this.props.username}</h3>
+                <a>{this.props.curtidas > 1 ? this.props.curtidas+" curtidas " : this.props.curtidas+" curtida " }  
+                
+                / {this.props.comentarios > 1 ? this.props.comentarios+" comentários" : this.props.comentarios+" comentário"} </a>
+
+                <hr></hr>
+
+            </div>
+        );
+    }
+}
+
+export default Feed;
+
+
+
+-----------------------------------
+
+App.js:
+
+
+import React, {Component} from "react";
+import Feed from "./components/feed";
+
+
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      feed: [
+        {id: 1, username: 'Leandro', curtidas: 10, comentarios: 5},
+        {id: 2, username: 'Renato Russo', curtidas: 1560, comentarios: 0},
+        {id: 3, username: 'Elvis', curtidas: 1, comentarios: 75},
+      ]
+    };
+
+
+  }
+
+//será usado uma função anônima para usar o feed
+
+// foi passado <div key={item.id}> para garantir o id de cada usuário nas curtidas e comentários
+  render(){
+    return(
+      <div>
+        {this.state.feed.map( (item) => {
+
+          return(
+            <Feed id={item.id} username={item.username} curtidas={item.curtidas} 
+            comentarios={item.comentarios} />
+
+          );
+
+        } )}
+        
+      </div>
+
+    );
+  }
+}
+
+
+export default App;
+
+
+-------------------------------------------
+index.js:
+
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
