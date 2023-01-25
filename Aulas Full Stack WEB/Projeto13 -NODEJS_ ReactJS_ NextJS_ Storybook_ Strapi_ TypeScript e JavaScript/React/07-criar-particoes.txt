@@ -1,0 +1,160 @@
+na pasta SRC criar um novo diretório chamado 
+components
+e uma sub-pasta Membros
+
+New file 
+Membros.js
+
+
+Quando for importar para App.js vai gerar um import assim:
+
+import Membros from "./components/Membros/Membros";
+
+
+isso pode ser ainda menor se renomear o arquivo Membros.js
+para index.js. É o único arquivo com esse nome dentro da pasta, 
+será a primeira a ser procurada por padrão e poderá ser importada assim:
+
+
+import Membros from "./components/Membros";
+
+------------------------------------------------
+Em Membros/index.js não poderá ser alterado o nome com o modelo seguinte:
+
+import React, {Component} from "react";
+
+class Membros extends Component{
+    render(){
+        return(
+            <div>
+                {this.props.nome}
+            </div>
+        );
+    }
+
+}
+
+export default Membros; //Para poder ser utilizado em outro lugar
+
+
+---------------------------------Assim poderá ser auterado com state:
+
+
+
+import React, {Component} from "react";
+
+
+class Membros extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            nome: props.nome
+        };
+        this.entrar = this.entrar.bind(this);
+        
+    }
+
+    entrar(){
+        this.setState({nome: 'LeandroCF'})
+    }
+
+    /* //Será feito diretamente no botão sair
+    sair(){
+        this.setState({nome: ''})
+    }
+*/
+
+
+    render(){
+        return(
+            <div>
+                <h4>Bem vindo {this.state.nome}</h4>
+                <button onClick={this.entrar}>Entrar</button>
+                <button onClick={  () => this.setState({nome: 'Visitante'})  }>Sair</button>
+
+            </div>
+        );
+    }
+
+}
+
+export default Membros; //Para poder ser utilizado em outro lugar
+
+
+
+
+
+--------------------------Passando por paramentros:
+
+
+
+import React, {Component} from "react";
+
+
+class Membros extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            nome: props.nome
+        };
+        this.entrar = this.entrar.bind(this);
+        
+    }
+
+    entrar(nome){
+        this.setState({nome: nome})
+    }
+
+    /* //Será feito diretamente no botão sair
+    sair(){
+        this.setState({nome: ''})
+    }
+*/
+
+
+    render(){
+        return(
+            <div>
+                <h4>Bem vindo {this.state.nome}</h4>
+
+                <button onClick={      () =>       this.entrar("leandrocf79")}>Entrar</button>
+
+                <button onClick={  () => this.setState({nome: 'Visitante'})  }>Sair</button>
+
+            </div>
+        );
+    }
+
+}
+
+export default Membros; //Para poder ser utilizado em outro lugar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
