@@ -1,0 +1,71 @@
+import React, {Component} from "react";
+
+
+class App extends Component{ 
+  constructor(props){
+    super(props);
+    this.state = {
+      nome: "",
+      email: "",
+      senha: '',        
+      
+    };
+    this.cadastrar = this.cadastrar.bind(this);
+
+  }
+
+  /* 
+  //teste do botão cadastrar
+  cadastrar(){
+    alert('CLICOU!! Botão "cadastrar" funcionou.')
+  }
+*/
+
+
+//Será importante usar event.preventDefault(); para não atualizar a página após clicar em "cadastrar"
+
+cadastrar(event){
+  const {nome, email, senha} = this.state;
+  
+  //verificar vazio
+  if(nome !== '' && email!=='' && senha!==''){
+    alert(nome);
+    alert(`E-mail: ${email}\n Senha: ${senha}`);
+  }else{
+    this.setState({error: "Preencha todos os campos."});
+  }
+  
+  event.preventDefault();
+  }
+
+  
+//onChange={} vai pegar o valor digitado e salvar na variável, no caso nome
+// será criada uma função anônima 
+//onSbumit={} serve para chamar uma função
+//{this.state.error && <p>{this.state.error}</p>} só vai renderisar se tiver algum erro
+
+  render(){
+    return(
+      <div>
+        <h2>Novo usuário</h2>
+       
+        {this.state.error && <p>{this.state.error}</p>}
+
+        <form onSubmit={this.cadastrar}>
+          <label>Nome: </label>
+          <input type="text" value={this.state.nome} onChange={ (evento) => this.setState({nome: evento.target.value}) } /><br/><br/>
+          <label>E-mail: </label>
+          <input type="email" value={this.state.email} onChange={(e) => this.setState({email: e.target.value})} /><br/><br/>
+          <label>Senha: </label>
+          <input type="password" value={this.state.senha} onChange={(e) => this.setState({senha: e.target.value})} /><br/><br/>
+
+          <button type="submit">Cadastrar</button>
+        </form>
+      
+      </div>
+    );
+  }
+}
+
+
+export default App;

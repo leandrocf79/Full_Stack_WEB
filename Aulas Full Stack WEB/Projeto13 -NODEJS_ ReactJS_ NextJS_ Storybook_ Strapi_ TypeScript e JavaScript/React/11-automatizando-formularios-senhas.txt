@@ -1,0 +1,67 @@
+import React, {Component} from "react";
+
+
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      form:{
+        nome: '',
+        email: "",
+        senha: "",
+        sexo: '',
+      }     
+    };
+    this.dadosForm = this.dadosForm.bind(this);
+  }
+
+
+//Vai alterar tudo com somente 1 função, mais fácil para dar manutenção quando o site estiver muito grande
+
+dadosForm(e){
+  let form = this.state.form;
+  form[e.target.name] = e.target.value;
+  this.setState({form: form});
+}
+
+
+
+
+  //prop para alterar value  usar: onChange={}
+
+  // Na SENHA será feita uma função em linha, mesma coisa, recebe "e" por parâmetro.
+  render(){
+    return(
+      <div>
+        <h2>Login</h2>
+        Nome:
+        <input type="text" name="nome" value={this.state.form.nome} onChange={this.dadosForm} /><br/><br/>
+
+
+        Email:
+        <input type="email" name="email" value={this.state.form.email}  onChange={this.dadosForm} /><br/><br/>
+        Senha: 
+        <input type="password" name="senha" value={this.state.form.senha} onChange={ this.dadosForm} /><br/><br/>
+
+        sexo:
+        <select name='sexo' value={this.state.form.sexo} onChange={this.dadosForm}>
+        <option value='masc'>Masculino</option>
+        <option value='fem'>Feminino</option>
+        <option value='outros'>Outros</option>
+        </select>
+
+        <div>
+          <h4>{this.state.form.nome}</h4>
+          <h4>{this.state.form.email}</h4>
+          <h4>{this.state.form.senha}</h4>
+          <h4>{this.state.form.sexo}</h4>
+        </div>
+        
+      </div>
+
+    );
+  }
+}
+
+
+export default App;

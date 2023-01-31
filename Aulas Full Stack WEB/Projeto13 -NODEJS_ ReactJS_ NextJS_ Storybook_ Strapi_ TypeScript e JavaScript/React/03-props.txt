@@ -20,9 +20,9 @@ function App(){
   return(
     <><div>
 
-      <Bemvindo />
+      <Bemvindos />
 
-      <h1> <Bemvindo/> </h1>
+      <h1> <Bemvindos/> </h1>
       <h2>&copy; leandrocf79@gmail.com</h2>
     </div>
     <div>

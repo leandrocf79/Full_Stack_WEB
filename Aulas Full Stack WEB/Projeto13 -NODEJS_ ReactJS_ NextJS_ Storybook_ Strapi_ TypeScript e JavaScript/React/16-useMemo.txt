@@ -1,0 +1,78 @@
+import React, { useState, useEffect, useMemo } from 'react';
+
+//useffects vai praticamente substituir todos os ciclos de vida dos componentes
+//useMemo - Um exemplo, serve para exibir uma quantidade de tarefas a serem feitas, só vai alterar quando solicitado.
+
+//tarefas, é o primeiro parâmetro da state, o nome dela, e o segundo parâmetro é a função que vai chamar para atualizar op valor da state
+
+function App() {
+/*
+  const [tarefas, setTarefas] = useState([
+    'Pagar a conta de luz',
+    'Estudar React Hooks'
+  ]);
+  */
+  const [tarefas, setTarefas] = useState([]);
+  const [input, setInput] = useState('');
+
+//useEffect é uma função e vai receber 2 parâmentros, 1º é a própria função e o 2º pode receber um array para monitorar. 
+//Toda vez que tiver alterações vai chamar essa função.
+
+useEffect(() => {
+  const tarefasStorage = localStorage.getItem('tarefas');
+  if(tarefasStorage){
+    setTarefas(JSON.parse(tarefasStorage)); //setTarefas vai alterar
+  }
+}, []);
+
+useEffect(() => {
+  localStorage.setItem('tarefas', JSON.stringify(tarefas)) //Vai adicionar, converter todo conteúdo para string e salvar 
+}, [tarefas]);
+
+//F12 no navegador escolha a opção "Aplication" / Local Storage e clique no http://localhost:3000
+
+
+
+
+  function handleAdd(){
+    setTarefas([...tarefas, input]) // lembrando que em JS os 3 pontos é para chamar tudo que tiver
+    setInput('');
+  }
+
+
+//Melhorando o uso de useMemo no <strong>Você tem {tarefas.length} tarefas</strong> 
+const totalTarefas= useMemo(() => tarefas.length, [tarefas]);
+
+
+
+
+  //usando <strong>Você tem {tarefas.length} tarefas</strong>
+const [nome, setNome] = useState('Leandro');
+
+  return (
+    <div>
+
+      <ul>
+        {tarefas.map(tarefa => (
+          <li key={tarefa}>{tarefa}</li>
+        ))}
+      </ul><br/>
+      {/*<strong>Você tem {tarefas.length} tarefas</strong> <br/>*/}
+      <strong>Você tem {totalTarefas} tarefas</strong> <br/>
+
+
+
+      <h4>Nome: {nome}</h4>
+
+      <input type="text" value={input} onChange={e => setInput(e.target.value)}/>    
+      <button type="button" onClick={handleAdd}>Adicionar</button>
+
+    </div>
+  );
+}
+
+export default App;
+
+
+
+
