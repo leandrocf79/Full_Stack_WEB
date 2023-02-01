@@ -1,0 +1,279 @@
+MELHORANDO ROTAS
+
+Criar um cabeçalho para todas as páginas
+
+
+
+Em 'src' criar uma pasta chamada 'components'/ 'Header' / index.js
+
+
+
+-----------src/components/Header/index.js
+
+import { Link } from 'react-router-dom';
+import './style.css';
+
+function Header(){
+  return(
+    <header>
+      <h2>Sujeito Dev</h2>
+
+      <div className="menu">
+        <Link to="/">Home</Link>
+        <Link to="/sobre">Sobre</Link>
+        <Link to="/contato">Contato</Link>
+      </div>
+    </header>
+  )
+}
+
+export default Header;
+
+
+
+-----------src/components/Header/style.css
+
+
+header{
+  width: 100%;
+  height: 100px;
+  background-color: #121212;
+  color: #FFF;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+header a{
+  color: #FFF;
+  font-size: 20px;
+}
+
+// Em header pegar TODOS os elementos 'a' de 'a' e dar margem de 10px 
+
+header a + a{
+  margin-left: 10px;
+}
+
+
+
+
+----------------------------------------
+----------------------------------------
+Em App.js usar um fragment  <> </>  (como se fosse uma div sem inteferir em nada visual)
+ para renderizar as rotas
+
+
+***Primeiro modelo.     Usar o outro!!!
+
+
+import RoutesApp from './routes';
+import Header from './components/Header';
+
+function App() {
+  return (
+    <>
+      <Header/>
+      <RoutesApp/> 
+    </>   
+  );
+}
+
+export default App;
+
+---------------
+---------------SEGUNDO MODELO. Usar esse !!
+
+import RoutesApp from './routes';
+
+function App() {
+  return (
+      <RoutesApp/>  
+  );
+}
+
+export default App;
+
+
+
+
+-----Agora colocar <Header/> em routes.js
+
+
+
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Home from './pages/Home';
+import Sobre from './pages/Sobre';
+import Contato from './pages/Contato';
+
+import Header from './components/Header';
+
+
+function RoutesApp(){
+  return(
+    <BrowserRouter> 
+
+      <Header/>			<------------Aqui. Sobre o conteúdo de cada página.
+
+      <Routes>
+        <Route path="/" element={ <Home/> } />
+        <Route path="/sobre" element={ <Sobre/> } />
+        <Route path="/contato" element={ <Contato/> } />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default RoutesApp;
+
+
+
+
+-------------------------------------
+-------------------------------------Os demais continuam iguais
+
+
+
+-----------Home/index.js
+
+import { Link } from 'react-router-dom';
+
+function Home() {
+  return (
+    <div>
+      <h1>Bem vindo a pagina HOME</h1>
+      <span>Sujeito Programador</span> <br/> <br/>
+
+      <Link to="/sobre">Sobre</Link> <br/>
+      <Link to="/contato">Contato</Link>
+    </div>
+  );
+}
+
+export default Home;
+
+
+
+
+-----------Sobre/index.js
+
+import { Link } from 'react-router-dom';
+
+function Sobre() {
+  return (
+    <div>
+      <h1>Pagina Sobre a empresa</h1> <br/> <br/> 
+
+      <Link to="/">Pagina Home</Link> <br/>
+      <Link to="/contato">Contato</Link>
+    </div>
+  );
+}
+
+export default Sobre;
+
+
+
+
+
+-----------Contato/index.js
+
+import { Link } from 'react-router-dom';
+
+function Contato(){
+  return(
+    <div>
+      <h1>Pagina Contato</h1>
+      <span>Contato da empresa (dd) xxxx-xxxx</span> <br/> <br/>
+
+      <Link to="/">Home</Link> <br/>
+      <Link to="/sobre">Sobre</Link>
+    </div>
+  )
+}
+
+export default Contato;
+
+
+
+
+
+
+
+--------------
+-------------src/style.css
+
+
+
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 35px;
+  height: 60px;
+  width: 100%;
+  background-color: #4c89e3;
+  color: #FFF;
+}
+
+.post{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 700px;
+  background-color: #FFF;
+  border-radius: 7px;
+  border-width: 1px;
+  margin:8px;
+  padding: 10px;
+}
+
+.titulo{
+  font-size: 25px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.subtitulo{
+ margin:5px;
+}
+
+.botao{
+  height: 40px;
+  background: none;
+  border-radius: 5px;
+  color: #4c89e3;
+  border: 2px solid #4c89e3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.5s;
+}
+
+.botao:hover{
+  background-color:#4c89e3;
+  color: #FFF;
+}
+
+
+

@@ -1,0 +1,152 @@
+Requisiçõpes HTTP
+
+Para pegar as APIs de um site qualquer e exibir no seu pode facilitar isso instalando uma
+extenção chamada "json viewer" PARA O CHROME
+
+https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh?hl=pt-BR
+
+no firefox não é o mesmo.
+
+
+
+-------------------------------------------------------
+
+
+
+import React, { useEffect, useState } from 'react';
+import './style.css';
+
+////https://sujeitoprogramador.com/rn-api/?api=posts
+
+
+
+function App() {
+  const [nutri, setNutri] = useState([]); //Vai carregar tudo que abrir no link abaixo
+
+  useEffect(()=> {
+
+    function loadApi(){
+      let url = 'https://sujeitoprogramador.com/rn-api/?api=posts';
+
+      fetch(url)
+      .then((resultado)=> resultado.json())   // Se 'url' der carregar vai chamar o 'then' e nessa linha converte para json
+      .then((json)=> {        // Nessa linha vai receber o json
+        // console.log(json);
+        setNutri(json);       // Aqui vai encaminhar para nutri em 'const [nutri, setNutri]'
+      })
+
+    }
+
+    loadApi();
+  }, []);
+  
+  return (
+    <div className="container">
+      <header>
+        <strong>React Nutri</strong>
+      </header>
+
+      {nutri.map((item)=>{          // a variavel nutri vai ser exibida aqui.  map((item) vai percorrer cada item.
+
+                // key={item.id} cada item será chamado pelo id.
+                // essas outros termos como "titulo", "subtitulo", "capa" e "id" são encontrados no próprio link que está sendo usado
+        return(
+          <article key={item.id} className="post">     
+          
+          <h2>Categoria: {item.categoria}</h2>
+
+            <strong className="titulo">{item.titulo}</strong>
+
+            <img src={item.capa} alt={item.titulo} className="capa" />
+            <p className="subtitulo">
+              {item.subtitulo}
+            </p>
+            
+            <a className="botao">Acessar</a>
+          </article>
+        )
+      })}
+    </div>
+  );
+}
+
+export default App;
+
+
+
+
+
+-------------------------------------------------------
+
+CSS:
+
+
+
+
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 35px;
+  height: 60px;
+  width: 100%;
+  background-color: #4c89e3;
+  color: #FFF;
+}
+
+.post{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 700px;
+  background-color: #FFF;
+  border-radius: 7px;
+  border-width: 1px;
+  margin:8px;
+  padding: 10px;
+}
+
+.titulo{
+  font-size: 25px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.subtitulo{
+ margin:5px;
+}
+
+.botao{
+  height: 40px;
+  background: none;
+  border-radius: 5px;
+  color: #4c89e3;
+  border: 2px solid #4c89e3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.5s;
+}
+
+.botao:hover{
+  background-color:#4c89e3;
+  color: #FFF;
+}
+
+
