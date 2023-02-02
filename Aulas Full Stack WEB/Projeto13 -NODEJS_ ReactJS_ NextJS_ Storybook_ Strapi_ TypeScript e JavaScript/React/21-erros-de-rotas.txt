@@ -1,0 +1,114 @@
+Corrigindo erros de rotas
+
+Crie em 'pages' um subdiretório chamado 'erro' / index.js com o conteúdo:
+
+
+import { Link } from 'react-router-dom' 
+
+function Erro(){
+  return(
+    <div>
+      <h2>Ops parece que essa pagina nao existe!</h2>
+
+      <span>Encontramos essas paginas aqui:</span> <br/>
+      <Link to="/">Home</Link> <br/>
+      <Link to="/sobre">Sobre</Link> <br/>
+      <Link to="/contato">Contato</Link>
+    </div>
+  )
+}
+
+export default Erro;
+
+
+
+
+
+
+-------------------------------------------
+------------------------------------------
+routes.js:
+
+
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Home from './pages/Home';
+import Sobre from './pages/Sobre';
+import Contato from './pages/Contato';
+import Erro from './pages/Erro';
+import Produto from './pages/Produto';
+
+import Header from './components/Header';
+
+
+function RoutesApp(){
+  return(
+    <BrowserRouter>
+      <Header/>
+      <Routes>
+        <Route path="/" element={ <Home/> } />
+        <Route path="/sobre" element={ <Sobre/> } />
+        <Route path="/contato" element={ <Contato/> } />
+        <Route path="/produto/:id" element={ <Produto/> } />
+
+        <Route path="*" element={ <Erro/> } />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default RoutesApp;
+
+
+-------------------------------------------
+------------------------------------------
+Criar agora uma diretório para produtos.
+
+Crie em 'pages' um subdiretório chamado 'produto' / index.js com o conteúdo:
+
+
+
+import { useParams } from 'react-router-dom';
+
+function Produto(){
+
+  const { id } = useParams(); // id vai retornar o valor digitado pelo usuário no navegador
+
+  return(
+    <div>
+      <h2>PAGINA DETALHE DO PRODUTO</h2>
+
+      <span>
+        MEU PRODUTO É {id}
+      </span>
+    </div>
+  )
+}
+
+export default Produto;
+
+
+
+
+
+------------------------------------------
+As demais páginas continuam iguais.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
