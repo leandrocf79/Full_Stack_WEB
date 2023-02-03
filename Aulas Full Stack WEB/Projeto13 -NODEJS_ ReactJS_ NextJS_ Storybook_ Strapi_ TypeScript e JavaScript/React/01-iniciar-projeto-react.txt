@@ -1,3 +1,11 @@
+Para alterar idioma de exibição:
+Ctrl+Shift+P
+digite na barra: display
+selecione: Configurar idioma de exibição
+
+
+
+
 # LEMBRE-SE SEMPRE:
 
 

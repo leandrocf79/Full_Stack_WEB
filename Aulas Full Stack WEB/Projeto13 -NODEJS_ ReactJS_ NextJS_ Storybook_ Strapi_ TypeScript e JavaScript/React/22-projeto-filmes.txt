@@ -1,0 +1,145 @@
+Para alterar idioma de exibição:
+Ctrl+Shift+P
+digite na barra: display
+selecione: Configurar idioma de exibição
+
+npx create-react-app filmes
+cd filmes
+yarn start ou  npm start
+
+
+No terminal instalar o pacote para criar as rotas
+npm install react-router-dom
+
+-----
+Para iniciar do zero, App.js:
+
+
+function App() {
+  return (
+    <div className="App">
+        teste
+    </div>
+  );
+}
+
+export default App;
+
+
+-----
+index.js:
+
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+
+-----
+alterar configurações inicias em style.css:
+
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+   font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+------------------------------------------
+Criando o projeto
+------------------------------------------
+
+Em src/pages/Home/index.js e criar um componente padrão: ((veja pasta e function com primeira letra maiuscula.))
+
+
+function Home(){
+    return(
+        <div>
+            <h2>Home</h2>
+        </div>
+    );
+}
+export default Home;
+
+
+
+-----
+Em src/pages/Filme/index.js e criar um componente padrão:
+
+function Filme(){
+    return(
+        <div>
+            Página filmes
+        </div>
+    );
+}
+export default Filme;
+
+
+-------------------------------------
+Criar rotas
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.

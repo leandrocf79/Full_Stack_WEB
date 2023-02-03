@@ -1,5 +1,11 @@
 MELHORANDO ROTAS
 
+No tertminal instalar:
+npm install react-router-dom
+
+
+
+
 Criar um cabeçalho para todas as páginas
 
 
