@@ -38,7 +38,7 @@ index.js:
 
 
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom/client'; // Observe "client"
 import './index.css';
 import App from './App';
 
@@ -175,7 +175,7 @@ Criar cabeçalho.
 src/components/Header/index.js:
 
 import './header.css';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'; //L maiúsculo
 
 function Header(){
   return(
@@ -242,7 +242,7 @@ Faça o cadastro, tipo de uso pessoal e justifique...
 Agora será liberada a chave e link de demonstração.
 
 Será algo parecido com isso:
-https://api.themoviedb.org/3/movie/550?api_key=80d98453904tr3ji90rfe90rfeu904r309
+https://api.themoviedb.org/3/movie/550?api_key=28fc232cc001c31e8a031f419d0a14ca
 
 Use a extensão "JSON Viewer" no navegador para visualizar melhor
 Download em:
@@ -253,7 +253,7 @@ Deixar opção para "Usar somente quewndo clicar na extensão"
 -----
 Se usar um parâmetro de idioma na frente do link ele já traduz ( &language=pt-BR )
 
-https://api.themoviedb.org/3/movie/550?api_key=80d98453904tr3ji90rfe90rfeu904r309&language=pt-BR
+https://api.themoviedb.org/3/movie/550?api_key=28fc232cc001c31e8a031f419d0a14ca&language=pt-BR
 
 
 Base da url:
@@ -280,14 +280,143 @@ npm install axios
 Em src/services/api.js:
 
 
+
 /*
 Base da url:
 https://api.themoviedb.org/3/
 
-O restante são as rotas
-https://api.themoviedb.org/3/movie/550?api_key=80de0e90fc4f08104f44d287cb6c7918&language=pt-BR
+O restante são as rotas, podem ser utilizadas na Home
+https://api.themoviedb.org/3/movie/550?api_key=28fc232cc001c31e8a031f419d0a14ca&language=pt-BR
+
+"movie/now_plaing" rota da URL que será utilizada.
+
 */
 
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: 'https://api.themoviedb.org/3/',
+
+});
+
+export default api;
+
+
+------------------------------
+
+Home:
+
+
+// https://api.themoviedb.org/3/movie/550?api_key=28fc232cc001c31e8a031f419d0a14ca
+// "movie/now_playing" rota que da URL que será utilizada.
+
+import { useEffect, useState } from 'react';
+import api from '../../services/api';
+
+// useEffect, vai buscar os filmes
+// useState, depois que buscar armazenar em um estado para que quando o usuário abrir a aplicação carregue os filmes.
+
+function Home(){
+
+  const [filmes, setFilmes] = useState([]);
+
+  // toda vez que que a aplicação abrir vai chamar useEffect
+  useEffect(() => {
+    async function loadFilmes(){
+      //await  para esperar a requisição
+      //get para buscar informações
+      const response = await api.get("movie/now_playing",{
+        params: {
+          api_key:'28fc232cc001c31e8a031f419d0a14ca',
+          language: 'pt-BR',
+          page: 1,
+        }
+      })    // "movie/now_playing" rota que da URL que será utilizada.
+      
+      //console.log(response); //para testar
+      //console.log(response.data); // Aqui vai aparecer tudo que precisa para chamar na aplicação.
+      console.log(response.data.results);
+    }
+    loadFilmes();
+  }, [])
+
+
+  return(
+    <div>
+      <h1>BEM VINDO A HOME</h1>
+    </div>
+  )
+}
+
+export default Home;
+
+
+-------------------------------------Atualizações na Home passando conteúdo para setFilmes.
+
+
+
+import { useEffect, useState} from 'react';
+import api from '../../services/api';
+
+import './home.css';
+import { Link } from 'react-router-dom';
+
+// URL DA API: /movie/now_playing?api_key=28fc232cc001c31e8a031f419d0a14ca&language=pt-BR
+
+function Home(){
+  const [filmes, setFilmes] = useState([]);
+
+
+  useEffect(()=>{
+
+    async function loadFilmes(){
+      const response = await api.get("movie/now_playing", {
+        params:{
+         api_key: "28fc232cc001c31e8a031f419d0a14ca",
+         language: "pt-BR",
+         page: 1,
+        }
+      })
+
+      //console.log(response.data.results); // Exibiu 20 itens, para pegar apenas 10:
+      //console.log(response.data.results.slice(0,10)); //Agora é só passar para o setFilmes
+      
+      setFilmes(response.data.results.slice(0,10))
+
+    }
+
+    loadFilmes();
+
+  }, [])
+
+//    {filmes.map((filme)=> {     Vai percorrer toda a lista.
+
+// imagem terá parte do link, pode concatenar com a base do  link. Veja a base do link no site de origem, em imagens. https:image.tmdb.org/t/p/original/
+// Para concatenar lembre-se das aspas de crase.
+
+  return(
+    <div>
+      <h1>BEM VINDO A HOME</h1>
+      <div className='container'>
+        <div className='lista-filmes'>
+          {filmes.map((filme)=> {
+            return(
+              <article key={filme.id}>
+                 <strong>{ filme.title }</strong>
+                 <img src={`https:image.tmdb.org/t/p/original/${filme.poster_path}`} alt={filme.title}/>
+                 <Link to ={`filme/${ filme.id }`}>Acessar</Link>
+              </article>
+            )
+
+          })}
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Home;
 
 
 
@@ -296,6 +425,51 @@ https://api.themoviedb.org/3/movie/550?api_key=80de0e90fc4f08104f44d287cb6c7918&
 
 
 
+------------------------- Criar em Home home.css:
+
+.lista-filmes{
+    max-width: 800px;
+    margin: 14px auto;
+}
+
+.lista-filmes article{
+    width: 100%;
+    background-color: #FFF;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.lista-filmes strong{
+    margin-bottom: 14px;
+    text-align: center;
+    font-size: 22px;
+    display: block;    
+}
+
+.lista-filmes img{
+    width: 900px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover; /*Isso da um efeito de tamanho bem interessante*/
+    display: block;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+}
+
+.lista-filmes a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #116feb;
+    text-decoration: none;
+    color: #fff;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;    
+}
+
+
+--------------------------------------
 
 
 
