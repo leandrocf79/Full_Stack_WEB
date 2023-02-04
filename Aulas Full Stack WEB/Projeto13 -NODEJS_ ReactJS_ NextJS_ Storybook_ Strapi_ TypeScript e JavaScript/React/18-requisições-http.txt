@@ -150,3 +150,52 @@ header{
 }
 
 
+
+----------------------------
+-------------------------------
+----------------------------------
+
+Buscar uma API para requisições HTTP
+
+Exemplo usado neste projeto:
+Vá em 
+https://www.themoviedb.org/?language=br
+
+Criar uma conta gratuita, confirme no email.
+
+Volte ao site e entre em configurações/API e solicitar CHAVE de API
+
+Developer
+ Aceitar os termos.
+
+Faça o cadastro, tipo de uso pessoal e justifique...
+
+Agora será liberada a chave e link de demonstração.
+
+Será algo parecido com isso:
+https://api.themoviedb.org/3/movie/550?api_key=80d98453904tr3ji90rfe90rfeu904r309
+
+Use a extensão "JSON Viewer" no navegador para visualizar melhor
+Download em:
+https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh?hl=pt-br
+Em configurações melhor escolher drácula para visualizalção. 
+Deixar opção para "Usar somente quewndo clicar na extensão"
+
+-----
+Se usar um parâmetro de idioma na frente do link ele já traduz ( &language=pt-BR )
+
+https://api.themoviedb.org/3/movie/550?api_key=80d98453904tr3ji90rfe90rfeu904r309&language=pt-BR
+
+
+Base da url:
+https://api.themoviedb.org/3/
+
+-----
+Veja outras opções no site, clique no link que está nesta parte:
+
+Documentação
+Our primary documentation is located at __developers.themoviedb.org.__
+
+Deixe na versão 3
+
+Vá em movies e veja tudo que é possivel utilizar nesta opção
