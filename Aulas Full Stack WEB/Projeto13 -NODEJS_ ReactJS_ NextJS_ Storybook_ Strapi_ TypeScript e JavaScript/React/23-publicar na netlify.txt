@@ -1,0 +1,76 @@
+Publicar na netlify:
+
+https://www.netlify.com/
+
+Faça o cadastro. Entrei com a conta do github.
+
+----------
+No terminal usar o build:
+
+npm run build
+
+
+Agora no diretório public criar um arquivo _redirects
+
+Com esse conteúdo:
+/* /index.html 200
+
+
+Gerar a build novamente:
+npm run build
+
+
+____________________
+Fazer o deploy
+
+Pode simplesmente arrastar a pasta build para o site ou fazer por linha de comando.
+
+Por linha de comando fica assim.
+
+Instalar o pacote do site netlify no terminal:
+npm  install -g netlify-cli
+
+Iniciar deploy pelo terminal:
+
+netlify deploy
+
+e autorize.
+
+Se for um projeto novo use a tecla direcional para baixo e ecolha
+
+"Create & configure a new site"
+
+Team: pode dar Enter
+
+Agora escolha o nome que quer dar para o site, se já existir tente outro.
+Escolhi: filmes-leandrocf
+
+Vai perguntar qual pasta quer encaminhar para produção, digite:
+./build
+
+
+Veja que o site ainda não foi publicado:
+https://app.netlify.com/teams/leandrocf79/overview
+
+
+Agora sim, fazer o deploy, vai ser produzido:
+
+netlify deploy --prod
+
+
+Novamente vai perguntar qual pasta quer encaminhar para produção, digite:
+./build
+
+
+https://filmes-leandrocf.netlify.app
+
+
+Fiz uma atualização, fazer novamenteo build:
+npm run build
+netlify deploy
+./build
+netlify deploy --prod
+./build
+
+
+
