@@ -36,11 +36,12 @@ Somente para melhorar a visualização, depois será melhorado isso.
     width: 600px;
     display: flex;
     flex-direction: column;
-    padding: 15px;
+    padding: 10px;
 }
 
 *{
     padding: 5px;
+    max-width: 250PX;
 }
 
 
@@ -247,7 +248,7 @@ function App() {
       setAutor(snapshot.data().autor)
       setTitulo(snapshot.data().titulo)
     })
-    .catch(()=>{
+    .catch((error)=>{
       alert("Erro ao buscar pela sua solicitação")
     })
 
@@ -282,6 +283,125 @@ export default App;
 
 
 -----------------------------------------------
+Exibir lista de postagem na busca
+
+
+Usar getDocs (com "s")
+-----------------------------------------------
+
+
+import {  useState  } from 'react';
+
+import { db } from './firebaseConnection';
+import { doc, setDoc, collection, addDoc, getDoc, getDocs } from 'firebase/firestore'; //Para criar no BD
+
+import './app.css';
+
+function App() {
+  const [titulo, setTitulo] = useState('');
+  const [autor, setAutor] = useState('');
+
+  //getDocs, com "s", vai buscar vários itens e serão armazenados aqui:
+  //post é o nome collection no DB
+  const [post, setPosts] = useState([]);
+
+  async function handleAdd(){
+    await addDoc(collection(db, "post"),{
+      titulo: titulo,
+      autor: autor,
+    })
+
+    .then(()=> {
+      console.log("Dados registrados no DB");
+      alert("Dados inseridos com sucesso.");
+      setAutor('');
+      setTitulo('');
+    })
+    .catch((error)=> {
+      console.log("Gerou erro " + error);
+      alert("ERRO ao cadastrar, tente novamente.");
+    })
+  } 
+
+
+
+  async function buscarDados(){
+
+    const postsRef = collection(db, 'post')
+    await getDocs(postsRef)
+    
+    .then((snapshot) => {
+      let lista = [];
+
+      //Colocar na lista os dados abaixo:
+      snapshot.forEach((doc)=>{
+        lista.push({
+          id: doc.id,
+          titulo: doc.data().titulo,
+          autor: doc.data().autor,
+        })
+        //Agora colocar tudo isso dentro de setPost:
+        setPosts(lista);
+
+      })
+
+    })
+    .catch((error)=>{
+      alert("Erro ao buscar pela sua solicitação")
+    })
+
+  }
+
+  return (
+    <div className="container">
+      <label>Título da postagem: </label>
+
+      <textarea type='text' placeholder='Digite o título: ' 
+      value={titulo}
+      onChange={ (e)=> setTitulo(e.target.value)}
+      />
+                  
+      <label>Autor: </label>
+
+      <input type='text' placeholder='Autor da postagem'
+      value={autor}
+      onChange={ (e)=> setAutor(e.target.value)}
+      /><br/>
+
+      <button onClick={ handleAdd }>Cadastrar</button><br/><br/>
+
+      <button onClick={buscarDados}>Buscar dados</button><br/>
+
+    {/*Exibir o conteúdo da lista que está dentro de setPosts*/}
+      <ul>
+        {post.map( (item)=>{
+          return(
+            <li key={item.id}>
+              <span>Título: {item.titulo}</span><br/>
+              <span>Autor: {item.autor}</span><br/><br/>
+            </li>
+          );        
+        })}
+      </ul>
+
+    </div>
+  );
+}
+
+export default App;
+
+
+
+------------------------------------
+-----------------------------------
+Editar dados inseridos no BD
+------------------------------------
+
+
+
+
+
+
 
 
 
