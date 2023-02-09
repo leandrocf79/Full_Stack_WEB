@@ -1,0 +1,103 @@
+Criar um projeto React novo no VSCode:
+
+Escolha uma pasta para o projeto.
+Iniciar um projeto com nome escolhido
+
+npx create-react-app curso-react
+
+**Vão aparecer 2 comandos após instalar:
+cd curso-react
+yarn start ou  npm start
+
+Em src pode deixar apenas App.js e index.js
+
+------------------------------------
+
+Ctrl+c no terminal para encerrar localhost caso tenha feito teste inicial.
+
+Instale:
+npm install firebase
+
+npm start
+
+---------------
+No site firebase foram geradas umas configurações iniciais
+
+ir para o console
+selecionar o BD que será usado
+
+--------
+copiar essa parte, essas credenciais do código:
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBetUNEViuR9l2wzErg",
+  authDomain: "curso-ccd14.firebaseapp.com",
+  projectId: "curso-ccd14",
+  storageBucket: "curso-ccd14.appspot.com",
+  messagingSenderId: "786603685854",
+  appId: "1:78660554:web:70e2e8c2c6a98f4f",
+  measurementId: "G-LG2GR7K1"
+};
+
+-------------------------
+No VSCode em src/farebaseConnection.js colar o conteúdo
+
+
+
+import {initializeApp} from 'firebase/app';
+import {getFirestore} from 'firebase/firestore'; // Foi o BD escolhido
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBetUNEViuR9l2wzErg",
+  authDomain: "curso-ccd14.firebaseapp.com",
+  projectId: "curso-ccd14",
+  storageBucket: "curso-ccd14.appspot.com",
+  messagingSenderId: "786603685854",
+  appId: "1:78660554:web:70e2e8c2c6a98f4f",
+  measurementId: "G-LG2GR7K1"
+};
+
+  const firebaseApp = initializeApp(firebaseConfig);
+
+  const db = getFirestore(firebaseApp);
+
+  export { db }; // Não foi default, quando for importar será entre chaves {}
+
+
+
+
+-------------App.js importar DB
+
+import { db } from './firebaseConnection';
+
+function App() {
+  return (
+    <div className="App">
+        react + firebase db
+    </div>
+  );
+}
+
+export default App;
+
+
+---------------------------
+Próximo arquivo utilizar DB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

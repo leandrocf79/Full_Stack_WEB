@@ -1,0 +1,311 @@
+Utilizando firebase
+
+
+----------------------Atualizar App.js para:
+
+import { db } from './firebaseConnection';
+import './app.css';
+
+function App() {
+
+  function handleAdd(){
+    alert("cadastrar");
+  }
+
+
+  return (
+    <div className="container">
+      <label>Título da postagem: </label>
+      <textarea type='text' placeholder='Digite o título: ' />
+      <label>Autor: </label>
+      <input type='text' placeholder='Autor da postagem'/>
+      <button onClick={ handleAdd }>Cadastrar</button>
+    </div>
+  );
+}
+
+export default App;
+
+
+
+
+-------------------Criar src/app.css:
+Somente para melhorar a visualização, depois será melhorado isso.
+
+.container{
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+*{
+    padding: 5px;
+}
+
+
+----------------------CUIDADO AO USAR ASSIM, vai sobrepor informaçõs no BD
+----------------------Atualizar App.js usando setDoc para:
+
+import {  useState  } from 'react';
+
+import { db } from './firebaseConnection';
+import { doc, setDoc } from 'firebase/firestore'; //Para criar no BD
+
+import './app.css';
+
+function App() {
+  /*Capturar a informação do usuário. 
+  Será usado dessa forma value={titulo}
+  Cada vez que escrever algo o onChange={ (e)=> setTitulo(e.target.value)} vai capturar
+  
+  */
+  const [titulo, setTitulo] = useState('');
+  const [autor, setAutor] = useState('');
+
+//async para aguardar a requisição no DB
+  async function handleAdd(){
+    //alert("cadastrar");
+
+    //db foi criado neste projeto para ser utilizado
+    //post é o nome que já foi dado no (collection) no firebase
+   // será criado um doc com nome dado "12345teste"
+    await setDoc(doc(db, "post", "12345teste"),{
+      //Agora o que será cadastrado
+      titulo: titulo,
+      autor: autor,
+
+    })
+
+// Se parar o mouse sobre setDoc vai ver que é uma "Promise", pode haver erros. Tratar isso:
+
+    //Para tratar casos de erros:
+    .then(()=> {
+      console.log("Dados registrados no DB");
+      alert("Dados inseridos com sucesso.");
+    })
+    .catch((error)=> {
+      console.log("Gerou erro " + error);
+      alert("ERRO ao cadastrar, tente novamente.");	
+    })
+  } //Abra inspecionar/console para visualizar e depois vá ao firebase para verificar se realmente deu certo.
+
+
+
+
+  return (
+    <div className="container">
+      <label>Título da postagem: </label>
+
+      <textarea type='text' placeholder='Digite o título: ' 
+      value={titulo}
+      onChange={ (e)=> setTitulo(e.target.value)}
+      />
+                  
+      <label>Autor: </label>
+
+      <input type='text' placeholder='Autor da postagem'
+      value={autor}
+      onChange={ (e)=> setAutor(e.target.value)}
+      />
+
+
+      <button onClick={ handleAdd }>Cadastrar</button>
+    </div>
+  );
+}
+
+export default App;
+
+
+-------------------------------
+-------------------------------
+GERAR id ÚNICO !!
+
+Acrescentar "collection, adDoc" em 
+import { doc, setDoc, collection, addDoc }
+
+**Substituir "setDoc" de id fixo para "addDoc"
+
+
+------------------------------Atualizar App.js com addDoc :
+
+
+import {  useState  } from 'react';
+
+import { db } from './firebaseConnection';
+import { doc, setDoc, collection, addDoc } from 'firebase/firestore'; //Para criar no BD
+
+import './app.css';
+
+function App() {
+  /*Capturar a informação do usuário. 
+  Será usado dessa forma value={titulo}
+  Cada vez que escrever algo o onChange={ (e)=> setTitulo(e.target.value)} vai capturar
+  
+  */
+  const [titulo, setTitulo] = useState('');
+  const [autor, setAutor] = useState('');
+
+
+  async function handleAdd(){
+
+    await addDoc(collection(db, "post"),{
+      //Agora o que será cadastrado
+      titulo: titulo,
+      autor: autor,
+
+    })
+
+    // Se parar o mouse sobre addDoc vai ver que é uma "Promise", pode haver erros. Tratar isso:
+    //Para tratar casos de erros:
+    .then(()=> {
+      console.log("Dados registrados no DB");
+      alert("Dados inseridos com sucesso.");
+      
+      //VOLTAR PARA VAZIO:
+      setAutor('');
+      setTitulo('');
+    })
+    .catch((error)=> {
+      console.log("Gerou erro " + error);
+      alert("ERRO ao cadastrar, tente novamente.");
+    })
+  } //Abra inspecionar/console para visualizar e depois vá ao firebase para verificar se realmente deu certo.
+
+
+
+  return (
+    <div className="container">
+      <label>Título da postagem: </label>
+
+      <textarea type='text' placeholder='Digite o título: ' 
+      value={titulo}
+      onChange={ (e)=> setTitulo(e.target.value)}
+      />
+                  
+      <label>Autor: </label>
+
+      <input type='text' placeholder='Autor da postagem'
+      value={autor}
+      onChange={ (e)=> setAutor(e.target.value)}
+      />
+
+
+      <button onClick={ handleAdd }>Cadastrar</button>
+    </div>
+  );
+}
+
+export default App;
+
+
+------------------------------
+
+Buscar informaçõs no DB
+
+
+----------------------Atualizar, com getDoc para buscar no DB, App.js para:
+BUSCAR ITEM ÚNICO.
+
+
+import {  useState  } from 'react';
+
+import { db } from './firebaseConnection';
+import { doc, setDoc, collection, addDoc, getDoc } from 'firebase/firestore'; //Para criar no BD
+
+import './app.css';
+
+function App() {
+  const [titulo, setTitulo] = useState('');
+  const [autor, setAutor] = useState('');
+
+  async function handleAdd(){
+    await addDoc(collection(db, "post"),{
+      titulo: titulo,
+      autor: autor,
+    })
+
+    .then(()=> {
+      console.log("Dados registrados no DB");
+      alert("Dados inseridos com sucesso.");
+      setAutor('');
+      setTitulo('');
+    })
+    .catch((error)=> {
+      console.log("Gerou erro " + error);
+      alert("ERRO ao cadastrar, tente novamente.");
+    })
+  } 
+
+  async function buscarDados(){
+    //alert("Buscar dados - teste");
+
+    const postRef = doc(db, 'post', '12345teste')// Ao clicar em Buscar vai trazer esses dados
+    await getDoc(postRef)
+    .then((snapshot) => {
+      setAutor(snapshot.data().autor)
+      setTitulo(snapshot.data().titulo)
+    })
+    .catch(()=>{
+      alert("Erro ao buscar pela sua solicitação")
+    })
+
+  }
+
+  return (
+    <div className="container">
+      <label>Título da postagem: </label>
+
+      <textarea type='text' placeholder='Digite o título: ' 
+      value={titulo}
+      onChange={ (e)=> setTitulo(e.target.value)}
+      />
+                  
+      <label>Autor: </label>
+
+      <input type='text' placeholder='Autor da postagem'
+      value={autor}
+      onChange={ (e)=> setAutor(e.target.value)}
+      />
+
+      <button onClick={ handleAdd }>Cadastrar</button>
+
+      <button onClick={buscarDados}>Buscar dados</button>
+    </div>
+  );
+}
+
+export default App;
+
+
+
+
+-----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

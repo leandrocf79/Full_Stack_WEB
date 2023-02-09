@@ -1,0 +1,163 @@
+Crie um cadastro no FIREBASE com uma conta gmail.
+
+https://console.firebase.google.com/
+
+Acesse "ir para o console"
+
+Criar um projeto chamado "curso".
+
+Pode deixar ativada a opção 
+"Ativar o Google Analytics neste projeto
+Recomendado"
+
+Crie uma conta:
+leandrocf79
+
+**Uma vantagem do firebase é que é gratuito, se tiver que pagar é porque o site cresceu, ou seja, está indo tudo bem.
+
+Clique em "Spark Plan".
+
+-------------
+Iniciar um projeto:
+Clique em web, está no icone  </>
+
+Nome do app:
+cursoApp
+
+** Neste momento não será utilizado o host
+
+registrar app
+
+Neste momento foi gerada as configurações para user no react.
+
+Clique em continuar no console. Essas informações acima ficarão salvas.
+
+https://console.firebase.google.com/project/curso-ccd14/overview?hl=pt
+
+-------------------
+O BD a ser utilizado aqui será o "Cloud Firestore"
+
+Vá em Cloud Firestore e selecione a opção Criar BD e "Iniciar no modo de teste" por enquanto.
+
+Escolha o BD localizado em "southamerica-east1 (São Paulo)"
+
+Clique em regras e estenda o tempo de utilização deste teste para ser utilizado alguns anos para frente
+
+request.time < timestamp.date(2028, 3, 9);
+
+
+----
+A estrutura desse BD é o seguinte, pode criar vários colletions e em cada um os docs
+Exemplo:
+-post (collection)
+	--123 (doc)
+	---titulo: Aprender React
+	---autor: LeandroCF
+
+-user (collection)
+	--1 (usuário 1) (doc)
+	---nome: Leandro
+	---idade: 18
+
+	--2 (doc)
+	---nome: User2
+	---idade: 19
+
+
+Replicar isso no BD.
+
+
+---------------------------------
+Na aba Dados clique em "+ Iniciar coleção"
+
+Tem a opção de "Auto ID" para evitar repetição de ID, neste momento pode deixar sem. Apenas conhecer FIREBASE.
+
+
+Código da coleção: post
+ID do documento: 123
+
+Campo	titulo 	
+Tipo	string
+Valor	Aprender React
+
+Clique em " + Add field "
+
+Campo	autor 
+Tipo	string
+Valor	LeandroCF
+
+SALVAR
+
+--- CRIAR MAIS UM POST ---
+Clique em "+ Adicionar um documento"
+
+
+ID do documento: 12345
+
+Campo	titulo 	
+Tipo	string
+Valor	Usando firebase
+
+Clique em " + Add field "
+
+Campo	autor 
+Tipo	string
+Valor	LeandroCF1979
+
+-----
+--- CRIAR MAIS UMA COLLECTION ---
+Clique em "+ INICIAR COLEÇÃO"
+
+Código da coleção: user
+Documento: 1
+
+Campo	nome
+Tipo	string
+Valor	Leandro
+
+Campo	idade
+Tipo	string
+Valor	18
+
+-----
+Campo	nome
+Tipo	string
+Valor	User2
+
+Campo	idade
+Tipo	string
+Valor	19
+
+
+-----------------------------------
+Criar um projeto React novo no VSCode:
+
+Escolha uma pasta para o projeto.
+Iniciar um projeto com nome escolhido
+
+npx create-react-app curso-react
+
+**Vão aparecer 2 comandos após instalar:
+cd curso-react
+yarn start ou  npm start
+
+Em src pode deixar apenas App.js e index.js
+
+------------------------------------
+Próximo arquivo é para integrar o firebase com o projeto react
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
