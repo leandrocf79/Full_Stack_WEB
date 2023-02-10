@@ -1,0 +1,186 @@
+Passar para RealTime com DB
+
+importar:
+useEffect
+onSnapshot //Cuidado com isso, tudo em tempo real fica muito pesado. Selecionar só o que for realmente importante.
+
+
+----------------------------------------------
+
+import {  useState, useEffect  } from 'react';
+import { db } from './firebaseConnection';
+
+import { 
+  doc, setDoc, collection, addDoc, getDoc, getDocs, 
+  updateDoc, deleteDoc, onSnapshot 
+} from 'firebase/firestore'; //Para criar no BD
+
+import './app.css';
+import { async } from '@firebase/util';
+
+function App() {
+  const [titulo, setTitulo] = useState('');
+  const [autor, setAutor] = useState('');
+  const [idPost, setIdPost] = useState(''); 
+  const [post, setPosts] = useState([]);
+
+  //Criar o efeito Realtime
+  useEffect (()=>{
+    async function carregarPostagem(){
+      //alert("teste carregar postagem");
+      const unsub = onSnapshot(collection(db, 'post'), (snapshot)=>{ // basicamente o que acontece em  .then
+
+        let listaPost = [];
+
+        snapshot.forEach((doc)=>{ //Vai verificar o tempo todo se há algo novo
+          listaPost.push({
+            id: doc.id,
+            titulo: doc.data().titulo,
+            autor: doc.data().autor,
+          })
+          setPosts(listaPost);
+  
+        })  
+      })
+    }
+    carregarPostagem();
+  }, [])
+
+
+
+  async function handleAdd(){
+    await addDoc(collection(db, "post"),{
+      titulo: titulo,
+      autor: autor,
+    })
+
+    .then(()=> {
+      console.log("Dados registrados no DB");
+      alert("Dados inseridos com sucesso.");
+      setAutor('');
+      setTitulo('');
+    })
+    .catch((error)=> {
+      console.log("Gerou erro " + error);
+      alert("ERRO ao cadastrar, tente novamente.");
+    })
+  } 
+
+
+
+  async function buscarDados(){
+
+    const postsRef = collection(db, 'post');
+    await getDocs(postsRef)
+    
+    .then((snapshot) => {
+      let lista = [];
+
+      snapshot.forEach((doc)=>{
+        lista.push({
+          id: doc.id,
+          titulo: doc.data().titulo,
+          autor: doc.data().autor,
+        })
+        setPosts(lista);
+
+      })
+
+    })
+    .catch((error)=>{
+      alert("Erro ao buscar pela sua solicitação")
+    })
+
+  }
+
+
+  
+async function editarPost(){
+  const docRef = doc(db, 'post', idPost);
+  await updateDoc(docRef, {
+    titulo: titulo,
+    autor: autor,
+  })
+  .then(()=> {
+    console.log("Dados atualizados com sucesso");
+    alert("Dados atualizados com sucesso");
+    setIdPost('');
+    setAutor('');
+    setTitulo('');
+  })
+  .catch((error)=> {   
+    console.log("Gerou erro " + error);
+    alert(`ERRO ${error} ao atualizar, tente novamente.`);
+  })
+  
+}
+
+async function excluirPost(id){
+  const docRef = doc(db, 'post', id);
+  await deleteDoc(docRef)
+
+  .then(()=> {
+    console.log("Dados deletados no DB");
+    alert("Dados deletados com sucesso.");
+    //buscarDados(); //Atualiza a lista ao deletar algo.
+
+  })
+  .catch((error)=> {
+    console.log("Gerou erro " + error);
+    alert("ERRO ao deletar, tente novamente.");
+  })
+}
+
+
+
+
+  return (
+    <div className="container">      
+      <label>ID da postagem: </label>
+      <input 
+      placeholder='Digite o ID da postagem' 
+      value={idPost} 
+      onChange={(e)=> setIdPost(e.target.value)}  ></input><br/>
+
+
+      <label>Título da postagem: </label>
+      <textarea type='text' placeholder='Digite o título: ' 
+      value={titulo}
+      onChange={ (e)=> setTitulo(e.target.value)}
+      />                  
+      <label>Autor: </label>
+      <input type='text' placeholder='Autor da postagem'
+      value={autor}
+      onChange={ (e)=> setAutor(e.target.value)}
+      /><br/>
+      <button onClick={ handleAdd }>Cadastrar</button><br/><br/>
+      <button onClick={buscarDados}>Buscar dados</button><br/>     
+      <button onClick={editarPost}>Atualizar dados</button>
+
+         
+         
+      <ul>
+        {post.map( (item)=>{
+          return(
+            <li key={item.id}>
+              <strong>ID: {item.id}</strong><br/>
+              <span>Título: {item.titulo}</span><br/>
+              <span>Autor: {item.autor}</span><br/>
+
+              <button onClick={()=> excluirPost(item.id)}>Excluir</button><br/><br/>
+
+              
+            </li>
+          );        
+        })}
+      </ul>
+
+    </div>
+  );
+}
+
+export default App;
+
+
+
+

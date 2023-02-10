@@ -1,0 +1,143 @@
+Editando informaçõs no BD
+
+
+
+
+import {  useState  } from 'react';
+
+import { db } from './firebaseConnection';
+import { doc, setDoc, collection, addDoc, getDoc, getDocs, updateDoc } from 'firebase/firestore'; //Para criar no BD
+
+import './app.css';
+import { async } from '@firebase/util';
+
+function App() {
+  const [titulo, setTitulo] = useState('');
+  const [autor, setAutor] = useState('');
+
+  //Para editar informações no DB usar updateDoc
+  const [idPost, setIdPost] = useState(''); 
+
+  //getDocs, com "s", vai buscar vários itens e serão armazenados aqui:
+  //post é o nome collection no DB
+  const [post, setPosts] = useState([]);
+
+  async function handleAdd(){
+    await addDoc(collection(db, "post"),{
+      titulo: titulo,
+      autor: autor,
+    })
+
+    .then(()=> {
+      console.log("Dados registrados no DB");
+      alert("Dados inseridos com sucesso.");
+      setAutor('');
+      setTitulo('');
+    })
+    .catch((error)=> {
+      console.log("Gerou erro " + error);
+      alert("ERRO ao cadastrar, tente novamente.");
+    })
+  } 
+
+
+
+  async function buscarDados(){
+
+    const postsRef = collection(db, 'post');
+    await getDocs(postsRef)
+    
+    .then((snapshot) => {
+      let lista = [];
+
+      //Colocar na lista os dados abaixo:
+      snapshot.forEach((doc)=>{
+        lista.push({
+          id: doc.id,
+          titulo: doc.data().titulo,
+          autor: doc.data().autor,
+        })
+        //Agora colocar tudo isso dentro de setPost:
+        setPosts(lista);
+
+      })
+
+    })
+    .catch((error)=>{
+      alert("Erro ao buscar pela sua solicitação")
+    })
+
+  }
+
+
+  //Para editar informações no DB usar updateDoc
+async function editarPost(){
+  //alert('teste de editar postagem');
+  const docRef = doc(db, 'post', idPost);
+  await updateDoc(docRef, {
+    titulo: titulo,
+    autor: autor,
+  })
+  .then(()=> {
+    console.log("Dados atualizados com sucesso");
+    alert("Dados atualizados com sucesso");
+    setIdPost('');
+    setAutor('');
+    setTitulo('');
+  })
+  .catch((error)=> { // Para forçar um erro basta digitar um id que não existe no bd
+    console.log("Gerou erro " + error);
+    alert(`ERRO ${error} ao atualizar, tente novamente.`);
+  })
+  
+}
+
+
+
+  return (
+    <div className="container">
+      {/*Para editar informações no DB*/}
+      <label>ID da postagem: </label>
+      <input 
+      placeholder='Digite o ID da postagem' 
+      value={idPost} 
+      onChange={(e)=> setIdPost(e.target.value)}  ></input><br/>
+
+
+      <label>Título da postagem: </label>
+      <textarea type='text' placeholder='Digite o título: ' 
+      value={titulo}
+      onChange={ (e)=> setTitulo(e.target.value)}
+      />                  
+      <label>Autor: </label>
+      <input type='text' placeholder='Autor da postagem'
+      value={autor}
+      onChange={ (e)=> setAutor(e.target.value)}
+      /><br/>
+      <button onClick={ handleAdd }>Cadastrar</button><br/><br/>
+      <button onClick={buscarDados}>Buscar dados</button><br/>
+
+      {/*Para editar informações no DB. Criar uma função: editarPost */}
+      <button onClick={editarPost}>Atualizar dados</button>
+
+
+
+
+    {/*Exibir o conteúdo da lista que está dentro de setPosts*/}
+      <ul>
+        {post.map( (item)=>{
+          return(
+            <li key={item.id}>
+              <strong>ID: {item.id}</strong><br/>
+              <span>Título: {item.titulo}</span><br/>
+              <span>Autor: {item.autor}</span><br/><br/>
+            </li>
+          );        
+        })}
+      </ul>
+
+    </div>
+  );
+}
+
+export default App;

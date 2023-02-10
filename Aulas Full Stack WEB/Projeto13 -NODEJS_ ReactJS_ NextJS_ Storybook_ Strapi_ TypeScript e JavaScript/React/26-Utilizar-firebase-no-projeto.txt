@@ -48,6 +48,9 @@ Somente para melhorar a visualização, depois será melhorado isso.
 ----------------------CUIDADO AO USAR ASSIM, vai sobrepor informaçõs no BD
 ----------------------Atualizar App.js usando setDoc para:
 
+----Tudo que for demorar um pouco para carregar colocar "async"
+
+
 import {  useState  } from 'react';
 
 import { db } from './firebaseConnection';
