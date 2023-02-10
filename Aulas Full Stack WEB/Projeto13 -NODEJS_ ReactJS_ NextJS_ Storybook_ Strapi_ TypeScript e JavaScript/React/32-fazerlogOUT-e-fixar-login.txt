@@ -1,0 +1,350 @@
+Fazer logout deve importar signOut
+
+// LOGOUT
+async function fazerLogout(){
+  //alert('teste logout')
+  await signOut(auth)
+  setUser(false);
+  setUserDetail({}); // volta ficar vazio por não estar mais logado
+}
+
+
+<button onClick={ fazerLogout }>Sair da conta</button>
+
+
+-------------------------------------------------------
+Fixar login, tem 2 formas,
+
+permanecer logado mesmo que atualizar a página:
+No BD tem o onAuthStateChanged OU localStorage no navegador.
+-------------------------------------------------------
+
+No BD tem o onAuthStateChanged. Deve criar um useEffect.
+
+
+
+-------
+
+
+import {  useState, useEffect  } from 'react';
+import { db, auth } from './firebaseConnection';
+
+import { 
+  doc, setDoc, collection, addDoc, getDoc, getDocs, 
+  updateDoc, deleteDoc, onSnapshot 
+} from 'firebase/firestore'; //Para criar no BD
+
+//área para cadastro, email e senha. 
+/*
+createUserWithEmailAndPassword, é para cadastro
+signInWithEmailAndPassword      é para login
+signOut                         é para fazer logout
+onAuthStateChanged              é para fixar login
+*/
+import { 
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+onAuthStateChanged
+} from 'firebase/auth';
+
+import './app.css';
+import { async } from '@firebase/util';
+
+function App() {
+  const [titulo, setTitulo] = useState('');
+  const [autor, setAutor] = useState('');
+  const [idPost, setIdPost] = useState(''); 
+  const [post, setPosts] = useState([]);
+  
+  //área para cadastro, email e senha
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+
+  //Login
+  //Renderização condicional para saber se está logado ou não
+  const [user, setUser] = useState(false); // false - inicia não logado
+  const [userDetail, setUserDetail] = useState({});//Para pegar os detalhes do usuário logado
+
+
+  //Criar o efeito Realtime
+  useEffect (()=>{
+    async function carregarPostagem(){
+      //alert("teste carregar postagem");
+      const unsub = onSnapshot(collection(db, 'post'), (snapshot)=>{ // basicamente o que acontece em .then
+
+        let listaPost = [];
+
+        snapshot.forEach((doc)=>{ //Vai verificar o tempo todo se há algo novo
+          listaPost.push({
+            id: doc.id,
+            titulo: doc.data().titulo,
+            autor: doc.data().autor,
+          })
+          setPosts(listaPost);
+  
+        })  
+      })
+    }
+    carregarPostagem();
+  }, [])
+
+
+  useEffect(()=>{
+    async function checarLogin(){  
+      onAuthStateChanged(auth, (user)=>{
+        if(user){
+          // Logado
+          console.log(user);// Logar e F5 para atualizar a página.
+          setUser(true);
+          setUserDetail({
+            uid: user.uid,
+            email: user.email
+          })
+
+        }else{
+          //Usuário não está logado
+          setUser(false);
+          setUserDetail({});
+        }
+      })    
+    }
+    checarLogin();
+
+  }, [])
+
+
+  async function handleAdd(){
+    await addDoc(collection(db, "post"),{
+      titulo: titulo,
+      autor: autor,
+    })
+
+    .then(()=> {
+      console.log("Dados registrados no DB");
+      alert("Dados inseridos com sucesso.");
+      setAutor('');
+      setTitulo('');
+    })
+    .catch((error)=> {
+      console.log("Gerou erro " + error);
+      alert("ERRO ao cadastrar, tente novamente.");
+    })
+  } 
+
+
+
+  async function buscarDados(){
+
+    const postsRef = collection(db, 'post');
+    await getDocs(postsRef)
+    
+    .then((snapshot) => {
+      let lista = [];
+
+      snapshot.forEach((doc)=>{
+        lista.push({
+          id: doc.id,
+          titulo: doc.data().titulo,
+          autor: doc.data().autor,
+        })
+        setPosts(lista);
+
+      })
+
+    })
+    .catch((error)=>{
+      alert("Erro ao buscar pela sua solicitação")
+    })
+
+  }
+
+
+  
+async function editarPost(){
+  const docRef = doc(db, 'post', idPost);
+  await updateDoc(docRef, {
+    titulo: titulo,
+    autor: autor,
+  })
+  .then(()=> {
+    console.log("Dados atualizados com sucesso");
+    alert("Dados atualizados com sucesso");
+    setIdPost('');
+    setAutor('');
+    setTitulo('');
+  })
+  .catch((error)=> {   
+    console.log("Gerou erro " + error);
+    alert(`ERRO ${error} ao atualizar, tente novamente.`);
+  })
+  
+}
+
+async function excluirPost(id){
+  const docRef = doc(db, 'post', id);
+  await deleteDoc(docRef)
+
+  .then(()=> {
+    console.log("Dados deletados no DB");
+    alert("Dados deletados com sucesso.");
+    //buscarDados();
+
+  })
+  .catch((error)=> {
+    console.log("Gerou erro " + error);
+    alert("ERRO ao deletar, tente novamente.");
+  })
+}
+
+
+//área para cadastro, email e senha.
+async function novoUsuario(){
+  //alert('teste novousuário');
+  await createUserWithEmailAndPassword(auth, email, senha) // é uma promise, usar verificações .then e .catch
+
+  .then((value)=> { 
+    alert("Cadastrado com sucesso.");
+    setEmail('')
+    setSenha('')
+
+  })
+  .catch((error)=> {
+    console.log("Gerou erro " + error);
+    alert("ERRO ao cadastrar.");    
+   
+    if(error.code === 'auth/weak-password'){   //Deve ser acima de 6 dígitos. 
+      alert("Senha muito fraca")
+    }else if(error.code === 'auth/email-already-in-use'){
+      alert('Email já cadastrado anteriormente')
+    }    
+  })
+}
+
+
+
+
+ //Login
+async function logarUsuario(){
+  //alert('teste botao login')
+  await signInWithEmailAndPassword(auth, email, senha)
+
+  .then((value)=> { 
+    console.log(value.user)
+
+    setUserDetail({
+      uid: value.user.uid,
+      email: value.user.email,
+    }) 
+    setUser(true); // Agora já está logado, passar para true
+
+    alert("Bem vindo(a) "+ email); 
+    setEmail('')
+    setSenha('')
+
+  })
+  .catch((error)=> {
+    console.log("Gerou erro " + error);
+    alert("ERRO ao fazer login."); 
+  })
+
+}
+
+
+
+// LOGOUT
+async function fazerLogout(){
+  //alert('teste logout')
+  await signOut(auth)
+  setUser(false);
+  setUserDetail({}); // volta ficar vazio por não estar mais logado
+}
+
+
+
+
+  return (
+    <div>
+    <h2>Usuários do site</h2>
+    {/* Login.  Será exibido o conteudo abaixo se setUser(true)*/}
+    { user && (
+      <div>
+        <strong>Bem vindo, você está logado!</strong><br/>
+        <span>ID: {userDetail.uid}</span><br/>
+        <span>E-mail: {userDetail.email} </span><br/><br/>
+        </div>
+    )}
+
+
+    {/*área para cadastro, email e senha. Criar uma useState acima */}
+    <div className="container"> 
+      <label>Email</label>
+      <input 
+      value={email} 
+      onChange={(e)=> setEmail(e.target.value)}
+      placeholder="Digite seu e-mail"
+      /> <br/>{/*  .target.value é para passar o que o usuário digitou */}
+
+
+      <label>Senha</label>
+      <input 
+      value={senha} 
+      onChange={(e)=> setSenha(e.target.value)}
+      placeholder="Digite sua senha"
+      /> <br/>
+
+      <button onClick={novoUsuario}>Cadastrar</button><br/>
+      <button onClick={ logarUsuario }>Login</button> {/*  Fazer login */}
+      <button onClick={ fazerLogout }>Sair da conta</button>
+
+    </div>
+    
+    <hr/>
+
+
+    <div className="container">  
+    <h2>Postagens</h2>    
+      <label>ID da postagem: </label>
+      <input 
+      placeholder='Digite o ID da postagem' 
+      value={idPost} 
+      onChange={(e)=> setIdPost(e.target.value)}  ></input><br/>
+
+
+      <label>Título da postagem: </label>
+      <textarea type='text' placeholder='Digite o título: ' 
+      value={titulo}
+      onChange={ (e)=> setTitulo(e.target.value)}
+      />                  
+      <label>Autor: </label>
+      <input type='text' placeholder='Autor da postagem'
+      value={autor}
+      onChange={ (e)=> setAutor(e.target.value)}
+      /><br/>
+      <button onClick={ handleAdd }>Cadastrar</button><br/><br/>
+      <button onClick={buscarDados}>Buscar dados</button><br/>     
+      <button onClick={editarPost}>Atualizar dados</button>
+
+         
+         
+      <ul>
+        {post.map( (item)=>{
+          return(
+            <li key={item.id}>
+              <strong>ID: {item.id}</strong><br/>
+              <span>Título: {item.titulo}</span><br/>
+              <span>Autor: {item.autor}</span><br/>
+
+              <button onClick={()=> excluirPost(item.id)}>Excluir</button><br/><br/>
+
+              
+            </li>
+          );        
+        })}
+      </ul>
+
+    </div></div>
+  );
+}
+
+export default App;
