@@ -35,7 +35,8 @@ Clique em continuar no console. Essas informações acima ficarão salvas.
 
 https://console.firebase.google.com/project/curso-ccd14/overview?hl=pt
 _________________________________________
-// verificar os dados corretos do DB. Este é apenas um modelo
+
+*******Dados INVÁLIDOS********* É apenas demonstrativo!! Vá ao DB e copie os dados corretos
 
 const firebaseConfig = {
   apiKey: "AIzaSyBetUNEViuR9l2wzErg",
@@ -75,7 +76,6 @@ import {getFirestore} from 'firebase/firestore'; // Foi o BD escolhido
 
 import { getAuth } from 'firebase/auth'; // Para cadastrar e login de usuários. Faz autenticação
 
-// verificar os dados corretos do DB. Este é apenas um modelo
 
 const firebaseConfig = {
   apiKey: "AIzaSyBetUNEViuR9l2wzErg",
@@ -124,16 +124,19 @@ button{
 --------------------Em src/index.js:
 
 import  React from 'react';
-import  ReactDOM  from 'react-dom/client';
+import  ReactDOM  from 'react';
 import  App from './App';
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <React.StrictMode>
+
+        <App/>
+
+    </React.StrictMode>
 );
+
 
 
 
@@ -238,20 +241,25 @@ export default RoutesApp;
 
 
 
-
-************************Desenvolvendo página Home/index.js
+-----------Desenvolver src/pages/Home/index.js:
 
 
 import { useState } from "react";
 import './home.css';
-
 import { Link } from 'react-router-dom'; // Com "L" maiúsculo
+
+import { auth } from '../../firebaseConnection';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom'; //para fazer navegação de forma indireta
 
 
 export default function Home() {
 
   const [email, setEmail] = useState('');
   const [password, setSenha] = useState('');
+
+  const navigate = useNavigate();// navigate para "navegar" usuário
+
 
 
   // Manipupar login
@@ -260,7 +268,20 @@ export default function Home() {
     //alert("Teste handleLogin")
 
     if (email !== '' && password !== ""){
-      alert("Dados preenchidos")
+      await signInWithEmailAndPassword(auth, email, password)
+
+      //Se der certo login pode ir para /admin
+      .then(()=>{
+
+        navigate('/admin', { replace: true })
+
+      })
+      //Se não existe usuário
+      .catch(()=>{
+        console.log("Erro ao fazer login.");
+
+      })
+
     }else{
       alert("Preencha todos os campos!")
     }
@@ -268,13 +289,13 @@ export default function Home() {
   }
 
 
-
     return (
       <div className="home-container">
+        
         <h1>Lista de tarefas</h1>
         <span>Gerencie sua agenda</span>
 
-        <form className="form" onSubmit={  handleLogin  }>
+        <form className="form" onSubmit={ handleLogin }>
 
           <input type="text" placeholder="Digite seu e-mail" value={email}
           onChange={(e)=> setEmail(e.target.value)}/>
@@ -295,7 +316,7 @@ export default function Home() {
 
 
 
---------------------Desenvolvendo página Home/home.css
+-----------Desenvolver src/pages/Home/home.css:
 
 .home-container{
     display: flex;
@@ -371,290 +392,15 @@ export default function Home() {
 
 
 
---------------------Desenvolvendo página Register/index.js:
-Muito parecido com Home. Pode copiar Home e colar em
-Register para fazer somente as mudanças necessárias.
 
-A princípio para testar fica como o modelo abaixo, mas tem que criar ainda a área de admin:
 
-import { useState } from "react";
-import './home.css';
+-----------Desenvolver src/pages/Register/index.js:
 
-import { Link } from 'react-router-dom'; // Com "L" maiúsculo
+É muito parecido com a Home, pode copiar e colar para fazer as alterações.
+home.cc já foi importada, pode tirar do Register.
 
 
-export default function Home() {
-
-  const [email, setEmail] = useState('');
-  const [password, setSenha] = useState('');
-
-
-
-  // Manipupar login
-  async function handleLogin(e){  // Não vai deixar atualizar a página após fazer login
-    e.preventDefault();
-    //alert("Teste handleLogin")
-
-    if (email !== '' && password !== ""){
-      alert("Dados preenchidos")
-    }else{
-      alert("Preencha todos os campos!")
-    }
-    
-  }
-
-
-    return (
-      <div className="home-container">
-        
-        <h1>Lista de tarefas</h1>
-        <span>Gerencie sua agenda</span>
-
-        <form className="form" onSubmit={ handleLogin }>
-
-          <input type="text" placeholder="Digite seu e-mail" value={email}
-          onChange={(e)=> setEmail(e.target.value)}/>
-
-          <input type="password" placeholder="**********" value={password}
-          onChange={(e)=> setSenha(e.target.value)}/>
-
-          <button type="submit">Cadastrar</button>
-
-          <Link to="/register">Não possui uma conta? Cadastre-se.</Link>
-
-        </form>
-  
-      </div>
-    );
-  }
-  
-
---------------------Criar página pages/Admin/index.js:
-
-import './admin.css';
-export default function Admin(){
-    return(
-        <div>
-            <h1>Teste página admin</h1>
-        </div>
-    )
-}
-
-
-----------------Atualizar routes com Admin:
-
-import { Routes, Route} from 'react-router-dom';
-import Home from '../pages/Home';
-import Register from '../pages/Register';
-import Admin from '../pages/Admin';
-
-function RoutesApp(){
-    return(
-        <Routes>
-            <Route path='/' element={<Home/>} />
-            <Route path='/register' element={<Register/>} />
-            <Route path='/admin' element={<Admin/>} />
-
-        </Routes>
-    )
-}
-
-export default RoutesApp;
-
-
-
-
-
-
---------------------Atualizar página Home/index.js:
-
-
-import { useState } from "react";
-import './home.css';
-import { Link } from 'react-router-dom'; // Com "L" maiúsculo
-
-import {auth} from '../../firebaseConnection';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom'; //para fazer navegação de forma indireta
-
-
-export default function Home() {
-
-  const [email, setEmail] = useState('');
-  const [password, setSenha] = useState('');
-
-  const navigate = useNavigate();// navigate para "navegar" usuário
-
-
-
-  // Manipupar login
-  async function handleLogin(e){  // Não vai deixar atualizar a página após fazer login
-    e.preventDefault();
-    //alert("Teste handleLogin")
-
-    if (email !== '' && password !== ""){
-      await signInWithEmailAndPassword(auth, email, password)
-
-      //Se der certo login pode ir para /admin
-      .then(()=>{
-
-        navigate('/admin', { replace: true })
-
-      })
-      //Se não existe usuário
-      .catch(()=>{
-        console.log("Erro ao fazer login.");
-
-      })
-
-    }else{
-      alert("Preencha todos os campos!")
-    }
-    
-  }
-
-
-    return (
-      <div className="home-container">
-        
-        <h1>Lista de tarefas</h1>
-        <span>Gerencie sua agenda</span>
-
-        <form className="form" onSubmit={ handleLogin }>
-
-          <input type="text" placeholder="Digite seu e-mail" value={email}
-          onChange={(e)=> setEmail(e.target.value)}/>
-
-          <input type="password" placeholder="**********" value={password}
-          onChange={(e)=> setSenha(e.target.value)}/>
-
-          <button type="submit">Acessar</button>
-
-          <Link to="/register">Não possui uma conta? Cadastre-se.</Link>
-
-        </form>
-  
-      </div>
-    );
-  }
-
-
-
---------------------Atualizar página Register/index.js:
-
-
-import { useState } from "react";
-//import './home.css'; Apagar. CSS já está sendo chamado em Home
-import { Link } from 'react-router-dom'; // Com "L" maiúsculo
-
-import {auth} from '../../firebaseConnection';
-
-// Aqui no Register é createUserwithEmailAndPassword 
-import { createUserWithEmailAndPassword } from 'firebase/auth';  
-
-import { useNavigate } from 'react-router-dom'; //para fazer navegação de forma indireta
-
-
-export default function Register() {
-
-  const [email, setEmail] = useState('');
-  const [password, setSenha] = useState('');
-
-  const navigate = useNavigate();// navigate para "navegar" usuário
-
-
-  // Manipupar login
-  async function handleRegister(e){  // Não vai deixar atualizar a página após fazer login
-    e.preventDefault();
-    //alert("Teste handleLogin")
-
-    if (email !== '' && password !== ""){
-      await createUserWithEmailAndPassword(auth, email, password)
-
-      //Se der certo login pode ir para /admin
-      .then(()=>{
-
-        navigate('/admin', { replace: true })
-
-      })
-      //Se não existe usuário
-      .catch(()=>{
-        console.log("Erro ao fazer cadastro.");
-
-      })
-
-    }else{
-      alert("Preencha todos os campos!")
-    }
-    
-  }
-
-
-
-    return (
-      <div className="home-container">
-        <h1>Cadastre-se</h1>
-        <span>Criar sua conta na Agenda Online</span>
-
-        <form className="form" onSubmit={  handleRegister  }>
-
-          <input type="text" placeholder="Digite seu e-mail" value={email}
-          onChange={(e)=> setEmail(e.target.value)}/>
-
-          <input type="password" placeholder="**********" value={password}
-          onChange={(e)=> setSenha(e.target.value)}/>
-
-          <button type="submit">Cadastrar</button>
-
-          <Link to="/">Já possui uma conta? Faça login.</Link>
-
-        </form>
-  
-      </div>
-    );
-  }
-  
-  
-
---------------------------------------
-
-
-No site firebase vá em Autentication e selecione a opção  E-mail/senha (Ativar somente esta) Salvar
-
-
-----------------Testar fazer um cadsatro no projeto e verificar no firebase:
-
-https://console.firebase.google.com/project/tarefas-802fe/authentication/users?hl=pt
-
--------------------------------------
-
-
-
-****************************
-Criar área protegida. Só pode ser acessada com login.
-
-  *********************************
-
-
-----------Criar pages/Admin/index.js:
-
-
-import './admin.css';
-export default function Admin(){
-    return(
-        <div>
-            <h1>Teste página admin</h1>
-        </div>
-    )
-}
-
-
-
-
-----------Proteger Admin:
-
-----------------------------Criar pages/Register/index.js:
-
+----- Área de criar o cadastro, usar (( createUserWithEmailAndPassword ))
 
 import { useState } from "react";
 //import './home.css'; Apagar. CSS já está sendo chamado em Home
@@ -729,14 +475,80 @@ export default function Register() {
 
 
 
----------------------------Corrija rotas routes/index.js:
+
+
+----------------------Atualizar rotas em routes/index.js:
 
 import { Routes, Route} from 'react-router-dom';
 import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Admin from '../pages/Admin';
 
-import Private from './Private'; // Para proteger <Admin/>
+function RoutesApp(){
+    return(
+        <Routes>
+            <Route path='/' element={<Home/>} />
+            <Route path='/register' element={<Register/>} />
+
+            <Route path='/admin' element={<Admin/>} />
+
+        </Routes>
+    )
+}
+
+export default RoutesApp;
+
+
+
+------------------------Criar src/pages/Admin/index.js:
+
+
+import './admin.css';
+export default function Admin(){
+    return(
+        <div>
+            <h1>Teste página admin</h1>
+        </div>
+    )
+}
+
+
+
+--------------------------------
+Fazer um cadastro no projeto para verificar se está tudo em ordem no DB. Se o usuário está mesmo sendo criado.
+
+https://console.firebase.google.com/project/tarefas-802fe/authentication/users
+--------------------------------
+
+
+**********
+Restringir Admin/index.js para que somente pessoas logadas possam acessar.
+
+
+
+
+
+*************Recurso importante paraproteção.
+
+
+----------Criar src/routes/Private.js:
+
+export default function Private({children}){
+    return children; // Indica que pode seguir. childrem
+
+
+}
+
+
+
+----------------------Atualizar rotas em routes/index.js:
+
+import { Routes, Route} from 'react-router-dom';
+import Home from '../pages/Home';
+import Register from '../pages/Register';
+import Admin from '../pages/Admin';
+
+import Private from './Private';    // Para proteger <Admin/>, só quem estiver logado terá acesso.
 
 function RoutesApp(){
     return(
@@ -755,9 +567,7 @@ export default RoutesApp;
 
 
 
--------------------Crie routes/Private.js:
-
-
+----------Atualizar src/routes/Private.js:
 
 import { useState, useEffect } from 'react';
 
@@ -821,96 +631,30 @@ export default function Private({children}){
 }
 
 
+--------------------------
 
-
-
-
------------------------Atualize Home/index.js:
-
-
-import { useState } from "react";
-import './home.css';
-import { Link } from 'react-router-dom'; // Com "L" maiúsculo
-
-import { auth } from '../../firebaseConnection';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom'; //para fazer navegação de forma indireta
-
-
-export default function Home() {
-
-  const [email, setEmail] = useState('');
-  const [password, setSenha] = useState('');
-
-  const navigate = useNavigate();// navigate para "navegar" usuário
-
-
-
-  // Manipupar login
-  async function handleLogin(e){  // Não vai deixar atualizar a página após fazer login
-    e.preventDefault();
-    //alert("Teste handleLogin")
-
-    if (email !== '' && password !== ""){
-      await signInWithEmailAndPassword(auth, email, password)
-
-      //Se der certo login pode ir para /admin
-      .then(()=>{
-
-        navigate('/admin', { replace: true })
-
-      })
-      //Se não existe usuário
-      .catch(()=>{
-        console.log("Erro ao fazer login.");
-
-      })
-
-    }else{
-      alert("Preencha todos os campos!")
-    }
-    
-  }
-
-
-    return (
-      <div className="home-container">
-        
-        <h1>Lista de tarefas</h1>
-        <span>Gerencie sua agenda</span>
-
-        <form className="form" onSubmit={ handleLogin }>
-
-          <input type="text" placeholder="Digite seu e-mail" value={email}
-          onChange={(e)=> setEmail(e.target.value)}/>
-
-          <input type="password" placeholder="**********" value={password}
-          onChange={(e)=> setSenha(e.target.value)}/>
-
-          <button type="submit">Acessar</button>
-
-          <Link to="/register">Não possui uma conta? Cadastre-se.</Link>
-
-        </form>
-  
-      </div>
-    );
-  }
-
-
-
-**********************************************
-
-
-  Teste no navegador anônimo acessar SEM usuário e senha, vai ficar preso na página inicial.
-Após fazer logim terá acesso a área ADMIN
+Abra em uma aba ANÔNIMA e faça o teste
 
 http://localhost:3000/admin
 
-Faça login agora.
+Vai permanecer na home por não estar logado.
 
 
-**********************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
