@@ -37,13 +37,13 @@ https://console.firebase.google.com/project/curso-ccd14/overview?hl=pt
 -------------------
 O BD a ser utilizado aqui será o "Cloud Firestore"
 
-Vá em Cloud Firestore e selecione a opção Criar BD e "Iniciar no modo de teste" por enquanto.
+Vá em (Criação/ Firestore Data base ) Cloud Firestore e selecione a opção Criar BD e "Iniciar no modo de teste" por enquanto.
 
 Escolha o BD localizado em "southamerica-east1 (São Paulo)"
 
 Clique em regras e estenda o tempo de utilização deste teste para ser utilizado alguns anos para frente
 
-request.time < timestamp.date(2028, 3, 9);
+request.time < timestamp.date(2030, 3, 9);
 
 
 ----
