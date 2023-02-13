@@ -770,9 +770,272 @@ async function handleLogout(){
     transition: all 0.5s;
 }
 
+.form textarea{
+    padding: 8px;
+}
+
 
 
 ------------------------------------
+REGISTRAR TAREFAS NO DB
+
+-----------------------------Atualizar Admin/index.js:
+
+import { useState, useEffect } from 'react'; //Para armazenar o que o usuário digitar
+import './admin.css';
+
+//Botão sair. Importar firebase
+import { auth, db } from '../../firebaseConnection';
+//Para fazer logout
+import { signOut } from 'firebase/auth';
+
+//Registrar atividades no DB
+import{ addDoc, collection } from 'firebase/firestore';
+
+export default function Admin(){
+    const [tarefaInput, setTarefaInput] = useState('');
+
+//Registrar atividades no DB
+    const [user, setUser] = useState({})
+
+
+//Registrar atividades no DB. Usar useEffect e importar db
+    //Logar. Para usar "Uid" inspecionar /Application/Local Storage/ http:// ... veja @detailUser
+    useEffect(()=>{
+        async function loadTarefas(){
+            const userDetail = localStorage.getItem("@detailUser")
+            setUser(JSON.parse(userDetail))//Convertendo de volta a string em objeto
+        }
+        loadTarefas();
+    },[])
+
+//Registrar atividades no DB
+    async function handleRegister(e){
+        e.preventDefault();
+        alert("teste botao registrar tarefa");
+
+        if(tarefaInput === ''){
+            alert("Digite sua tarefa...")
+            return; // Parar a execução do cod.
+        }
+
+        await addDoc(collection(db, "tarefas"), {
+            tarefa: tarefaInput,
+            created: new Date(), // para saber quando foi criada a tarefa. ´possivel filtrar por ordem crescente depois
+            userUid: user?.uid, // para não enviar vazio
+        })
+        .then(()=>{
+            console.log("Tarefa registarda");
+            setTarefaInput('');
+        })
+        .catch((error)=>{
+            console.log("Erro ao registrar tarefa" + error);
+        })
+    }
+
+
+
+    //Botão sair. Importar firebase. Terá logout e vai para pg inicial como configurado em Private.js
+async function handleLogout(){
+    await signOut(auth);
+} 
+
+    return(
+        <div className='admin-container'>
+            <h1>Minhas tarefas</h1>
+            <form className='form' onSubmit={handleRegister}>
+                <textarea 
+                placeholder="Digite sua tarefa" 
+                value={tarefaInput} 
+                onChange={(e)=>setTarefaInput(e.target.value)} />
+
+                <button className='btn-register' type='submit'>Registrar</button>
+            </form>
+
+            <article className='list'>
+                <p> tarefas</p>
+                <div>
+                    <button>Editar</button>
+                    <button className='btn-delete'>Excluir</button>
+
+                </div>
+            </article>
+
+            <button className='btn-logout' onClick={handleLogout}>Sair</button>
+
+
+        </div>
+    )
+}
+
+
+
+
+
+-------------Testar aplicação e veja o resultado no DB
+https://console.firebase.google.com/project/tarefas-802fe/firestore/data/~2F
+
+
+
+----------------------------------------
+
+Listar tarefas na área admin.
+
+Criar usuários diferentes e cadastrar tarefas para testar.
+
+Listar tarefas deve ser filtrada por usuário.
+------------------
+
+import { useState, useEffect } from 'react';
+import './admin.css';
+import { auth, db } from '../../firebaseConnection';
+import { signOut } from 'firebase/auth';
+
+//Listartarefas deve ser filtrada por usuário.  Importar onSnapshot para deixar Realtime.
+/*onSnapshot - real time
+ query - busca
+ orderBy - classificar em ordem cres. ou decres
+ where - Busca itens ONDE tiver certas condições que especificar.
+
+ */
+ 
+ import{ 
+    addDoc, 
+    collection,
+    onSnapshot, query, orderBy, where
+} from 'firebase/firestore';
+
+export default function Admin(){
+    const [tarefaInput, setTarefaInput] = useState('');
+    const [user, setUser] = useState({})
+
+    //Listar tarefas deve ser filtrada por usuário. 
+    //Aqui serão armazenadas as tarefas
+    const [tarefas, setTarefas] = useState([]);
+
+    useEffect(()=>{
+        async function loadTarefas(){
+            const userDetail = localStorage.getItem("@detailUser")
+            setUser(JSON.parse(userDetail))
+
+//Listar tarefas deve ser filtrada por usuário. userDetail tem os dados do user logado, buscar dados.
+            if(userDetail){
+                const data = JSON.parse(userDetail);
+                const tarefaRef = collection(db, 'tarefas'); //acessar tarefas no DB
+                const q = query(tarefaRef, orderBy("created", "desc"), where("userUid", "==", data?.uid)); //A busca será em tarefaRef e ordenar pelo "created" essa palavra está no DB
+          
+             //   where("userUid", "==", data?.uid)  Pegar no BD dados ONDE usuário  seja igual ao LOGADO
+                //Agora usar snapshot para ficar buscando dados
+                const unsub = onSnapshot(q, (snapshot)=>{
+                    let lista = []; //Vai percorrer todas as tarefas encontradas na query
+                    snapshot.forEach((doc)=>{
+                        lista.push({
+                            id: doc.id,
+                            tarefa: doc.data().tarefa, // Nome no DB - tarefa
+                            userUid: doc.data().userUid
+                        })
+                    })
+                    
+                    console.log(lista);// Ao corrigiro o erro de index e atualizar a páfina a lista erá exibida no console.
+                    
+                    setTarefas(lista); // passar a lista para dentro de Set Tarefas
+
+                    /*Se testar vai dar erro, inspecione a página, ""The query requires an index.""
+                     vai  pedir para criar um index no DB. userUid
+                    Vá no site clique em indice:
+                    https://console.firebase.google.com/project/tarefas-802fe/firestore/indexes
+
+                    Criar índice 
+                        Collection ID: tarefas     //nome neste projeto
+                    Field path: userUid     Descending 
+                    Field path: created     Descending 
+
+                    * Collection
+
+                    E criar index. Vai demorar um pouco para criar.
+
+                    Inspecione a página novamente. O erro deve ter desaparecido.
+
+                    ***Pode deslogar e inspecionar, logar com outro usuário e inspecionar 
+
+                    */
+                } )
+
+            }
+        }
+        loadTarefas();
+    },[])
+
+
+    async function handleRegister(e){
+        e.preventDefault();
+        //alert("teste botao registrar tarefa");
+
+        if(tarefaInput === ''){
+            alert("Digite sua tarefa...")
+            return; 
+        }
+
+        await addDoc(collection(db, "tarefas"), {
+            tarefa: tarefaInput,
+            created: new Date(), 
+            userUid: user?.uid, 
+        })
+        .then(()=>{
+            console.log("Tarefa registarda");
+            setTarefaInput('');
+        })
+        .catch((error)=>{
+            console.log("Erro ao registrar tarefa" + error);
+        })
+    }
+    
+    
+    async function handleLogout(){
+        await signOut(auth);
+    } 
+
+    
+    return(
+        <div className='admin-container'>
+            <h1>Minhas tarefas</h1>
+            <form className='form' onSubmit={handleRegister}>
+                <textarea 
+                placeholder="Digite sua tarefa" 
+                value={tarefaInput} 
+                onChange={(e)=>setTarefaInput(e.target.value)} />
+
+                <button className='btn-register' type='submit'>Registrar</button>
+            </form>
+
+            <article className='list'>
+                <p> tarefas</p>
+                <div>
+                    <button>Editar</button>
+                    <button className='btn-delete'>Excluir</button>
+
+                </div>
+            </article>
+
+            <button className='btn-logout' onClick={handleLogout}>Sair</button>
+
+
+        </div>
+    )
+}
+
+
+
+
+
+----------------------------------------
+
+Exibir a lista no HTML
+
+
+---------------
+
+
 
 
 
