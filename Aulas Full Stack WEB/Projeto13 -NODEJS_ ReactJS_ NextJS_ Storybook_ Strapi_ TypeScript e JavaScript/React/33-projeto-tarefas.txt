@@ -1,10 +1,40 @@
-No Projeto Tarefas foi colocado área para cadastro, login, logout de usuário. 
+Mais um projeto com React. Foco no Back-end.
 
-Também é possivel verificar áreas protegidas por senha para criar, editar ou excluir uma tarefa da lista.
+Existe a parte Realtime com Banco de Dados para a exibição das tarefas agendadas. Faça login com mesmo usuário em 2 navegadores diferentes e modifique algo para observar no outro.
 
-Existe a parte Realtime com Banco de Dados para a exibição das tarefas agendadas.
+
+
+No Projeto-Tarefas foram colocadas áreas para cadastro, login e logout de usuário que é protegida por senha para criar, editar ou excluir uma tarefa pessoal da lista no Banco de Dados.
+
+
 
 Diferentes usuários podem se cadastrar e cada um terá sua área pessoal.
+
+
+
+https://lnkd.in/d9KjM-sY
+
+
+
+Se não quiser usar seu e-mail, tente este simbólico:
+
+E-mail: le@le.le
+
+Senha: 323232
+
+Lembre-se que você pode fazer seu cadastro.
+
+
+
+Deixe seu joia enquanto aguardo minha vaga de emprego na área de tecnologia. 
+
+
+
+*** Próximos projetos serão feitos usando Context API para registrar chamados de usuários,  Redux para controlar componentes e outros recursos também serão utilizados.
+
+#react  #tecnologia #vagadeemprego 
+
+
 
 
 
@@ -1439,6 +1469,8 @@ toast.success("Filme salvo com sucesso!");
 
 
 -------------opções de avisos--------------
+
+
 import { toast } from 'react-toastify';
 
 

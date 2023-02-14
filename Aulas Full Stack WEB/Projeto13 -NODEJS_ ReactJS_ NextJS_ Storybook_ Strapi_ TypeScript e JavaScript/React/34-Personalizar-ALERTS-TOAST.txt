@@ -66,16 +66,15 @@ import { toast } from 'react-toastify';
 
 
 
-toast('Mensagem default');
+toast('Mensagem default');		COLORIDO
 
-toast.error('Mensagem error');
+toast.error('Mensagem error');		VERMELHO
 
-toast.success('Mensagem success');
+toast.success('Mensagem success');	VERDE
 
-toast.info('Mensagem info');
+toast.info('Mensagem info');		AZUL
 
-toast.warn('Mensagem warn');
-
+toast.warn('Mensagem warn');		AMARELO
 -----
 function handleCustom() {
 toast('Mensagem customizada', {

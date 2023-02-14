@@ -5,10 +5,6 @@ https://www.netlify.com/
 Faça o cadastro. Entrei com a conta do github.
 
 ----------
-No terminal usar o build:
-
-npm run build
-
 
 Agora no diretório public criar um arquivo _redirects
 
@@ -16,7 +12,8 @@ Com esse conteúdo:
 /* /index.html 200
 
 
-Gerar a build novamente:
+No terminal usar o build, TAMBÉM PARA TODA ALTERAÇÃO NO PROJETO:
+
 npm run build
 
 
@@ -49,7 +46,7 @@ Vai perguntar qual pasta quer encaminhar para produção, digite:
 ./build
 
 
-Veja que o site ainda não foi publicado:
+Veja que o site ainda NÃO foi publicado:
 https://app.netlify.com/teams/leandrocf79/overview
 
 
