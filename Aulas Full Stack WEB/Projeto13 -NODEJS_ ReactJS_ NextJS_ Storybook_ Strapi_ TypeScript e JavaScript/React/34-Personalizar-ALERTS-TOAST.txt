@@ -1,0 +1,88 @@
+Personalizar os alerts
+Usar React-toastify
+
+https://fkhadra.github.io/react-toastify/introduction
+------------------------------------------------
+Fechar terminal e iniciar novo.
+No terminal:
+npm install react-toastify
+npm start
+
+Em src App.js atualizar para:
+
+
+import RoutesApp from './routes';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+//No site diz para importar o css do ToastContainer:
+//      https://fkhadra.github.io/react-toastify/introduction
+//      https://fkhadra.github.io/react-toastify/installation
+
+
+// Fechar ToastContainer em 3 segundos --> autoClose={3000}
+function App() {
+  return (
+    <div className="App">
+      <ToastContainer autoClose={2000}/>   <------------------------------
+      <RoutesApp/>
+    </div>
+  );
+}
+
+export default App;
+
+
+----------------------------------------
+------------------------------
+---------Atualizar Filme/index.js com a importação do 'react-toastify'e
+alterar o "alert" para toast.
+
+Aqui está um fragmento:
+
+
+import { toast } from 'react-toastify';
+
+
+
+if(hasFilme){
+  //alert("Esse filme já está na lista");
+  toast.warn("Esse filme já está na lista");
+
+return; // para parar a execução
+}
+filmeSalvo.push(filme);
+localStorage.setItem("@salvarfilmes", JSON.stringify(filmeSalvo));
+//alert("Filme salvo com sucesso!")
+toast.success("Filme salvo com sucesso!");
+}
+
+
+
+
+
+-------------opções de avisos--------------
+import { toast } from 'react-toastify';
+
+
+
+toast('Mensagem default');
+
+toast.error('Mensagem error');
+
+toast.success('Mensagem success');
+
+toast.info('Mensagem info');
+
+toast.warn('Mensagem warn');
+
+-----
+function handleCustom() {
+toast('Mensagem customizada', {
+position: toast.POSITION.TOP_LEFT,
+className: 'sua-classe',
+});
+
+
+
+
