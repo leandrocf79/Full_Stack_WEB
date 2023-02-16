@@ -1,0 +1,1507 @@
+Mais um projeto com React. Foco no Back-end.
+
+Existe a parte Realtime com Banco de Dados para a exibição das tarefas agendadas. Faça login com mesmo usuário em 2 navegadores diferentes e modifique algo para observar no outro.
+
+
+
+No Projeto-Tarefas foram colocadas áreas para cadastro, login e logout de usuário que é protegida por senha para criar, editar ou excluir uma tarefa pessoal da lista no Banco de Dados.
+
+
+
+Diferentes usuários podem se cadastrar e cada um terá sua área pessoal.
+
+
+
+https://lnkd.in/d9KjM-sY
+
+
+
+Se não quiser usar seu e-mail, tente este simbólico:
+
+E-mail: le@le.le
+
+Senha: 323232
+
+Lembre-se que você pode fazer seu cadastro.
+
+
+
+Deixe seu joia enquanto aguardo minha vaga de emprego na área de tecnologia. 
+
+
+
+*** Próximos projetos serão feitos usando Context API para registrar chamados de usuários,  Redux para controlar componentes e outros recursos também serão utilizados.
+
+#react  #tecnologia #vagadeemprego 
+
+
+
+
+
+-------------------------------Resumo de instalações iniciais:
+npx create-react-app tarefas
+cd tarefas
+npm install firebase			*Iniciar firebase DB no projeto
+npm install react-router-dom        	*Para fazer a navegação de páginas
+
+
+-----
+No https://console.firebase.google.com/
+Ir para o console / Adicionar projeto / Tarefas
+salvar
+
+Clicar em web com icone assim:  </>
+Registrar app
+TarefasApp
+
+** Neste momento não será utilizado host
+
+-----
+
+No terminal do projeto instalar:
+
+cd tarefas
+npm install firebase
+
+Copiar os dados do BD ou
+
+Clique em continuar no console. Essas informações acima ficarão salvas.
+
+https://console.firebase.google.com/project/curso-ccd14/overview?hl=pt
+_________________________________________
+
+*******Dados INVÁLIDOS********* É apenas demonstrativo!! Vá ao DB e copie os dados corretos
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBetUNEViuR9l2wzErg",
+  authDomain: "curso-ccd14.firebaseapp.com",
+  projectId: "curso-ccd14",
+  storageBucket: "curso-ccd14.appspot.com",
+  messagingSenderId: "786603685854",
+  appId: "1:78660554:web:70e2e8c2c6a98f4f",
+  measurementId: "G-LG2GR7K1"
+};
+
+
+_________________________________________
+
+
+
+-----------------------------------------Terminar configurações no Firebase
+O BD a ser utilizado aqui será o "Cloud Firestore"
+
+Vá em (Criação/ Firestore Data base ) Cloud Firestore e selecione a opção Criar BD e "Iniciar no modo de teste" por enquanto.
+
+Escolha o BD localizado em "southamerica-east1 (São Paulo)"
+
+Clique em regras e estenda o tempo de utilização deste teste para ser utilizado alguns anos para frente
+
+request.time < timestamp.date(2028, 3, 9);
+
+
+---------------------------------------------
+
+Integrar os dados do DB no projeto:
+
+No VSCode em src/farebaseConnection.js colar o conteúdo correto do site.
+
+import {initializeApp} from 'firebase/app';
+import {getFirestore} from 'firebase/firestore'; // Foi o BD escolhido
+
+import { getAuth } from 'firebase/auth'; // Para cadastrar e login de usuários. Faz autenticação
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBetUNEViuR9l2wzErg",
+  authDomain: "curso-ccd14.firebaseapp.com",
+  projectId: "curso-ccd14",
+  storageBucket: "curso-ccd14.appspot.com",
+  messagingSenderId: "786603685854",
+  appId: "1:78660554:web:70e2e8c2c6a98f4f",
+  measurementId: "G-LG2GR7K1"
+};
+
+  const firebaseApp = initializeApp(firebaseConfig);
+
+  const db = getFirestore(firebaseApp);
+  const auth = getAuth(firebaseApp);
+
+  export { db, auth }; // Não foi default, quando for importar será entre chaves {}
+
+
+
+
+------------------Dar um reset em src/index.css:
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Iniciar estilos globais*/
+body{
+    background-color: #15171a;
+    color: #FFF;
+    width: 100%;
+    font-family: sans-serif, 'Segoe UI', Tahoma, Geneva, Verdana;
+}
+
+/*Ativar cursos da "mãozinha" em todos os botões */
+button{
+    cursor: pointer;
+}
+
+
+
+
+--------------------Em src/index.js:
+
+import  React from 'react';
+import  ReactDOM  from 'react';
+import  App from './App';
+import './index.css';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+    <React.StrictMode>
+
+        <App/>
+
+    </React.StrictMode>
+);
+
+
+
+
+----------------------Em src/ App.js:
+
+export default function App() {
+  return (
+    <div className="container">
+      <h1>teste App.js</h1>
+
+    </div>
+  );
+}
+
+
+
+--------------------Em src/pages/Home/index.js:
+
+export default function Home() {
+  return (
+    <div className="App">
+      <h1>teste Home.js</h1>
+
+    </div>
+  );
+}
+
+
+
+----------------------Criar rotas.
+
+Em src/routes/index.js:
+
+
+import { Routes, Route} from 'react-router-dom';
+import Home from '../pages/Home';
+
+function RoutesApp(){
+    return(
+        <Routes>
+            <Route path='/' element={<Home/>} />
+        </Routes>
+    )
+}
+
+export default RoutesApp;
+
+
+
+
+----------------App.js não será mais usado manualmente, atualizar para:
+
+
+import { BrowserRouter } from "react-router-dom";
+import RoutesApp from "./routes";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <RoutesApp/>    
+    </BrowserRouter>
+  )
+}
+
+
+
+
+--------------------Em src/pages/Register/index.js:
+
+export default function Register() {
+  return (
+    <div className="App">
+      <h1>teste Register</h1>
+
+    </div>
+  );
+}
+
+
+
+
+--------Atualizar routes/index.js:
+
+import { Routes, Route} from 'react-router-dom';
+import Home from '../pages/Home';
+import Register from '../pages/Register';
+
+function RoutesApp(){
+    return(
+        <Routes>
+            <Route path='/' element={<Home/>} />
+            <Route path='/register' element={<Register/>} />
+
+        </Routes>
+    )
+}
+
+export default RoutesApp;
+
+
+//Teste no navegador: http://localhost:3000/register
+
+
+
+-----------Desenvolver src/pages/Home/index.js:
+
+
+import { useState } from "react";
+import './home.css';
+import { Link } from 'react-router-dom'; // Com "L" maiúsculo
+
+import { auth } from '../../firebaseConnection';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom'; //para fazer navegação de forma indireta
+
+
+export default function Home() {
+
+  const [email, setEmail] = useState('');
+  const [password, setSenha] = useState('');
+
+  const navigate = useNavigate();// navigate para "navegar" usuário
+
+
+
+  // Manipupar login
+  async function handleLogin(e){  // Não vai deixar atualizar a página após fazer login
+    e.preventDefault();
+    //alert("Teste handleLogin")
+
+    if (email !== '' && password !== ""){
+      await signInWithEmailAndPassword(auth, email, password)
+
+      //Se der certo login pode ir para /admin
+      .then(()=>{
+
+        navigate('/admin', { replace: true })
+
+      })
+      //Se não existe usuário
+      .catch(()=>{
+        console.log("Erro ao fazer login.");
+
+      })
+
+    }else{
+      alert("Preencha todos os campos!")
+    }
+    
+  }
+
+
+    return (
+      <div className="home-container">
+        
+        <h1>Lista de tarefas</h1>
+        <span>Gerencie sua agenda</span>
+
+        <form className="form" onSubmit={ handleLogin }>
+
+          <input type="text" placeholder="Digite seu e-mail" value={email}
+          onChange={(e)=> setEmail(e.target.value)}/>
+
+          <input type="password" placeholder="**********" value={password}
+          onChange={(e)=> setSenha(e.target.value)}/>
+
+          <button type="submit">Acessar</button>
+
+          <Link to="/register">Não possui uma conta? Cadastre-se.</Link>
+
+        </form>
+  
+      </div>
+    );
+  }
+  
+
+
+
+-----------Desenvolver src/pages/Home/home.css:
+
+.home-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+    width: 100%;
+}
+
+.home-container h1{
+    font-size: 24;
+    margin-bottom: 10px;
+}
+
+.home-container span{
+    margin-bottom: 30px;
+}
+
+
+/* Aqui teve uma coisa interessante sobre a largura responsiva*/
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 300px;
+}
+
+.form input{
+    border: 0;
+    margin-bottom: 15px;
+    height: 35px;
+    border-radius: 5px;
+    padding: 0 8px;    
+}
+
+.form button{
+    height: 35px;
+    border-radius: 5px;
+    padding: 0 8px;  
+    background-color: #5b81f3;
+    color: #fff;
+    font-size: 15px;
+    max-width: 50%;
+    margin-left: 25%;
+}
+
+.form button:hover{
+    background-color: #e2e9bbf5;
+    color: #083bd4; 
+    transform: scale(1.1);
+    transition: all 0.5s;
+    font-size:20px;
+}
+
+.form textarea{
+    margin-bottom: 12px;
+    border: 0;
+    height: 90px;
+    resize: none;
+    padding: 8px;
+}
+
+
+/* Para "Link" utilizar "a" */
+.form a{
+    color: #fff;
+    text-decoration: none;
+    margin: 15px 0;
+    font-size: 15px;
+    max-width: 55%;
+    margin-left: 25%;
+}
+
+
+
+
+
+-----------Desenvolver src/pages/Register/index.js:
+
+É muito parecido com a Home, pode copiar e colar para fazer as alterações.
+home.cc já foi importada, pode tirar do Register.
+
+
+----- Área de criar o cadastro, usar (( createUserWithEmailAndPassword ))
+
+import { useState } from "react";
+//import './home.css'; Apagar. CSS já está sendo chamado em Home
+import { Link } from 'react-router-dom'; // Com "L" maiúsculo
+
+import {auth} from '../../firebaseConnection';
+
+// Aqui no Register é createUserwithEmailAndPassword 
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+
+import { useNavigate } from 'react-router-dom'; //para fazer navegação de forma indireta
+
+
+export default function Register() {
+
+  const [email, setEmail] = useState('');
+  const [password, setSenha] = useState('');
+
+  const navigate = useNavigate();// navigate para "navegar" usuário
+
+
+  // Manipupar login
+  async function handleRegister(e){ // Não vai deixar atualizar a página após fazer login
+    e.preventDefault();
+    //alert("Teste handleLogin")
+
+    if(email !== '' && password !== ''){
+      await createUserWithEmailAndPassword(auth, email, password)
+
+      //Se der certo login pode ir para /admin
+      .then(() => {
+
+        navigate('/admin', { replace: true })
+
+      })
+      //Se não existe usuário
+      .catch(() => {
+        console.log("ERRO AO FAZER O CADASTRO")
+      })
+
+    }else{
+      alert("Preencha todos os campos!")
+    }
+
+  }
+
+
+
+    return (
+      <div className="home-container">
+        <h1>Cadastre-se</h1>
+        <span>Criar sua conta na Agenda Online</span>
+
+        <form className="form" onSubmit={  handleRegister  }>
+
+          <input type="text" placeholder="Digite seu e-mail" value={email}
+          onChange={(e)=> setEmail(e.target.value)}/>
+
+          <input type="password" placeholder="**********" value={password}
+          onChange={(e)=> setSenha(e.target.value)}/>
+
+          <button type="submit" >Cadastrar</button>
+
+          <Link to="/">Já possui uma conta? Faça login.</Link>
+
+        </form>
+  
+      </div>
+    );
+  }
+  
+
+
+
+
+
+----------------------Atualizar rotas em routes/index.js:
+
+import { Routes, Route} from 'react-router-dom';
+import Home from '../pages/Home';
+import Register from '../pages/Register';
+import Admin from '../pages/Admin';
+
+function RoutesApp(){
+    return(
+        <Routes>
+            <Route path='/' element={<Home/>} />
+            <Route path='/register' element={<Register/>} />
+
+            <Route path='/admin' element={<Admin/>} />
+
+        </Routes>
+    )
+}
+
+export default RoutesApp;
+
+
+
+------------------------Criar src/pages/Admin/index.js:
+
+
+import './admin.css';
+export default function Admin(){
+    return(
+        <div>
+            <h1>Teste página admin</h1>
+        </div>
+    )
+}
+
+
+
+--------------------------------
+Fazer um cadastro no projeto para verificar se está tudo em ordem no DB. Se o usuário está mesmo sendo criado.
+
+https://console.firebase.google.com/project/tarefas-802fe/authentication/users
+--------------------------------
+
+
+**********
+Restringir Admin/index.js para que somente pessoas logadas possam acessar.
+
+
+
+
+
+*************Recurso importante paraproteção.
+
+
+----------Criar src/routes/Private.js:
+
+export default function Private({children}){
+    return children; // Indica que pode seguir. childrem
+
+
+}
+
+
+
+----------------------Atualizar rotas em routes/index.js:
+
+import { Routes, Route} from 'react-router-dom';
+import Home from '../pages/Home';
+import Register from '../pages/Register';
+import Admin from '../pages/Admin';
+
+import Private from './Private';    // Para proteger <Admin/>, só quem estiver logado terá acesso.
+
+function RoutesApp(){
+    return(
+        <Routes>
+            <Route path='/' element={<Home/>} />
+            <Route path='/register' element={<Register/>} />
+            
+            <Route path='/admin' element={ <Private>  <Admin/>  </Private>} />
+
+        </Routes>
+    )
+}
+
+export default RoutesApp;
+
+
+
+
+----------Atualizar src/routes/Private.js:
+
+import { useState, useEffect } from 'react';
+
+import { auth } from '../firebaseConnection'; // Para fazer a conexão com autenticação
+import { onAuthStateChanged } from 'firebase/auth'; // Vericar se tem usuário logado 
+import { async } from '@firebase/util';
+
+import { Navigate } from 'react-router-dom';
+
+export default function Private({children}){
+    //console.log('Teste de login');
+
+    const [loading, setLoading] = useState(true);
+
+    //verificar se está logado:
+    const [signed, setSigned] = useState(false); //Não inicia logado
+    
+    useEffect(()=>{
+        async function checkLogin(){
+            const unsub = onAuthStateChanged(auth, (user)=>{
+                
+                //verificar se tem user logado:
+                if(user){
+                    //Se tiver logado manter em localStorage
+                    const userData = {
+                        uid: user.uid,
+                        email: user.email,
+                    }
+                    // passar localStorage para string com JSON para poder salvar
+                    localStorage.setItem("@detailUser", JSON.stringify(userData));
+                    setLoading(false);
+                    setSigned(true); // Agora usuário está logado
+
+                }else{
+                    // não possui user logado
+                    setLoading(false);
+                    setSigned(false);
+                }
+
+            })
+
+        }
+        checkLogin();
+
+     }, [])
+
+     //Se tiver carregado informações de usuário deixar em branco mesmo
+     if(loading){
+        return(
+            <div></div>
+        )
+     }
+     //Se NÃO estiver logado vai para home
+     if(  !signed  ){
+        return <Navigate to="/" />
+     }
+
+
+    return children; // após passar por todas as verificações pode seguir. childrem
+
+}
+
+
+--------------------------
+
+Abra em uma aba ANÔNIMA e faça o teste
+
+http://localhost:3000/admin
+
+Vai permanecer na home por não estar logado.
+
+
+
+---------------------------------------------
+
+----------------Atualizar Admin/index.js:
+
+
+import { useState } from 'react'; //Para armazenar o que o usuário digitar
+
+import './admin.css';
+
+//Botão sair. Importar firebase
+import { auth } from '../../firebaseConnection';
+//Para fazer logout
+import { signOut } from 'firebase/auth';
+
+
+export default function Admin(){
+    const [tarefaInput, setTarefaInput] = useState('')
+
+    async function handleRegister(e){
+        e.preventDefaul();
+        alert("teste botao registrar tarefa")
+    }
+
+
+    //Botão sair. Importar firebase. Terá logout e vai para pg inicial como configurado em Private.js
+async function handleLogout(){
+    await signOut(auth);
+} 
+
+    return(
+        <div className='admin-container'>
+            <h1>Minhas tarefas</h1>
+            <form className='form' onSubmit={handleRegister}>
+                <textarea placeholder='Digite sua tarefa' value={tarefaInput} onChange={(e)=> setTarefaInput(e.target.value)} />
+
+                <button className='btn-register' type='submit'>Registrar</button>
+            </form>
+
+            <article className='list'>
+                <p> tarefas</p>
+                <div>
+                    <button>Editar</button>
+                    <button className='btn-delete'>Excluir</button>
+
+                </div>
+            </article>
+
+            <button className='btn-logout' onClick={handleLogout}>Sair</button>
+
+
+        </div>
+    )
+}
+
+
+
+----------------Criar admin.css:
+
+.admin-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 45px;
+}
+
+.admin-container{
+    margin-bottom: 30px;
+}
+
+.btn-register{
+    margin-bottom: 30px;    
+}
+
+.list{
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(18, 17, 16);
+    border-radius: 5px;
+    margin-bottom: 12px;
+    justify-content: center;
+    padding: 10px 10px;
+}
+
+.list p{
+    margin-bottom: 8px;
+}
+
+.list button{
+    margin-right: 20px;
+    border-color: rgb(47, 45, 43);
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgb(18, 17, 16);
+    color: #FFF;
+}
+
+.list button:hover{
+    border-color: rgba(175, 217, 39, 0.426);
+    color:  rgba(175, 217, 39, 0.426);
+}
+
+/* Selecionar 2º elemento */
+.list button:hover:nth-child( 2 ){
+    border-color: rgb(217, 39, 39);
+    color: red;
+}
+
+
+.btn-logout{
+    position: absolute;
+    bottom: 6%;
+    left: 4%;
+    height: 60px;
+    width: 60px;
+    border-radius: 30px;
+    border: 0;
+    background-color: rgba(70, 205, 205, 0.225);
+    font-weight: bold;
+}
+
+.btn-logout:hover{
+    background-color: rgba(70, 205, 205, 0.815);
+    color: #FFF;
+    transition: all 0.5s;
+}
+
+.form textarea{
+    padding: 8px;
+}
+
+
+
+------------------------------------
+REGISTRAR TAREFAS NO DB
+
+-----------------------------Atualizar Admin/index.js:
+
+import { useState, useEffect } from 'react'; //Para armazenar o que o usuário digitar
+import './admin.css';
+
+//Botão sair. Importar firebase
+import { auth, db } from '../../firebaseConnection';
+//Para fazer logout
+import { signOut } from 'firebase/auth';
+
+//Registrar atividades no DB
+import{ addDoc, collection } from 'firebase/firestore';
+
+export default function Admin(){
+    const [tarefaInput, setTarefaInput] = useState('');
+
+//Registrar atividades no DB
+    const [user, setUser] = useState({})
+
+
+//Registrar atividades no DB. Usar useEffect e importar db
+    //Logar. Para usar "Uid" inspecionar /Application/Local Storage/ http:// ... veja @detailUser
+    useEffect(()=>{
+        async function loadTarefas(){
+            const userDetail = localStorage.getItem("@detailUser")
+            setUser(JSON.parse(userDetail))//Convertendo de volta a string em objeto
+        }
+        loadTarefas();
+    },[])
+
+//Registrar atividades no DB
+    async function handleRegister(e){
+        e.preventDefault();
+        alert("teste botao registrar tarefa");
+
+        if(tarefaInput === ''){
+            alert("Digite sua tarefa...")
+            return; // Parar a execução do cod.
+        }
+
+        await addDoc(collection(db, "tarefas"), {
+            tarefa: tarefaInput,
+            created: new Date(), // para saber quando foi criada a tarefa. ´possivel filtrar por ordem crescente depois
+            userUid: user?.uid, // para não enviar vazio
+        })
+        .then(()=>{
+            console.log("Tarefa registarda");
+            setTarefaInput('');
+        })
+        .catch((error)=>{
+            console.log("Erro ao registrar tarefa" + error);
+        })
+    }
+
+
+
+    //Botão sair. Importar firebase. Terá logout e vai para pg inicial como configurado em Private.js
+async function handleLogout(){
+    await signOut(auth);
+} 
+
+    return(
+        <div className='admin-container'>
+            <h1>Minhas tarefas</h1>
+            <form className='form' onSubmit={handleRegister}>
+                <textarea 
+                placeholder="Digite sua tarefa" 
+                value={tarefaInput} 
+                onChange={(e)=>setTarefaInput(e.target.value)} />
+
+                <button className='btn-register' type='submit'>Registrar</button>
+            </form>
+
+            <article className='list'>
+                <p> tarefas</p>
+                <div>
+                    <button>Editar</button>
+                    <button className='btn-delete'>Excluir</button>
+
+                </div>
+            </article>
+
+            <button className='btn-logout' onClick={handleLogout}>Sair</button>
+
+
+        </div>
+    )
+}
+
+
+
+
+
+-------------Testar aplicação e veja o resultado no DB
+https://console.firebase.google.com/project/tarefas-802fe/firestore/data/~2F
+
+
+
+----------------------------------------
+
+Listar tarefas na área admin.
+
+Criar usuários diferentes e cadastrar tarefas para testar.
+
+Listar tarefas deve ser filtrada por usuário.
+------------------
+
+import { useState, useEffect } from 'react';
+import './admin.css';
+import { auth, db } from '../../firebaseConnection';
+import { signOut } from 'firebase/auth';
+
+//Listartarefas deve ser filtrada por usuário.  Importar onSnapshot para deixar Realtime.
+/*onSnapshot - real time
+ query - busca
+ orderBy - classificar em ordem cres. ou decres
+ where - Busca itens ONDE tiver certas condições que especificar.
+
+ */
+ 
+ import{ 
+    addDoc, 
+    collection,
+    onSnapshot, query, orderBy, where
+} from 'firebase/firestore';
+
+export default function Admin(){
+    const [tarefaInput, setTarefaInput] = useState('');
+    const [user, setUser] = useState({})
+
+    //Listar tarefas deve ser filtrada por usuário. 
+    //Aqui serão armazenadas as tarefas
+    const [tarefas, setTarefas] = useState([]);
+
+    useEffect(()=>{
+        async function loadTarefas(){
+            const userDetail = localStorage.getItem("@detailUser")
+            setUser(JSON.parse(userDetail))
+
+//Listar tarefas deve ser filtrada por usuário. userDetail tem os dados do user logado, buscar dados.
+            if(userDetail){
+                const data = JSON.parse(userDetail);
+                const tarefaRef = collection(db, 'tarefas'); //acessar tarefas no DB
+                const q = query(tarefaRef, orderBy("created", "desc"), where("userUid", "==", data?.uid)); //A busca será em tarefaRef e ordenar pelo "created" essa palavra está no DB
+          
+             //   where("userUid", "==", data?.uid)  Pegar no BD dados ONDE usuário  seja igual ao LOGADO
+                //Agora usar snapshot para ficar buscando dados
+                const unsub = onSnapshot(q, (snapshot)=>{
+                    let lista = []; //Vai percorrer todas as tarefas encontradas na query
+                    snapshot.forEach((doc)=>{
+                        lista.push({
+                            id: doc.id,
+                            tarefa: doc.data().tarefa, // Nome no DB - tarefa
+                            userUid: doc.data().userUid
+                        })
+                    })
+                    
+                    console.log(lista);// Ao corrigiro o erro de index e atualizar a páfina a lista erá exibida no console.
+                    
+                    setTarefas(lista); // passar a lista para dentro de Set Tarefas
+
+                    /*Se testar vai dar erro, inspecione a página, ""The query requires an index.""
+                     vai  pedir para criar um index no DB. userUid
+                    Vá no site clique em indice:
+                    https://console.firebase.google.com/project/tarefas-802fe/firestore/indexes
+
+                    Criar índice 
+                        Collection ID: tarefas     //nome neste projeto
+                    Field path: userUid     Descending 
+                    Field path: created     Descending 
+
+                    * Collection
+
+                    E criar index. Vai demorar um pouco para criar.
+
+                    Inspecione a página novamente. O erro deve ter desaparecido.
+
+                    ***Pode deslogar e inspecionar, logar com outro usuário e inspecionar 
+
+                    */
+                } )
+
+            }
+        }
+        loadTarefas();
+    },[])
+
+
+    async function handleRegister(e){
+        e.preventDefault();
+        //alert("teste botao registrar tarefa");
+
+        if(tarefaInput === ''){
+            alert("Digite sua tarefa...")
+            return; 
+        }
+
+        await addDoc(collection(db, "tarefas"), {
+            tarefa: tarefaInput,
+            created: new Date(), 
+            userUid: user?.uid, 
+        })
+        .then(()=>{
+            console.log("Tarefa registarda");
+            setTarefaInput('');
+        })
+        .catch((error)=>{
+            console.log("Erro ao registrar tarefa" + error);
+        })
+    }
+    
+    
+    async function handleLogout(){
+        await signOut(auth);
+    } 
+
+    
+    return(
+        <div className='admin-container'>
+            <h1>Minhas tarefas</h1>
+            <form className='form' onSubmit={handleRegister}>
+                <textarea 
+                placeholder="Digite sua tarefa" 
+                value={tarefaInput} 
+                onChange={(e)=>setTarefaInput(e.target.value)} />
+
+                <button className='btn-register' type='submit'>Registrar</button>
+            </form>
+
+            <article className='list'>
+                <p> tarefas</p>
+                <div>
+                    <button>Editar</button>
+                    <button className='btn-delete'>Excluir</button>
+
+                </div>
+            </article>
+
+            <button className='btn-logout' onClick={handleLogout}>Sair</button>
+
+
+        </div>
+    )
+}
+
+
+
+
+
+----------------------------------------
+
+Exibir a lista no HTML, neste projeto o que estiver em <article> que deverá estar dentro de uma estrutura assim:
+{tarefas.map((item)=>(
+                
+            ))}
+
+---------------Feito esse ajuste:
+
+ {tarefas.map((item)=>(
+                <article key={item.id} className='list'>
+                    <p>{item.tarefa}</p>
+                    <div>
+                        <button>Editar</button>
+                        <button className='btn-delete'>Excluir</button>
+                    </div>
+                </article>                
+            ))} 
+
+
+
+----------------Criar a funcionalidade para Excluir:
+
+
+
+
+import { useState, useEffect } from 'react';
+import './admin.css';
+import { auth, db } from '../../firebaseConnection';
+import { signOut } from 'firebase/auth';
+
+//Excluir tarefa do BD importar: doc, deleteDoc
+
+import{ 
+    addDoc, 
+    collection,
+    onSnapshot, query, orderBy, where,
+    doc, deleteDoc
+} from 'firebase/firestore';
+import { async } from '@firebase/util';
+
+export default function Admin(){
+    const [tarefaInput, setTarefaInput] = useState('');
+    const [user, setUser] = useState({})
+    const [tarefas, setTarefas] = useState([]);
+
+    useEffect(()=>{
+        async function loadTarefas(){
+            const userDetail = localStorage.getItem("@detailUser")
+            setUser(JSON.parse(userDetail))
+
+
+            if(userDetail){
+                const data = JSON.parse(userDetail);
+                const tarefaRef = collection(db, 'tarefas'); 
+                const q = query(tarefaRef, orderBy("created", "desc"), where("userUid", "==", data?.uid)); 
+                const unsub = onSnapshot(q, (snapshot)=>{
+                    let lista = []; 
+                    snapshot.forEach((doc)=>{
+                        lista.push({
+                            id: doc.id,
+                            tarefa: doc.data().tarefa, 
+                            userUid: doc.data().userUid
+                        })
+                    })
+                    
+                    //console.log(lista);
+                    setTarefas(lista);
+                } )
+
+            }
+        }
+        loadTarefas();
+    },[])
+
+
+    async function handleRegister(e){
+        e.preventDefault();
+        //alert("teste botao registrar tarefa");
+
+        if(tarefaInput === ''){
+            alert("Digite sua tarefa...")
+            return; 
+        }
+
+        await addDoc(collection(db, "tarefas"), {
+            tarefa: tarefaInput,
+            created: new Date(), 
+            userUid: user?.uid, 
+        })
+        .then(()=>{
+            console.log("Tarefa registarda");
+            setTarefaInput('');
+        })
+        .catch((error)=>{
+            console.log("Erro ao registrar tarefa" + error);
+        })
+    }
+    
+    
+    async function handleLogout(){
+        await signOut(auth);
+    } 
+
+//Excluir tarefa do BD importar: doc, deleteDoc
+    async function delTarefa(id){
+       // alert('teste delTarefa. ID: '+ id);
+       const docRef = doc(db, "tarefas", id)
+       await deleteDoc(docRef); //O conteúdo de docRef será deletado
+    } 
+
+
+     //Os registros dos usuários serão exibidos em <article>
+    return(
+        <div className='admin-container'>
+            <h1>Minhas tarefas</h1>
+            <form className='form' onSubmit={handleRegister}>
+                <textarea 
+                placeholder="Digite sua tarefa" 
+                value={tarefaInput} 
+                onChange={(e)=>setTarefaInput(e.target.value)} />
+
+                <button className='btn-register' type='submit'>Registrar</button>
+            </form>
+
+            {tarefas.map((item)=>(
+                <article key={item.id} className='list'>
+                    <p>{item.tarefa}</p>
+                    <div>
+                        <button>Editar</button>
+                        <button onClick={  ()=> delTarefa(item.id)  } 
+                        className='btn-delete'>Excluir</button>
+                    </div>
+                </article>                
+            ))}            
+
+            <button className='btn-logout' onClick={handleLogout}>Sair</button>
+
+
+        </div>
+    )
+}
+
+
+
+
+--------
+Agora é só fazer o teste:
+https://console.firebase.google.com/project/tarefas-802fe/firestore/data/~2Ftarefas~2F0PgR2Gbxkl7l68PaUDSP
+
+
+
+
+----------------Criar a funcionalidade para EDITAR:
+
+
+
+import { useState, useEffect } from 'react';
+import './admin.css';
+import { auth, db } from '../../firebaseConnection';
+import { signOut } from 'firebase/auth';
+
+//EDITAR TAREFA  importar updateDoc
+import{ 
+    addDoc, 
+    collection,
+    onSnapshot, query, orderBy, where,
+    doc, deleteDoc,
+    updateDoc
+} from 'firebase/firestore';
+import { async } from '@firebase/util';
+
+export default function Admin(){
+    const [tarefaInput, setTarefaInput] = useState('');
+    const [user, setUser] = useState({});
+    const [tarefas, setTarefas] = useState([]);
+
+    //EDITAR TAREFA
+    const [edit, setEdit] = useState({});// Aqui será passado o item inteiro como id, tarefa... Todas as propriedades.
+
+    useEffect(()=>{
+        async function loadTarefas(){
+            const userDetail = localStorage.getItem("@detailUser")
+            setUser(JSON.parse(userDetail))
+
+
+            if(userDetail){
+                const data = JSON.parse(userDetail);
+                const tarefaRef = collection(db, 'tarefas'); 
+                const q = query(tarefaRef, orderBy("created", "desc"), where("userUid", "==", data?.uid)); 
+                const unsub = onSnapshot(q, (snapshot)=>{
+                    let lista = []; 
+                    snapshot.forEach((doc)=>{
+                        lista.push({
+                            id: doc.id,
+                            tarefa: doc.data().tarefa, 
+                            userUid: doc.data().userUid
+                        })
+                    })
+                    
+                    //console.log(lista);
+                    setTarefas(lista);
+                } )
+
+            }
+        }
+        loadTarefas();
+    },[])
+
+
+    async function handleRegister(e){
+        e.preventDefault();
+        //alert("teste botao registrar tarefa");
+
+        if(tarefaInput === ''){
+            alert("Digite sua tarefa...")
+            return; 
+        }
+
+//Verificação EDITAR TAREFA
+        //edit?  se não tiver id ele segue em frente, ignora essa parte.
+        if(edit?.id){
+            UpdateTarefa();// Se tiver um ID vai chamar essa função
+            return;
+        }
+//Fim verificação EDITAR TAREFA
+
+
+        await addDoc(collection(db, "tarefas"), {
+            tarefa: tarefaInput,
+            created: new Date(), 
+            userUid: user?.uid, 
+        })
+        .then(()=>{
+            console.log("Tarefa registarda");
+            setTarefaInput('');
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+    }
+    
+    
+    async function handleLogout(){
+        await signOut(auth);
+    } 
+
+    async function delTarefa(id){
+       // alert('teste delTarefa. ID: '+ id);
+       const docRef = doc(db, "tarefas", id)
+       await deleteDoc(docRef);
+    } 
+
+//EDITAR TAREFA
+    //Repara que vai ser editado o item, não o id. Por isso coloca item aqui.
+    //Outra coisa importante o textarea que registra é comandado pelo tarefaInput
+    async function editTarefa(item){
+        //console.log(item);
+        setTarefaInput(item.tarefa);
+
+        setEdit(item); // Aqui será passado o item inteiro como id, tarefa... Todas as propriedades.
+    }
+
+
+//EDITAR TAREFA
+    async function UpdateTarefa(){
+       // alert('botao atualizar / submit / onSubmit={handleRegister}  / if(edit?.id) /  UpdateTarefa(); ');
+      const docRef = doc(db, "tarefas", edit?.id);
+      await updateDoc(docRef, { //Agora passar o que será atualizado
+        tarefa: tarefaInput,
+      })
+      .then(()=>{
+        console.log("Tarefa atualizada");
+        //Limpar áreas
+        setTarefaInput('');
+        setEdit({});
+      })
+      .catch(()=>{
+        alert("ERRO ao atualizar. Salve sua lista em outro lugar antes de prosseguir.")
+        console.log('ERRO ao atualizar.');
+        setTarefaInput('');
+        setEdit({});
+      })
+    }
+
+    
+    return(
+        <div className='admin-container'>
+            <h1>Minhas tarefas</h1>
+            <form className='form' onSubmit={handleRegister}>
+                <textarea 
+                placeholder="Digite sua tarefa" 
+                value={tarefaInput} 
+                onChange={(e)=>setTarefaInput(e.target.value)} />
+
+{/*EDITAR TAREFA:
+        Aqui será criada uma renderização condicional para depois que 
+        editar mudar o nome do botão de Registrar para Atualizar
+{Object.keys(edit).length > 0 } isso é para saber se está vasio ou tem algo em   const [edit, setEdit] = useState([]);
+o sinal "?" quer dizer que vai editar uma tarefa
+*/}      
+                {Object.keys(edit).length > 0 ? (
+                    <button className='btn-register' style={{backgroundColor: '#1da770'}} type='submit'>Atualizar</button>
+                ) : (
+                    <button className='btn-register' type='submit'>Registrar</button>
+                )}
+                
+            </form>
+
+            {tarefas.map((item)=>(
+                <article key={item.id} className='list'>
+                    <p>{item.tarefa}</p>
+                    <div>
+
+                        <button onClick={ ()=> editTarefa(item)  }>Editar</button>
+
+                        <button onClick={  ()=> delTarefa(item.id)  } 
+                        className='btn-delete'>Excluir</button>
+                    </div>
+                </article>                
+            ))}            
+
+            <button className='btn-logout' onClick={handleLogout}>Sair</button>
+
+
+        </div>
+    )
+}
+
+
+--------------Aula encerrou aqui. Customisei os alerts
+
+
+Parar terminal
+Ctrl+c
+npm install react-toastify
+npm start
+
+
+
+
+MODELO EXEMPLO:
+
+Personalizar os alerts
+Usar React-toastify
+
+https://fkhadra.github.io/react-toastify/introduction
+------------------------------------------------
+Fechar terminal e iniciar novo.
+No terminal:
+npm install react-toastify
+npm start
+
+Em src App.js atualizar para:
+
+
+import RoutesApp from './routes';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+//No site diz para importar o css do ToastContainer:
+//      https://fkhadra.github.io/react-toastify/introduction
+//      https://fkhadra.github.io/react-toastify/installation
+
+
+// Fechar ToastContainer em 3 segundos --> autoClose={3000}
+function App() {
+  return (
+    <div className="App">
+      <ToastContainer autoClose={2000}/>   <------------------------------
+      <RoutesApp/>
+    </div>
+  );
+}
+
+export default App;
+
+
+----------------------------------------
+------------------------------
+---------Atualizar Filme/index.js com a importação do 'react-toastify'e
+alterar o "alert" para toast.
+
+Aqui está um fragmento:
+
+
+import { toast } from 'react-toastify';
+
+
+
+if(hasFilme){
+  //alert("Esse filme já está na lista");
+  toast.warn("Esse filme já está na lista");
+
+return; // para parar a execução
+}
+filmeSalvo.push(filme);
+localStorage.setItem("@salvarfilmes", JSON.stringify(filmeSalvo));
+//alert("Filme salvo com sucesso!")
+toast.success("Filme salvo com sucesso!");
+}
+
+
+
+
+
+-------------opções de avisos--------------
+
+
+import { toast } from 'react-toastify';
+
+
+
+toast('Mensagem default');		COLORIDO
+
+toast.error('Mensagem error');		VERMELHO
+
+toast.success('Mensagem success');	VERDE
+
+toast.info('Mensagem info');		AZUL
+
+toast.warn('Mensagem warn');		AMARELO
+
+-----
+function handleCustom() {
+toast('Mensagem customizada', {
+position: toast.POSITION.TOP_LEFT,
+className: 'sua-classe',
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+

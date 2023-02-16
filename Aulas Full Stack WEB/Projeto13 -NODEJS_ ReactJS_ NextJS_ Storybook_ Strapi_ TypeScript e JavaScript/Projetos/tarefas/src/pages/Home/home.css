@@ -1,0 +1,72 @@
+.home-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(100vh - 180px);
+    justify-content: center;
+    width: 100%;
+}
+
+.home-container h1{
+    font-size: 35px;
+    margin-bottom: 100px;
+    margin-top: 20px;
+}
+
+.home-container span{
+    margin-bottom: 30px;
+}
+
+
+/* Aqui teve uma coisa interessante sobre a largura responsiva*/
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 500px;
+}
+
+.form input{
+    border: 0;
+    margin-bottom: 15px;
+    height: 35px;
+    border-radius: 5px;
+    padding: 0 8px;    
+}
+
+.form button{
+    height: 35px;
+    border-radius: 5px;
+    padding: 0 8px;  
+    background-color: #5b81f3;
+    color: #fff;
+    font-size: 15px;
+    max-width: 50%;
+    margin-left: 25%;
+}
+
+.form button:hover{
+    background-color: #e2e9bbf5;
+    color: #083bd4; 
+    transform: scale(1.1);
+    transition: all 0.5s;
+    font-size:20px;
+}
+
+.form textarea{
+    margin-bottom: 12px;
+    border: 0;
+    height: 90px;
+    resize: none;
+}
+
+
+/* Para "Link" utilizar "a" */
+.form a{
+    color: #fff;
+    text-decoration: none;
+    margin: 15px 0;
+    font-size: 15px;
+    max-width: 55%;
+    margin-left: 25%;
+}
