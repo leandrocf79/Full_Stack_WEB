@@ -1,0 +1,215 @@
+Modelo passando por propriedades abaixo será utilizado ContextAPI para facilitar depois. 
+Ele cria um situação GLOBAL onde o elemento pode ser chamado de qualquer lugar.
+
+-------------App.js:
+
+import { useState } from 'react';
+import Alunos from './components/Alunos';  //Repara que ele está importando alunos e alunos importa nome
+
+function App() {
+  const [nomeAluno, setNomeAluno] = useState('LUCAS OLIVEIRA');
+
+
+  return (
+    <div>
+      <h1>ESCOLA</h1>
+      <hr/>
+
+      <Alunos nome={nomeAluno} mudaNome={setNomeAluno} />
+    </div>
+  );
+}
+
+export default App;
+
+
+
+
+
+
+--------components/Nome/aluno.js:
+
+
+import Nome from '../Nome';
+
+function Alunos({ nome, mudaNome }) {
+  return (
+    <div>
+      <h2>Component Alunos</h2>
+      <Nome nome={nome} mudaNome={mudaNome} />
+    </div>
+  );
+}
+
+export default Alunos;
+
+
+
+
+
+--------components/Nome/nome.js:
+
+
+function Nome({ nome, mudaNome }) {
+  return (
+    <div>
+      <span style={{ color: '#FF0000' }} >Bem vindo: {nome} </span>
+      <br/>
+      <button onClick={() => mudaNome('Sujeito Programador') } >Trocar nome</button>
+    </div>
+  );
+}
+
+export default Nome;
+
+
+
+
+
+----------------------------------------
+----------------------------------------
+Fazer isso acima em projetos pequenos já da trabalho ficar 
+passando de propeiedade em propriedade para passar valores. 
+Em projetos grandes vai ficar muito bagunçado.
+
+----------------------------------------
+----------------------------------------Usando ContextAPI:
+
+Para usar o contextapi é interessante criar um diretório novo, pois podem haver vários contexto.
+
+-----src/contexts/user.js:
+
+
+//Criar user global aqui. Será dado o nome de UserContext para import e uma função pai UserProvider
+import { useState, createContext } from 'react';
+
+export const UserContext = createContext({});
+
+function UserProvider({children}){ 
+  const [alunos, setAlunos] = useState('Sujeito Programador');
+  const [qtdAlunos, setQtdAlunos] = useState(35);
+
+  //Tudo que tiver aqui dentrode "UserContext.Provider " é filho de userProvider e pode ser exportada para todo lugar.
+  return(
+    <UserContext.Provider value={{ alunos, setAlunos, qtdAlunos }}> {/*  Aqui vai espalhar para toda a aplicação */}
+      {children}
+    </UserContext.Provider>
+  )
+}
+
+export default UserProvider;
+
+
+
+
+
+-----src/App.js:
+
+
+
+//import { useState } from 'react';
+import Alunos from './components/Alunos';
+
+import UserProvider from './contexts/user'; // Tudo dentro de useProvider terá acesso aos recursos contextAPI 
+
+//**Quando for "export default" não precisa chaves {}
+
+function App() {
+
+  return (
+   <UserProvider>
+          <div>          
+            <Titulo/>   
+
+              <h1>ESCOLA</h1>            
+            
+            <hr/>
+            <Alunos/>
+            
+          </div>
+    </UserProvider> 
+  );
+}
+
+export default App;
+
+
+//Exemplo antigo:
+function Titulo(){     //Para mais itens colocar uma div
+  return(
+    <h1>Título deste App</h1>    
+  )
+}
+
+
+
+
+
+-----src/components/Alunos/index.js:
+
+
+//Deve ser chamado em todo lugar que for utilizar este recurso contextAPI
+import { useContext } from 'react';
+import { UserContext } from '../../contexts/user'; //Contexto criado para uso global
+
+//**Quando for "export default" não precisa chaves {}
+import Nome from '../Nome';
+
+
+
+
+function Alunos() {
+  const { qtdAlunos } = useContext(UserContext); // Veja como fica a importação global
+ 
+  return (
+    <div>
+      <h2>Quantidade total de alunos: {qtdAlunos} </h2>
+      
+      <Nome />
+    </div>
+  );
+}
+
+export default Alunos;
+
+
+
+
+-----src/components/Nome/index.js:
+
+
+
+//Deve ser chamado em todo lugar que for utilizar este recurso contextAPI
+import { useContext } from 'react';
+import { UserContext } from '../../contexts/user'; //Contexto criado para uso global
+
+
+
+function Nome() {
+  const { alunos, setAlunos } = useContext(UserContext);
+
+  return (
+    <div>
+      <span style={{ color: '#FF0000' }} >Bem vindo: {alunos} </span>
+      <br/>
+      <button onClick={ () => setAlunos('Leandro CF') } >Troca Nome</button>
+    </div>
+  );
+}
+
+export default Nome;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
