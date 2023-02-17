@@ -1,0 +1,381 @@
+
+npm install firebase
+npm install react-router-dom
+npm install react-router-dom@5.x   // Essa versão para usar Switch
+
+
+
+Deixar somente Apps.js e index.js com o padrão e zerar o src/index.css:
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*:focus{
+    outline: 0;
+}
+
+/*passar altura padrão do projeto: */
+html, body, #root{
+	height: 100%;
+}
+
+
+---------Importar o index.css em index.js: 
+
+import './index.css';
+
+
+---------Atualizar o index.css para este projeto, isso também 
+pode se aplicar a outros projetos, ficou muito bom assim como configuração inicial:
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*:focus{
+    outline: 0;
+}
+
+/*passar altura padrão do projeto: */
+html, body, #root{
+	height: 100%;
+}
+
+
+/*Pesquise "roboto" no google e veja fontes.
+https://fonts.google.com/specimen/Roboto
+
+Select a opção que desejar e clique em @import
+Copiar o conteúso SEM o <style> e colar no iniício deste css
+para poder importar ele aqui
+*/
+body{
+    font: 14px 'Roboto', sans-serif;
+    background-color: #efefef;
+}
+
+a{
+    text-decoration: none; /*Tirar aquelas ancoras de sublinhado  */
+}
+
+ul{
+    list-style: none; /* Tirar a bolinha de listas não ordenadas   */
+}
+
+button{
+    cursor: pointer; /*Aparecer o cursor de mão sobre os botões   */
+}
+
+
+
+
+
+-----------------------------
+-----------------------------
+Criar projeto novo no FIREBASE, aqui será "sistema"
+
+Ativar o Google Analytics neste projeto
+
+Selecionar user e criar.
+
+No icone WEB </> criar uma chave, pode ser o mesmo nome "sistema"
+Não precisa marcar a opção: Configure também o Firebase Hosting
+
+e registarr app
+
+Copiar a chave do DB e colar em src/services/firebaseConnection.js:
+((   Aqui está modificado, veja no DB os valores reais   ))
+
+
+
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore'; // Foi o BD escolhido
+
+import { getAuth } from 'firebase/auth'; // Para cadastrar e login de usuários. Faz autenticação
+
+import firebase from 'firebase/app'; // Importa o objeto firebase
+
+
+const firebaseConfig = {
+      apiKey: "AIzaSfsdfsdfhdSbj6f7WAsdfsdfdf",
+      authDomain: "sistema-yy56y65y.firebaseapp.com",
+      projectId: "sistema-y65y56y7",
+      storageBucket: "sistema-u67u67u6.appspot.com",
+      messagingSenderId: "5u676kikuik,u,u",
+      appId: "1:5ui,ui,ui,yu,kty,tryujyjyujyujyujyujyujyu15",
+      measurementId: "G-syujyujyujyu"
+    };
+    
+// Verifica se o Firebase já foi inicializado
+if (firebase.apps.length === 0) {
+    initializeApp(firebaseConfig);
+  }
+  
+  const firebaseApp = firebase.app(); // Obtém a instância do aplicativo Firebase
+  const db = getFirestore(firebaseApp);
+  const auth = getAuth(firebaseApp);
+  
+  export { db, auth };
+
+
+
+
+---------------------------
+Agora vá em firebase em Authentication/Email e senha
+
+Em  Firestore Database / Cloud FireStore 
+***Neste momento deixar em Teste MOde para que todos possam usar sem estar logado.
+
+Selecionar: southamerica-east1 (São Paulo)
+
+Agora vá em Rules e altere a data de expiração:
+ allow read, write: if
+          request.time < timestamp.date(2033, 3, 18);
+    }
+
+--------------
+No terminal do projeto:
+
+Ctrl+c para sair localhost e instalar o DB
+
+ npm install firebase
+
+npm start
+
+-------------
+Verificar se db está funcionando.
+Vá em App.js e import:
+
+import firebase from './services/firebaseConnection';
+
+function App() {
+
+  return (
+    <div>
+      teste
+    </div>
+  
+  );
+}
+
+export default App;
+
+
+
+------------------Criar em src/pages/SignIn/index.js:
+function SignIn() {
+
+    return (
+      <div>
+        Teste SignIn. Página de login
+      </div>
+    
+    );
+  }
+  
+  export default SignIn;
+
+
+
+------------------Criar em src/pages/SignUp/index.js:
+
+function SignUp() {
+
+    return (
+      <div>
+        Teste SignUp. Cadastro
+      </div>
+    
+    );
+  }
+  
+  export default SignUp;
+
+
+
+-------------------
+-----------No terminal Ctrl+c
+Instalar:
+npm install react-router-dom
+
+
+
+-----------Criar src/routes/index.js:
+
+
+// Switch - um componente por página
+import { Switch } from 'react-router-dom';
+import Route from './Route';
+
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+
+export default function Routes(){
+    return(
+        <switch>
+
+        </switch>
+    )
+}
+
+
+
+
+
+
+-----------Criar src/routes/Route.js:
+
+
+// Redirect - para enviar o usuário para uma página específica
+import {Route, Redirect} from 'react-router-dom';
+
+// isPrivate - para saber se a rota é privada ou não
+// usando o sprad operator(...) vai passar todo o resto aqui
+
+export default function RouteWrapper({
+    component: Component,
+    isPrivate,
+    ...rest
+}){
+    
+    //simular aqui 2 variáveis para testar login:
+    const loading = false;
+    const signed = false;
+    
+
+    //Condicionais de verificação de login
+    if(loading){
+        return(
+            <div></div>
+        )        
+    }
+
+    //Se não está logado e rota que está tentando acessar for privada será direcionado para login
+    if( !signed && isPrivate){
+        return <Redirect to='/' />
+    }
+
+    //Logado e acessa página não privada
+    if( signed && !isPrivate){
+        return <Redirect to='/dashboard' />
+    }
+    
+    
+    return(
+        <Route
+            {...rest}
+            render={props => (
+                <Component{...props} />
+                )} //Para retornar o componente com todas as propriedades
+        />
+    )
+}
+
+
+
+
+-------------------Atualizar rotas. src/routes/index.js:
+
+
+// Switch - um componente por página
+import { Switch } from 'react-router-dom';
+import Route from './Route';
+
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+
+export default function Routes(){
+    return(
+        <Switch>
+            <Route exact path='/' component={SignIn} />
+            <Route exact path='/register' component={SignUp} />
+
+        </Switch>
+    )
+}
+
+
+
+
+
+-------------------Atualizar src/App.js:
+
+
+
+import { BrowserRouter } from "react-router-dom";
+import Routes from "./routes";
+
+function App() {
+
+  return (
+   <BrowserRouter>
+       <Routes/>
+   
+   </BrowserRouter>
+  
+  );
+}
+
+export default App;
+
+
+-----
+Teste isso:
+
+http://localhost:3000/register
+
+
+
+
+------------------Criar em src/pages/Dashboard/index.js:
+
+ 
+export default function Dashboard(){
+    return(
+        <div>
+            Página DASHBOARD, só quem estiver logado poderá acessar.
+        </div>
+    )
+}
+
+
+
+-------------------Atualizar rotas. src/routes/index.js:
+
+// Switch - um componente por página
+import { Switch } from 'react-router-dom';
+import Route from './Route';
+
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+
+import Dashboard from '../pages/Dashboard';
+
+export default function Routes(){
+    return(
+        <Switch>
+            <Route exact path='/' component={SignIn} />
+            <Route exact path='/register' component={SignUp} />
+            <Route exact path='/dashboard' component={Dashboard}   isPrivate   />
+
+        </Switch>
+    )
+}
+
+
+
+Testar COM e SEM isPrivete
+e depois troque para TRUE em Route.js 
+const signed = false; 
+http://localhost:3000/dashboard
+
+
+
