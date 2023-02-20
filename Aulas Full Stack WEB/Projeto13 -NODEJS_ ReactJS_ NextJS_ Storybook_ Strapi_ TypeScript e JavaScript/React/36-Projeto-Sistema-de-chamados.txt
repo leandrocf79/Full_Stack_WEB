@@ -96,12 +96,18 @@ Copiar a chave do DB e colar em src/services/firebaseConnection.js:
 
 
 
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore'; // Foi o BD escolhido
 
-import { getAuth } from 'firebase/auth'; // Para cadastrar e login de usuários. Faz autenticação
+/*  VERSÃO 8 do firebase
+import firebase from "firebase/app";
+import "firebase/auth";  
+import "firebase/firestore";
+*/
 
-import firebase from 'firebase/app'; // Importa o objeto firebase
+// VERSÃO 9 compatível do firebase. Depois é interessante corrigir todo o código para versão MODULAR
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+
 
 
 const firebaseConfig = {
@@ -114,16 +120,15 @@ const firebaseConfig = {
       measurementId: "G-syujyujyujyu"
     };
     
-// Verifica se o Firebase já foi inicializado
-if (firebase.apps.length === 0) {
-    initializeApp(firebaseConfig);
+
+  // Initialize Firebase com verificação
+
+  if(!firebase.apps.length){
+    firebase.initializeApp(firebaseConfig);
   }
-  
-  const firebaseApp = firebase.app(); // Obtém a instância do aplicativo Firebase
-  const db = getFirestore(firebaseApp);
-  const auth = getAuth(firebaseApp);
-  
-  export { db, auth };
+ 
+  export default firebase;
+
 
 
 
@@ -527,6 +532,969 @@ form button:active{
 
 
 -----------------------------------------
+Atualizar SignUp. É basicamente a mesma coisa de SignIn:
+
+
+
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import logo from '../../assets/logoJPG.jpg';
+
+function SignUp() {
+  const [nome, setNome] =useState('');
+
+  const [email, setEmail] =useState('');
+  const [password, setPassword] =useState('');
+
+  
+
+
+  async function handleSubmit(e){
+    e.preventDefault(); //Para não atualizar a página
+    //alert('teste handleSubmit')
+  }
+
+    return (
+      <div className='container-center'>
+        <div className='login'>
+          <div className='logo-area'>
+            <div> 
+            <img src={logo} alt='Logo marca' />
+            </div>
+          </div>
+          
+
+            <form onSubmit={handleSubmit}>
+              <h1>Cadastro</h1>
+
+              <input type="text" placeholder='Digite seu nome' value={nome} onChange={(e)=> setNome(e.target.value) }/>
+
+
+              <input type="text" placeholder='E-mail' value={email} onChange={(e)=> setEmail(e.target.value) }/>
+              <input type="text" placeholder='************'value={password} onChange={(e)=> setPassword(e.target.value) }/>
+              <button type='submit'>Cadastrar</button>
+            </form>
+
+
+            <Link to='/'>Já possui uma conta? Entrar.</Link>
+
+
+        </div>        
+      </div>
+    
+    );
+  }
+  
+  export default SignUp;
+
+  //http://localhost:3000/register
+
+
+
+
+------------------------------------
+
+CONTEXTAPI para cadastro de usuario.
+
+Criar em src/contexts/auth.js para autenticação:
+
+
+
+
+
+import { useState, useEffect, createContext} from 'react';
+import firebase from '../services/firebaseConnection';
+
+export const AuthContext = createContext({});
+
+//prover
+function AuthProvider({ children }){
+
+    const [user, setUser] = useState(null);  //Inicia como logout
+    const [loadingAuth, setLoadingAuth] = useState(false); // após login mudar para true lá na função
+    //const [loading, setLoading] = useState(true); // iniciar carregando
+
+//signed é um boolean para saber se está logado ou não.
+// signed: !!user    isso converte para boolean
+    return(
+        <AuthContext.Provider value={{signed: !!user, user}}>
+            {children}
+        </AuthContext.Provider>
+    )
+}
+
+export default AuthProvider;
+
+
+
+
+
+---------------Atualizar App.js, vai apresentar um erro, mas precisa corrigir rotas depois:
+
+
+import { BrowserRouter } from "react-router-dom";
+
+import AuthProvider from "./contexts/auth"; //Agora terá acesso aos dados do usuário em todos os lugares
+
+import Routes from "./routes";
+
+function App() {
+
+  return (
+    <AuthProvider>    
+        <BrowserRouter>
+            <Routes/>
+        
+        </BrowserRouter>
+   </AuthProvider>
+  
+  );
+}
+
+export default App;
+
+
+
+
+------------------Corrigir ROTAS, em Route.js:
+
+
+
+import { useContext } from 'react';
+
+// Redirect - para enviar o usuário para uma página específica
+import { Route, Redirect } from 'react-router-dom';
+
+import { AuthContext } from '../contexts/auth';
+
+
+
+// isPrivate - para saber se a rota é privada ou não
+// usando o sprad operator(...) vai passar todo o resto aqui
+
+export default function RouteWrapper({
+    component: Component,
+    isPrivate,
+    ...rest
+}){
+    const{signed, loading}=useContext(AuthContext)
+    
+      //const loadin = false;
+
+    //Condicionais de verificação de login
+    if(loading){
+        return(
+            <div></div>
+        )        
+    }
+
+    //Se não está logado e rota que está tentando acessar for privada será direcionado para login
+    if( !signed && isPrivate){
+        return <Redirect to='/' />
+    }
+
+    //Logado e acessa página não privada
+    if( signed && !isPrivate){
+        return <Redirect to='/dashboard' />
+    }
+    
+    
+    return(
+        <Route
+            {...rest}
+            render={props => (
+                <Component{...props} />
+                )} //Para retornar o componente com todas as propriedades
+        />
+    )
+}
+
+
+
+---------------------Para testar pode ir em auth.js:
+
+
+
+
+import { useState, useEffect, createContext} from 'react';
+import firebase from '../services/firebaseConnection';
+
+export const AuthContext = createContext({});
+
+//prover
+function AuthProvider({ children }){
+
+    //teste para dashboard
+    const [user, setUser] = useState({id: 1, nome: "Leandro"}); // testar http://localhost:3000/dashboard
+
+    //const [user, setUser] = useState(null);  //Inicia como logout.
+
+    const [loadingAuth, setLoadingAuth] = useState(false); // após login mudar para true lá na função
+    //const [loading, setLoading] = useState(true); // iniciar carregando
+
+//signed é um boolean para saber se está logado ou não.
+// signed: !!user    isso converte para boolean
+    return(
+        <AuthContext.Provider value={{signed: !!user, user}}>
+            {children}
+        </AuthContext.Provider>
+    )
+}
+
+export default AuthProvider;
+
+
+
+--------------------Atualizar auth.js:
+
+
+
+import { useState, useEffect, createContext} from 'react';
+import firebase from '../services/firebaseConnection';
+
+export const AuthContext = createContext({});
+
+//prover
+function AuthProvider({ children }){
+
+    //teste para dashboard
+    //const [user, setUser] = useState({id: 1, nome: "Leandro"}); // testar http://localhost:3000/dashboard
+
+    const [user, setUser] = useState(null);  //Inicia como logout
+    const [loadingAuth, setLoadingAuth] = useState(false); // após login mudar para true lá na função
+    const [loading, setLoading] = useState(true); // iniciar carregando
+
+    //useEffect para saber se tem algum usuário logado:
+    useEffect(()=>{
+
+        function loadStorage(){
+            const storageUser = localStorage.getItem('SistemaUser');
+
+            if(storageUser){
+                setUser(JSON.parse(storageUser));
+                //se já tiver usuário:
+                setLoading(false);
+            }
+            setLoading(false);
+        }
+        loadStorage();
+
+    },[])
+
+
+//função para cadastarr usuário:
+async function signUp( email, password, nome ){
+    //alterar para true:
+    setLoadingAuth(true);
+    await firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then( async(value)=>{      
+        let uid =value.user.uid;
+        
+          //cadastrar no DB
+        await firebase.firestore().collection('users')
+        .doc(uid).set({
+            nome: nome,
+            avatarUrl: null, //vai começar com a imagema avatar padrão
+        })
+        .then( ()=>{
+            // disponibilizar para o setUser
+            let data = {
+                uid: uid,
+                nome: nome,
+                email: value.user.email,
+                avatarUrl: null,
+            }//passar data para setUser. Pode salvar em localStorage também, mais abaixo
+            setUser(data);
+            storageUser(data); //Veja função criada mais abaixo
+
+            setLoadingAuth(false);
+
+        })
+    })//Tratar os casos de erros
+    .catch((error)=>{
+        console.log(error);
+        setLoadingAuth(false);
+    })
+
+
+
+}//localStorage salvar data aqui também
+
+
+function storageUser(data){
+    localStorage.setItem('SistemaUser', JSON.stringify(data)) //'SistemaUser' foi o nome dado acima em localStorage
+}
+
+
+
+//signed é um boolean para saber se está logado ou não.
+// signed: !!user    isso converte para boolean
+//tudo que quiser disponibilizar globalmente é só inserir aqui {signed: !!user, user, loading}
+    return(
+        <AuthContext.Provider value={{
+            signed: !!user, 
+            user, 
+            loading, 
+            signUp,
+
+            }}> {/*signUp pode ser disponibilizado aqui tb e precisa ser acessado na página do componente signUp*/}
+            {children}
+        </AuthContext.Provider>
+    )
+}
+
+export default AuthProvider;
+
+
+---------------------------------------------
+Até agora se não estiver logado foça a ir para login ou cadastro
+
+---------------------------------------------
+Cadastar usuário novo.
+
+
+----------Atualizar auth.js:
+
+
+
+
+
+import { useState, useEffect, createContext} from 'react';
+import firebase from '../services/firebaseConnection';
+
+export const AuthContext = createContext({});
+
+//prover
+function AuthProvider({ children }){
+
+    //teste para dashboard
+    //const [user, setUser] = useState({id: 1, nome: "Leandro"}); // testar http://localhost:3000/dashboard
+
+    const [user, setUser] = useState(null);  //Inicia como logout
+    const [loadingAuth, setLoadingAuth] = useState(false); // após login mudar para true lá na função
+    const [loading, setLoading] = useState(true); // iniciar carregando
+
+    //useEffect para saber se tem algum usuário logado:
+    useEffect(()=>{
+
+        function loadStorage(){
+            const storageUser = localStorage.getItem('SistemaUser');
+
+            if(storageUser){
+                setUser(JSON.parse(storageUser));
+                //se já tiver usuário:
+                setLoading(false);
+            }
+            setLoading(false);
+        }
+        loadStorage();
+
+    },[])
+
+
+//função para cadastarr usuário:
+async function signUp( email, password, nome ){
+    //alterar para true:
+    setLoadingAuth(true);
+    await firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then( async(value)=>{      
+        let uid =value.user.uid;
+        
+          //cadastrar no DB
+        await firebase.firestore().collection('users')
+        .doc(uid).set({
+            nome: nome,
+            avatarUrl: null, //vai começar com a imagema avatar padrão
+        })
+        .then( ()=>{
+            // disponibilizar para o setUser
+            let data = {
+                uid: uid,
+                nome: nome,
+                email: value.user.email,
+                avatarUrl: null,
+            }//passar data para setUser. Pode salvar em localStorage também, mais abaixo
+            setUser(data);
+            storageUser(data); //Veja função criada mais abaixo
+
+            setLoadingAuth(false);
+
+        })
+    })//Tratar os casos de erros
+    .catch((error)=>{
+        console.log(error);
+        setLoadingAuth(false);
+    })
+
+
+
+}//localStorage salvar data aqui também
+
+
+function storageUser(data){
+    localStorage.setItem('SistemaUser', JSON.stringify(data)) //'SistemaUser' foi o nome dado acima em localStorage
+}
+
+
+
+//signed é um boolean para saber se está logado ou não.
+// signed: !!user    isso converte para boolean
+//tudo que quiser disponibilizar globalmente é só inserir aqui {signed: !!user, user, loading}
+    return(
+        <AuthContext.Provider value={{
+            signed: !!user, 
+            user, 
+            loading, 
+            signUp,
+
+            }}> {/*signUp pode ser disponibilizado aqui tb e precisa ser acessado na página do componente signUp*/}
+            {children}
+        </AuthContext.Provider>
+    )
+}
+
+export default AuthProvider;
+
+
+
+
+
+
+-----------------SingUp/index.js:
+
+
+
+
+import { useState, useContext } from 'react'; //importar useContext
+import { AuthContext } from '../../contexts/auth';//importar useContext
+
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logoJPG.jpg';
+
+function SignUp() {
+  const [nome, setNome] =useState('');
+  const [email, setEmail] =useState('');
+  const [password, setPassword] =useState('');
+
+  //importar useContext e chamar signUp
+  const { signUp } = useContext(AuthContext); //importar useContext
+
+  
+  async function handleSubmit(e){
+    e.preventDefault(); //Para não atualizar a página
+    //alert('teste handleSubmit')
+
+//importar useContext aqui com signUp. Se tudo for DIFERENTE  de vazio, cadastrar usuário.
+    if(nome !== ''  && email !== ''  &&  password !== ''){
+      signUp(nome, email, password) //Tem que ser NA MESMA ORDEM DECLARADA que está em auth.js
+
+    }
+
+  }
+
+    return (
+      <div className='container-center'>
+        <div className='login'>
+          <div className='logo-area'>
+            <div> 
+            <img src={logo} alt='Logo marca' />
+            </div>
+          </div>
+          
+
+            <form onSubmit={handleSubmit}>
+              <h1>Cadastro</h1>
+
+              <input type="text" placeholder='Digite seu nome' value={nome} onChange={(e)=> setNome(e.target.value) }/>
+
+
+              <input type="text" placeholder='E-mail' value={email} onChange={(e)=> setEmail(e.target.value) }/>
+              <input type="password" placeholder='************'value={password} onChange={(e)=> setPassword(e.target.value) }/>
+             
+              <button type='submit'>Cadastrar</button>
+            </form>
+
+
+            <Link to='/'>Já possui uma conta? Entrar.</Link>
+
+
+        </div>        
+      </div>
+    
+    );
+  }
+  
+  export default SignUp;
+
+  //http://localhost:3000/register
+
+
+
+
+------------------------------------------
+
+Criar opção para Sair da conta de usuário.
+
+Em auth.js:
+
+
+
+
+
+import { useState, useEffect, createContext} from 'react';
+import firebase from '../services/firebaseConnection';
+
+export const AuthContext = createContext({});
+
+//prover
+function AuthProvider({ children }){
+
+    //teste para dashboard
+    //const [user, setUser] = useState({id: 1, nome: "Leandro"}); // testar http://localhost:3000/dashboard
+
+    const [user, setUser] = useState(null);  //Inicia como logout
+    const [loadingAuth, setLoadingAuth] = useState(false); // após login mudar para true lá na função
+    const [loading, setLoading] = useState(true); // iniciar carregando
+
+    //useEffect para saber se tem algum usuário logado:
+    useEffect(()=>{
+
+        function loadStorage(){
+            const storageUser = localStorage.getItem('SistemaUser');
+
+            if(storageUser){
+                setUser(JSON.parse(storageUser));
+                //se já tiver usuário:
+                setLoading(false);
+            }
+            setLoading(false);
+        }
+        loadStorage();
+
+    },[])
+
+
+//função para cadastarr usuário:
+async function signUp( email, password, nome ){
+    //alterar para true:
+    setLoadingAuth(true);
+    await firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then( async(value)=>{      
+        let uid =value.user.uid;
+        
+          //cadastrar no DB
+        await firebase.firestore().collection('users')
+        .doc(uid).set({
+            nome: nome,
+            avatarUrl: null, //vai começar com a imagema avatar padrão
+        })
+        .then( ()=>{
+            // disponibilizar para o setUser
+            let data = {
+                uid: uid,
+                nome: nome,
+                email: value.user.email,
+                avatarUrl: null,
+            }//passar data para setUser. Pode salvar em localStorage também, mais abaixo
+            setUser(data);
+            storageUser(data); //Veja função criada mais abaixo
+
+            setLoadingAuth(false);
+
+        })
+    })//Tratar os casos de erros
+    .catch((error)=>{
+        console.log(error);
+        setLoadingAuth(false);
+    })
+
+
+
+}//localStorage salvar data aqui também
+
+
+function storageUser(data){
+    localStorage.setItem('SistemaUser', JSON.stringify(data)) //'SistemaUser' foi o nome dado acima em localStorage
+}
+
+// signout
+async function signOut() {
+    await firebase.auth().signOut();
+
+    //limpar localStorage
+    localStorage.removeItem('SistemaUser');
+
+    //voltar ao estado normal do user que é null
+    setUser(null);
+
+
+    //precisa disponibilizar essa função em AutoContext.Provider value
+}
+
+
+
+//signed é um boolean para saber se está logado ou não.
+// signed: !!user    isso converte para boolean
+//tudo que quiser disponibilizar globalmente é só inserir aqui {signed: !!user, user, loading}
+    return(
+        <AuthContext.Provider value={{
+            signed: !!user, 
+            user, 
+            loading, 
+            signUp,
+            signOut, //Ir em Dashboard importar useContext e AuthContext para criar o botão sair
+
+            }}> {/*signUp pode ser disponibilizado aqui tb e precisa ser acessado na página do componente signUp*/}
+            {children}
+        </AuthContext.Provider>
+    )
+}
+
+export default AuthProvider;
+
+
+
+
+--------Criar o botão "Sair" em  Dashboard/index.js:
+
+************Observação, ainda não tem o sistema de login até este ponto. 
+
+
+// Importar useContext e AuthContext para poder deslogar
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/auth";
+
+
+
+export default function Dashboard(){
+
+const{ signOut }=useContext(AuthContext); // Para deslogar. Agora criar um botão.
+
+
+    return(
+        <div>
+            Página DASHBOARD
+            <button onClick={()=> signOut() }>Sair da conta</button>
+        </div>
+    )
+}
+
+
+
+************Criar login de usuário cadastrado. Em auth:
+
+
+
+
+
+import { useState, useEffect, createContext} from 'react';
+import firebase from '../services/firebaseConnection';
+
+export const AuthContext = createContext({});
+
+//prover
+function AuthProvider({ children }){
+
+    //teste para dashboard
+    //const [user, setUser] = useState({id: 1, nome: "Leandro"}); // testar http://localhost:3000/dashboard
+
+    const [user, setUser] = useState(null);  //Inicia como logout
+    const [loadingAuth, setLoadingAuth] = useState(false); // após login mudar para true lá na função
+    const [loading, setLoading] = useState(true); // iniciar carregando
+
+    //useEffect para saber se tem algum usuário logado:
+    useEffect(()=>{
+
+        function loadStorage(){
+            const storageUser = localStorage.getItem('SistemaUser');
+
+            if(storageUser){
+                setUser(JSON.parse(storageUser));
+                //se já tiver usuário:
+                setLoading(false);
+            }
+            setLoading(false);
+        }
+        loadStorage();
+
+    },[])
+
+
+//função para cadastarr usuário:
+async function signUp( email, password, nome ){
+    //alterar para true:
+    setLoadingAuth(true);
+    await firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then( async(value)=>{      
+        let uid =value.user.uid;
+        
+          //cadastrar no DB
+        await firebase.firestore().collection('users')
+        .doc(uid).set({
+            nome: nome,
+            avatarUrl: null, //vai começar com a imagema avatar padrão
+        })
+        .then( ()=>{
+            // disponibilizar para o setUser
+            let data = {
+                uid: uid,
+                nome: nome,
+                email: value.user.email,
+                avatarUrl: null,
+            }//passar data para setUser. Pode salvar em localStorage também, mais abaixo
+            setUser(data);
+            storageUser(data); //Veja função criada mais abaixo
+
+            setLoadingAuth(false);
+
+        })
+    })//Tratar os casos de erros
+    .catch((error)=>{
+        console.log(error);
+        setLoadingAuth(false);
+    })
+
+
+
+}//localStorage salvar data aqui também
+
+
+function storageUser(data){
+    localStorage.setItem('SistemaUser', JSON.stringify(data)) //'SistemaUser' foi o nome dado acima em localStorage
+}
+
+// signout
+async function signOut() {
+    await firebase.auth().signOut();
+
+    //limpar localStorage
+    localStorage.removeItem('SistemaUser');
+
+    //voltar ao estado normal do user que é null
+    setUser(null);
+
+
+    //precisa disponibilizar essa função em AutoContext.Provider value
+}
+
+
+//Criar o acesso login do usuário:
+async function signIn(email, password){
+    setLoadingAuth(true); //Para logar, passar para true
+
+    await firebase.auth().signInWithEmailAndPassword(email, password)
+    //Quando logar recebe value
+    .then(async (value)=>{ // Se logou vai entrar em then
+        let uid = value.user.uid;
+
+        const userProfile = await firebase.firestore().collection('users').doc(uid).get(); //.get é para buscar a informação
+
+        let data = {
+            uid: uid,
+            nome: userProfile.data.nome,
+            email: value.user.email,
+            avatarUrl: userProfile.data.avatarUrl,
+        };
+
+        setUser(data); // Se deu tudo certo vai passar para data
+        storageUser(data);  // Salvar no localStorage
+        setLoadingAuth(false);
+
+
+
+    })
+    .catch((error)=>{
+        console.log(error);
+        setLoadingAuth(false);
+
+    })
+}
+
+
+
+
+
+
+
+//signed é um boolean para saber se está logado ou não.
+// signed: !!user    isso converte para boolean
+//tudo que quiser disponibilizar globalmente é só inserir aqui {signed: !!user, user, loading}
+    return(
+        <AuthContext.Provider value={{
+            signed: !!user, 
+            user, 
+            loading, 
+            signUp,
+            signOut, //Ir em Dashboard importar useContext e AuthContext para criar o botão sair
+
+            signIn, //Para fazer o login. Agora ir em pages/index.js
+
+            }}> {/*signUp pode ser disponibilizado aqui tb e precisa ser acessado na página do componente signUp*/}
+            {children}
+        </AuthContext.Provider>
+    )
+}
+
+export default AuthProvider;
+
+
+
+
+
+
+----------------------------
+
+Em pages/SignIn/index.js:
+
+
+
+
+
+//Para logar importar useContext e AuthContext
+
+import { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../../contexts/auth';
+
+import './signin.css';
+import logo from '../../assets/logoJPG.jpg';
+
+function SignIn() {
+  const [email, setEmail] =useState('');
+  const [password, setPassword] =useState('');
+
+  //Para logar importar useContext e AuthContext e fazer uma verificação
+  const { signIn } = useContext(AuthContext);
+
+
+  async function handleSubmit(e){
+    e.preventDefault(); //Para não atualizar a página
+    //alert('teste handleSubmit')
+
+//Para logar importar useContext e AuthContext e fazer uma verificação
+    if(email !== '' &&  password !== ''){
+     //Se for diferente de vazio, então vai chamar signIn
+      signIn(email, password);
+    }
+
+  }
+
+    return (
+      <div className='container-center'>
+        <div className='login'>
+          <div className='logo-area'>
+            <div> 
+            <img src={logo} alt='Logo marca' />
+            </div>
+          </div>
+          
+
+            <form onSubmit={handleSubmit}>
+              <h1>Entrar</h1>
+              <input type="text" placeholder='E-mail' value={email} onChange={(e)=> setEmail(e.target.value) }/>
+              <input type="password" placeholder='************'value={password} onChange={(e)=> setPassword(e.target.value) }/>
+              <button type='submit'>Entrar</button>
+            </form>
+            <Link to='/register'>Criar uma conta.</Link>
+
+        </div>        
+      </div>
+    
+    );
+  }
+  
+  export default SignIn;
+
+
+
+*******************************************************************
+
+-------------------------------------pegar o loadinAuth para 
+controlar acesso e avisar usuário que está carregando, está buscando informações
+
+Em auth.js disponibilizar ele:
+
+
+
+return(
+        <AuthContext.Provider value={{
+            signed: !!user, 
+            user, 
+            loading, 
+            signUp,
+            signOut, //Ir em Dashboard importar useContext e AuthContext para criar o botão sair
+
+            signIn, //Para fazer o login. Agora ir em pages/index.js
+
+            loadingAuth, //Para avisar usuário que está carregando informações
+
+            }}> {/*signUp pode ser disponibilizado aqui tb e precisa ser acessado na página do componente signUp*/}
+            {children}
+        </AuthContext.Provider>
+
+
+
+
+-------------Em SignIn/index.js alterar o botão usando loadingAuth:
+
+Primeiro chamar ele aqui:
+  //Para logar importar useContext e AuthContext e fazer uma verificação
+  const { signIn, loadingAuth } = useContext(AuthContext);
+
+Agora o botão, como ele é um boolean fica facil:
+
+
+<button type='submit'>{loadingAuth?'Carregando...' : 'Entrar'} </button>
+
+Tive que fazer um ajuste no css para caber o carregando...
+
+
+
+
+--------Fazer a mesma coisa em cadastro:
+
+
+
+
+  //importar useContext e chamar signUp
+  const { signUp, loadingAuth } = useContext(AuthContext); //importar useContext
+
+
+ 
+ <button type='submit'>{loadingAuth?'Carregando...' : 'Cadastrar'} </button>
+            
+
+*******************************************************************
+
+
+Agora pode criar os alertas com toast:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
