@@ -1543,7 +1543,7 @@ export default function Header(){
 
 
 -----
-para chamar em dasboard:
+para chamar em dashboard:
 
 
 
@@ -1601,7 +1601,7 @@ export default function Header(){
 
 {/*   Veja: https://react-icons.github.io/react-icons/
                      Instalar: npm install react-icons */}
-            <Link to='/dasboard'> 
+            <Link to='/dashboard'> 
                 <FiHome color='#fff' size={25} />
             Chamados           
             </Link>   
@@ -1730,15 +1730,400 @@ export default function Header(){
 --------------------------
 --------------------------
 
+Criar um componente para título, pois vai alterar a função dele.
+
+
+
+src/components/Title/index.js e title.css.
+
+Em index.js:
+
+import './title.css';
+
+export default function Title(){
+    return (
+        <div>
+            <h1>Teste título</h1>
+
+        </div>
+    )
+}
+
+
+-----------Em pages. Criar Profile/index.js e profile.css:
+
+import './profile.css';
+
+export default function Profile(){
+    return (
+        <div>
+            <h1>Teste Profile. Perfil do usuário</h1>
+
+        </div>
+    )
+}
 
 
 
 
 
+--------------Atualizar rotas. routes/index.js:
+
+import { Switch } from 'react-router-dom';
+import Route from './Route';
+
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+import Dashboard from '../pages/Dashboard';
+
+import Profile from '../pages/Profile';
+
+export default function Routes(){
+    return(
+        <Switch>
+            <Route exact path='/' component={SignIn} />
+            <Route exact path='/register' component={SignUp} />
+            <Route exact path='/dashboard' component={Dashboard}  isPrivate  />
+
+            <Route exact path='/profile' component={ Profile } isPrivate />
+
+        </Switch>
+    )
+}
+
+
+--------------Atualizar Profile/index.js importando Header:
+
+import './profile.css';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+
+import { FiSettings } from 'react-icons/fi';
+
+export default function Profile(){
+    return (
+        <div>
+            <Header/>
+
+            <div className='content'>
+                <Title name="Meu Perfil">
+                    <FiSettings color='#121212' size={25} />
+
+                </Title>
+            </div>
+
+        </div>
+    )
+}
+
+// testar http://localhost:3000/profile
+
+/* <Title></Title>  foi passado dessa forma para poder receber de children.
+Cada tela ele terá um icone diferente, vai ser melhor assim
+
+*/
 
 
 
 
+
+--------------Atualizar Title/index.js importar Profile com children e 
+***name*** que foi criado em Profile  <Title name="Meu Perfil"> :
+
+
+import './title.css';
+
+export default function Title(  { children, name }  ){
+    return (
+        <div className="title">
+
+            { children }
+
+            <span>{ name }</span>  {/* <----name foi achamada de <Title name ="Meu Perfil" > que está em Profile */}
+
+         </div>
+    )
+}
+
+
+
+---------Title/title.css:
+
+.title{
+    display: flex;
+    flex-direction: row; /* row - será alinhadp e, linha */
+    align-items: center;
+    margin: 1em 0;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    padding: .8em;
+}
+
+.title span{
+    margin-left: 1em;
+    font-size: 1.5em;
+}
+
+/* Em header.css deve ajustar as margens left
+
+*/
+
+
+
+**************************************Ajustes em header.css:
+/* Ajustes de profile */
+.content{
+    margin-left: 200px;
+    padding: 1px 16px;
+}
+
+/* FIM ajustes de profile */
+
+
+@media screen and (max-width: 700px){ /*Quando a largura máxima for 700px será aplicado o que tem aqui dentro*/
+    .sidebar{
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+
+    .sidebar a{
+        float: left; /*icones vão ficar da E para a D */
+    }
+
+    .sidebar div{
+        display: none;/* Em aparelhos pequenos vai desaparecer o menu lateral quando melhor que 700px */
+    }
+    .sidebar a svg{
+        display: none;/* Quando melhor que 700px os icones vao desaparecer*/
+    }
+
+
+    /* Ajustes de profile */
+    div.content{
+        margin-left: 0px;
+        padding: 1px 16px;
+    }
+
+/* FIM ajustes de profile */
+
+}
+
+**************************************
+Profile são as comfigurações pessoais. Agora vem a parte de editar dados e salvar.
+http://localhost:3000/profile
+
+------
+--------------Atualizar Profile/index.js com  o container de atualização:
+
+
+
+
+// Para editar informações de usuário deve importar:
+import { useState, useContext } from 'react';
+import { AuthContext } from '../../contexts/auth';
+import avatar from  '../../assets/avatar.png';
+
+import './profile.css';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+
+import { FiSettings, FiUpload } from 'react-icons/fi';
+
+
+export default function Profile(){
+
+// Para editar informações de usuário
+const { user, signOut } = useContext(AuthContext);
+const [nome, setNome] = useState(user && user.nome); //Não logou em branco, deve passar os parâmetros do acesso do usuário.
+const [email, setEmail] = useState(user && user.email);
+const [avatarUrl, setAvatarUrl] = useState(user && user.avatarUrl);
+
+    return (
+        <div>
+            <Header/>
+            <div className='content'>
+                <Title name ="Meu Perfil" >
+                    <FiSettings  size={25} />
+                </Title>
+
+
+        {/*// Para editar informações de usuário */}
+                <div className='container'>
+                    <form className='form-profile'>
+                        
+                        <label className='label-avatar'> 
+                        {/* criar um ícone sobre a imagem do avatar*/}
+                            <span>
+                                <FiUpload color='#fff' size={25} />
+                            </span>
+                            <input type='file' accept='  image/*  ' />  {/* Na edição de img vai aceitar somente imagens*/}
+                            <br/> 
+                            {/* Caso não tenha imagem deverá exibir o avatar padrão*/}
+                            { avatarUrl === null ? 
+                                <img src={avatar} width="200" height='200' alt='Imagem do perfil do usuário' /> 
+                                : 
+                                <img src={avatarUrl} width="200" height='200' alt='Imagem do perfil do usuário' />
+                            }
+                        </label>
+
+
+                        <label>Nome</label>
+                        <input type='text' value={ nome } onChange={ (e)=> setNome(e.target.value)}/>
+
+
+                        <label>E-mail</label>
+                        <input type='text' value={ email } disabled={true}/> {/* Tirar o onChange para não trocar o email*/}
+
+                        <button type='submit'>Salvar</button>
+                    </form>
+                </div>
+
+{/* Criar um campo novo fora de form pra sair, mas pode usar as mesmas configurações de container*/}
+                <div className='container'>
+                    <button className='logout-btn' onClick={ ()=> signOut() } >
+                        Sair
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+    )
+}
+
+// testar http://localhost:3000/profile
+
+/* <Title></Title>  foi passado dessa forma para poder receber de children.
+Cada tela ele terá um icone diferente, vai ser melhor assim
+
+*/
+
+
+
+
+--------------Editar Profile/profile.css:
+
+
+
+.container{
+    display: flex;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    padding: .8em;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.label-avatar{
+    width: 280px;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer
+    /*para saber o tamanho durante esta edição:
+    background-color: #121212;
+    */
+}
+
+.label-avatar input{
+    display: none; /*Para tirar o botão enviar */    
+}
+
+.label-avatar span{
+    /*Deixar sobreposto*/
+    z-index: 99;
+
+    position: absolute; /*aqui vai arrastar para sobrepor*/
+    /*background-color: #121212;*/ 
+    opacity: 0.7;
+    transition: all .5s;
+
+
+}
+
+.label-avatar span:hover{
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+.form-profile img{
+    margin-bottom: 1em;
+    border-radius: 50%; /* para arredondar a imagem */
+    object-fit: cover; /* PARA NÃO DESTORCER */
+}
+
+.form-profile label{
+    margin-bottom: .5em;
+    font-size: 1.4em;
+}
+
+.form-profile input, textarea, select{
+    margin-bottom: 1em;
+    padding: .5em;
+    border: 0;
+    border-radius: 5px;
+    max-width: 600px;
+}
+
+.form-profile input:disabled{
+    cursor: not-allowed; /* vai aparecer o cursor de PROIBIDO onde não pode editar */
+}
+
+/*
+.form-profile button{
+    max-width: 600px;
+} Não vai precisar, definido menor em outro lugar*/
+
+.logout-btn{
+    padding: 5px 20px;
+    background-color: transparent;
+    border: 1px solid #121212;
+    border-radius: 8px;
+    font-size: 1.2em;
+
+    /*alinhar dentro do botão*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+
+-------------Atualizar dashboard, pode tirar o botão agora:
+
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/auth";
+
+//cabeçalho
+import  Header  from "../../components/Header";
+
+export default function Dashboard(){
+
+const{ signOut }=useContext(AuthContext); // Para deslogar. Agora criar um botão.
+
+
+    return(
+        <div>
+            <Header/>
+
+            Página DASHBOARD
+            {/* Após configurar profile pode tirar esse botão
+            <button onClick={()=> signOut() }>Sair da conta</button>
+            */}
+        </div>
+    )
+}
+
+
+
+------------------------------
+Agora fazer a parte funcional
+------------------------------
 
 
 
