@@ -2504,6 +2504,378 @@ Cada tela ele terá um icone diferente, vai ser melhor assim
 
 
 
+-------------------------------------------------------
+---------------------------------------
+Cadastrar e editar clientes
+
+---------------------------------------
+-------------------------------------------------------
+
+pages/Custumers/ index.js e customers.css:
+
+import './customers.css';
+
+export default function Customers(){
+    return(
+        <div>
+            CUSTOMERS - Pg Clientes
+        </div>
+    )
+}
+
+
+---------Corrigir rotas em routes/index.js:
+
+
+// Switch - um componente por página
+import { Switch } from 'react-router-dom';
+import Route from './Route';
+
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+import Dashboard from '../pages/Dashboard';
+import Profile from '../pages/Profile';
+
+import Customers from '../pages/Customers';
+
+export default function Routes(){
+    return(
+        <Switch>
+            <Route exact path='/' component={SignIn} />
+            <Route exact path='/register' component={SignUp} />
+            
+            <Route exact path='/dashboard' component={Dashboard}  isPrivate  />
+            <Route exact path='/profile' component={Profile} isPrivate />
+
+            <Route exact path='/customers' component={ Customers } isPrivate />
+
+        </Switch>
+    )
+}
+
+
+
+-----Verificar se está tudo ok e  atualizar
+pages/Custumers/ index.js:
+
+http://localhost:3000/customers
+
+
+importar o Header e Title.
+
+
+-----Parte gráfica:
+
+
+import { useState } from 'react';
+
+/*Pode utilizar as mesmas configurações CSS que já foram feitas em profile.
+Para isso basta utilizar os memos nomes das classes.
+*/
+import './customers.css';
+
+import Title from '../../components/Title';
+import Header from '../../components/Header';
+
+import { FiUser } from 'react-icons/fi';
+
+
+export default function Customers(){
+    const[nomeFantasia, setNomeFantasia] = useState('');
+    const[cnpj, setCnpj] = useState('');
+    const[endereco, setEndereco] = useState('');
+
+    async function handleAdd(e){
+        e.preventDefault();
+       // alert('Teste Cadastrar no formulário')
+    }
+
+    return(
+        <div>
+            <Header/>
+            <div className='content'>
+                <Title name='Clientes'>
+                    <FiUser size={25} />
+                </Title>
+
+                <div className='container'>
+                    <form className='form-profile customers' onSubmit={ handleAdd }>
+                        <label>Nome da empresa</label>
+                        <input type='text' placeholder='Nome da empresa' value={ nomeFantasia } 
+                        onChange={(e)=>setNomeFantasia(e.target.value)} />
+
+                        <label>CNPJ</label>
+                        <input type='text' placeholder='CNPJ' value={ cnpj } 
+                        onChange={ (e)=>setCnpj(e.target.value) } />
+
+                        <label>Endereço</label>
+                        <input type='text' placeholder='Endereço' value={ endereco } 
+                        onChange={(e)=>setEndereco(e.target.value)} />
+
+                        <button type='submit'>Cadastrar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+
+-----Parte funcional, importar firebase:
+
+
+import { useState } from 'react';
+
+/*Pode utilizar as mesmas configurações CSS que já foram feitas em profile.
+Para isso basta utilizar os memos nomes das classes. */
+import './customers.css';
+
+import Title from '../../components/Title';
+import Header from '../../components/Header';
+
+import { FiUser } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+
+import firebase from '../../services/firebaseConnection';
+
+export default function Customers(){
+    const[nomeFantasia, setNomeFantasia] = useState('');
+    const[cnpj, setCnpj] = useState('');
+    const[endereco, setEndereco] = useState('');
+
+
+    async function handleAdd(e){
+        e.preventDefault();
+       // alert('Teste Cadastrar no formulário')
+       if(nomeFantasia !== '' && cnpj !== '' && endereco !== ''){
+        await firebase.firestore().collection('customers')
+        .add({
+            nomeFantasia: nomeFantasia,
+            cnpj: cnpj,
+            endereco: endereco
+        })
+        //Se deu tudo certo limpar dasdos do formulário
+        .then(()=>{
+            setNomeFantasia('');
+            setCnpj('');
+            setEndereco('');
+            toast.success('Empresa cadsatrada com sucesso.')
+        })
+        //Se deu algun erro
+        .catch((error)=>{
+            console.log(error);
+            toast.error('Erro ao cadastar empresa');
+        })
+       }else{
+        toast.error('Preencha todos os campos.')
+       }
+
+    }
+
+
+
+    return(
+        <div>
+            <Header/>
+            <div className='content'>
+                <Title name='Clientes'>
+                    <FiUser size={25} />
+                </Title>
+
+                <div className='container'>
+                    <form className='form-profile customers' onSubmit={ handleAdd }>
+                        <label>Nome da empresa</label>
+                        <input type='text' placeholder='Nome da empresa' value={ nomeFantasia } 
+                        onChange={(e)=>setNomeFantasia(e.target.value)} />
+
+                        <label>CNPJ</label>
+                        <input type='text' placeholder='CNPJ' value={ cnpj } 
+                        onChange={ (e)=>setCnpj(e.target.value) } />
+
+                        <label>Endereço</label>
+                        <input type='text' placeholder='Endereço' value={ endereco } 
+                        onChange={(e)=>setEndereco(e.target.value)} />
+
+                        <button type='submit'>Cadastrar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+
+
+------------------------------------
+--------------------------------
+Agora será editada a DASHBOARD para fazer a parte de chamadas.
+--------------------------------
+------------------------------------
+Parte grafica:
+
+import './dashboard.css';
+// Importar useContext e AuthContext para poder deslogar
+import { useState } from "react";
+
+
+import  Header  from "../../components/Header";
+import Title from '../../components/Title';
+import { FiMessageSquare, FiPlus} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+
+
+export default function Dashboard(){
+
+
+
+    return(
+        <div>
+            <Header/>
+
+            <div className='content'>  
+                <Title name='Atendimentos'>
+                    <FiMessageSquare size={25}/>                    
+                </Title>
+
+                <div className='container dashboard'>
+                    <span>Verificando... Nenhum chamado registrado.</span>
+
+                    <Link  to='new' className='new' >
+                        <FiPlus color='fff' size={25} />
+                        Novo chamado
+                    </Link>
+                </div>
+            </div>           
+        </div>
+    )
+}
+
+
+
+----------------------
+dashboard.css:
+
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;    
+    align-items: center;
+}
+
+.dashboard span{
+    margin: 2em 0;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.new{
+    float:right;
+    margin-bottom: 1.5em;
+    background-color: #3baf42;
+    color: #fff;
+    border: 0;
+    padding: .7em;
+    font-weight: 500;
+    font-size: 1.1em;
+    border-radius: 7px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: ease-in 0.2s;
+}
+
+/*afastar o icone*/
+.new svg{
+    margin-right: 5px;
+}
+
+.new:hover{
+    background-color: #62d56a;
+    transform: scale(1.1);
+}
+
+.new:active{
+    background-color: #dddfe1;
+    color: #3baf42;      
+}
+
+
+
+--------------Atualizar DASHBOARD com a parte funcional.
+
+
+import './dashboard.css';
+// Importar useContext e AuthContext para poder deslogar
+import { useState } from "react";
+
+
+import  Header  from "../../components/Header";
+import Title from '../../components/Title';
+import { FiMessageSquare, FiPlus} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+
+
+export default function Dashboard(){
+
+    const[chamados, setChamados]=useState([]);// Será em um array pois terá uma lista
+
+
+
+
+    return(
+        <div>
+            <Header/>
+
+            <div className='content'>  
+                <Title name='Atendimentos'>
+                    <FiMessageSquare size={25}/>                    
+                </Title>
+
+
+{/*Se for igual a zero quer dizer que não há chamados */}
+                { chamados.length===0 ? (  
+                    <div className='container dashboard'>
+                        <span>Verificando... Nenhum chamado registrado.</span>
+
+                        <Link  to='new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link>
+                    </div>
+
+                ) : (
+                    
+                   <>   {/*Pode usar um "Fragment" aqui para não alterar formatação */}
+
+                        <Link  to='new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link>           
+                   
+                   </>
+                )} 
+
+                
+            </div>           
+        </div>
+    )
+}
+
+
+
+
+
+--------------------Criar tabelas na DASHBOARD:
+
+
+
 
 
 
