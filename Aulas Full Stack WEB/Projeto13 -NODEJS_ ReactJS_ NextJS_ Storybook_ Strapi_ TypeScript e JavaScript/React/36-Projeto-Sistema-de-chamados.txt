@@ -2852,7 +2852,7 @@ export default function Dashboard(){
 
                 ) : (
                     
-                   <>   {/*Pode usar um "Fragment" aqui para não alterar formatação */}
+                   <>   {/*Pode usar um "Fragment" aqui para não alterar formatação. Não tem estilização */}
 
                         <Link  to='new' className='new' >
                             <FiPlus color='fff' size={25} />
@@ -2872,27 +2872,673 @@ export default function Dashboard(){
 
 
 
---------------------Criar tabelas na DASHBOARD:
+--------------------Criar tabelas de chamados na DASHBOARD:
+Criar tabelas para simulação aqui e depois a parte funcional.
+
+
+import './dashboard.css';
+// Importar useContext e AuthContext para poder deslogar
+import { useState } from "react";
+
+
+import  Header  from "../../components/Header";
+import Title from '../../components/Title';
+import { FiMessageSquare, FiPlus, FiSearch, FiEdit2} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+
+
+export default function Dashboard(){
+
+    //Para simular um chamado durante o desenvolvimento coloque 1, 
+    //mas para o uso normal, deixar em branco, inicia vazia.
+    const[chamados, setChamados]=useState([1]);// Será em um array pois terá uma lista.
+
+
+
+
+    return(
+        <div>
+            <Header/>
+
+            <div className='content'>  
+                <Title name='Atendimentos'>
+                    <FiMessageSquare size={25}/>                    
+                </Title>
+
+
+{/*Se for igual a zero quer dizer que não há chamados */}
+                { chamados.length===0 ? (  
+                    <div className='container dashboard'>
+                        <span>Verificando... Nenhum chamado registrado.</span>
+
+                        <Link  to='new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link>
+                    </div>
+
+                ) : (
+                    
+                   <>   {/*Pode usar um "Fragment" aqui para não alterar formatação */}
+
+                        <Link  to='new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link> 
+
+
+                        {/*Tabelas dos chamados */}
+                        <table>
+                            <thead>{/*Cabeçalho */}
+                                <tr>
+                                    <th scope='col'>Cliente</th>
+                                    <th scope='col'>Assunto</th>
+                                    <th scope='col'>Status</th>
+                                    <th scope='col'>Cadastrado em</th>
+                                    <th scope='col'>#</th>                                    
+                                </tr>                                
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td data-label='Cliente'>cliente escola</td>
+                                    <td data-label='Assunto'>assunto</td>
+                                    <td data-label='Status'>
+                                        <span className='badge' style={{backgroundColor: '#5cb85c'}} >Aberto</span>
+                                    </td>
+                                    <td data-label='Cadastrado'>20/02/2022</td>
+                                    <td data-label='#'>
+                                        <button className='action' style={{backgroundColor:'#3583f6'  }}>
+                                            <FiSearch color='#fff' size={17} />
+                                        </button>
+                                        <button className='action' style={{backgroundColor:'#f6a935'  }}>
+                                            <FiEdit2 color='#fff' size={17} />
+                                        </button>
+                                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>          
+                   
+                   </>
+                )} 
+
+                
+            </div>           
+        </div>
+    )
+}
+
+
+
+--------------------
+Aplicando css dashboard.css:
+
+
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;    
+    align-items: center;
+}
+
+.dashboard span{
+    margin: 2em 0;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.new{
+    float:right;
+    margin-bottom: 1.5em;
+    background-color: #3baf42;
+    color: #fff;
+    border: 0;
+    padding: .7em;
+    font-weight: 500;
+    font-size: 1.1em;
+    border-radius: 7px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: ease-in 0.2s;
+}
+
+/*afastar o icone*/
+.new svg{
+    margin-right: 5px;
+}
+
+.new:hover{
+    background-color: #62d56a;
+    transform: scale(1.1);
+}
+
+.new:active{
+    background-color: #dddfe1;
+    color: #3baf42;      
+}
+
+
+/* Tabelas dos chamados */
+
+table{
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table caption{
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+}
+
+table tr{
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: .35em;
+}
+
+table th, td{
+    padding: .62em;
+    text-align: center;
+}
+
+table th{
+    font-size: .95em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+table td .action{
+    border: 0;
+    padding: 5px;
+    margin-right: 8px;
+    align-items: center;
+    display: inline-block;
+    border-radius: 5px;    
+}
+
+table td .action svg{
+    vertical-align: middle;
+}
+
+table td .badge{
+    padding: 3px 8px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+@media screen and (max-width: 600px ){
+    table{
+        border: 0;        
+    }
+
+    table caption{
+        font-size: 1.3em;
+    }
+
+    table thead{
+        border: none;
+        clip: rect(0 0 0 0);
+        height:1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    table tr{
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .65em;
+    }
+
+    table td{
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+
+    /* Tudo acima foi alinhado à D,
+    agora o cabeçalho à E */
+    table td::before{
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    /* tirar o risco horizontal da última linha */
+    table td:last-child{
+        border-bottom: 0;
+    }
+    
+}
+
+
+
+---------------Criar o cadastro das chamadas.
+Em pages/New/index.js e new.css:
+
+import './new.css';
+
+export default function New(){
+    return(
+        <div>
+            Tela de cadastro chamados
+        </div>
+    )
+}
+
+
+-----Atualizar rotas routes/index.js:
+
+
+// Switch - um componente por página
+import { Switch } from 'react-router-dom';
+import Route from './Route';
+
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+import Dashboard from '../pages/Dashboard';
+import Profile from '../pages/Profile';
+import Customers from '../pages/Customers';
+
+import New from '../pages/New';
+
+export default function Routes(){
+    return(
+        <Switch>
+            <Route exact path='/' component={SignIn} />
+            <Route exact path='/register' component={SignUp} />
+            
+            <Route exact path='/dashboard' component={Dashboard}  isPrivate  />
+            <Route exact path='/profile' component={Profile} isPrivate />
+            <Route exact path='/customers' component={ Customers } isPrivate />
+
+            <Route exact path='/new' component={ New } isPrivate />
+
+        </Switch>
+    )
+}
+
+
+
+------------------Atualizar pages/New/index.js:
+A parte funcional será feita depois.
+
+
+import './new.css';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+
+import { FiPlusCircle } from 'react-icons/fi';
+
+
+export default function New(){
+    return(
+        <div>
+            <Header/>
+            
+            <div className='content'>
+                <Title name="Novo Chamado">
+                    <FiPlusCircle size={25}/>
+                </Title>
+
+                <div className='container'>
+                    <form className='form-profile'>
+                        
+                        <label>Cliente</label>
+                        <select>
+                            <option key={1} value={1}>
+                                Lcf
+                            </option>
+                        </select>
+
+                        <label>Assunto</label>
+                        <select>
+                            <option value="Suporte">Suporte</option>
+                            <option value="Visita técnica">Visita técnica</option>
+                            <option value="Financeiro">Financeiro</option>
+                        </select>
+
+                        <label>Status</label>
+                        <div className='status'>
+                            <input type='radio' name='radio' value="Aberto"
+                            /> <span>Aberto</span>
+
+                            <input type='radio' name='radio' value="Progresso"
+                            /> <span>Progresso</span>
+
+                            <input type='radio' name='radio' value="Atendido"
+                            /> <span>Atendido</span>
+                        </div>
+
+                        <label>Solicitação</label>
+                        <textarea type="text"  placeholder='Descreva o problema.' />
+
+                        <button type='submit'>Registrar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+------------------pages/New/new.css:
+
+form textarea{
+    height: 120px;
+    resize: none;
+}
+
+form input[type=radio]{
+    margin: 5px 0 15px 0;
+}
+
+/*Vai espaçar todos à E menos o primeiro */
+form input[type=radio]:not(:first-child){
+    margin-left: 30px;
+}
+
+.status span{
+    padding-left: .1em;
+    font-size: 1.2em;
+}
+
+.form-profile label:not(:first-child){
+    margin-top: 15px;
+
+}
+
+
+
+
+--------------------------Funcionalidades
+------------------Atualizar pages/New/index.js:
+
+Deixar a parte do cliente por ultimo.
+
+
+
+import './new.css';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+import { FiPlusCircle } from 'react-icons/fi';
+
+import { useState } from 'react';
+
+export default function New(){
+
+    const [assunto, setAssunto]=useState('Suporte');
+    const [status, setStatus]=useState('Aberto');
+    const [complemento, setComplemento]=useState('');
+
+    function handleRegister(e){
+        e.preventDefault();
+        //alert('teste botão registrar')
+
+    }
+
+
+    //Trocar assunto
+    function handleChancheSelect(e){
+        setAssunto(e.target.value);
+        //console.log(e.target.value);
+    }
+
+
+    //Trocar status
+    function handleOptionChanche(e){
+       setStatus(e.target.value); 
+       //console.log(e.target.value);
+
+    }
+
+
+    return(
+        <div>
+            <Header/>
+            
+            <div className='content'>
+                <Title name="Novo Chamado">
+                    <FiPlusCircle size={25}/>
+                </Title>
+
+                <div className='container'>
+                    <form className='form-profile'   onSubmit={handleRegister} >
+                        
+                        <label>Cliente</label>
+                        <select>
+                            <option key={1} value={1}>
+                                Lcf
+                            </option>
+                        </select>
+
+                        <label>Assunto</label>
+                        <select value={assunto} onChange={handleChancheSelect}>
+                            <option value="Suporte">Suporte</option>
+                            <option value="Visita técnica">Visita técnica</option>
+                            <option value="Financeiro">Financeiro</option>
+                        </select>
+
+                        <label>Status</label>
+                        <div className='status'>
+                            <input type='radio' name='radio' value="Aberto"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Aberto'} 
+                            /> <span>Aberto</span>  {/*    checked={status === 'Aberto'}  Compara qual está marcado inicialmente */}
+
+                            <input type='radio' name='radio' value="Progresso"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Progresso'}
+                            /> <span>Progresso</span>
+
+                            <input type='radio' name='radio' value="Atendido"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Atendido'}
+                            /> <span>Atendido</span>
+                        </div>
+
+                        <label>Solicitação</label>
+                        <textarea type="text"  placeholder='Descreva...' 
+                        value={complemento}
+                        onChange={(e)=> setComplemento(e.target.value)}
+                        />
+
+                        <button type='submit'>Registrar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 
 
 
 
+--------------------------Funcionalidades, parte do cliente
+------------------Atualizar pages/New/index.js:
 
 
 
 
+import './new.css';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+import { FiPlusCircle } from 'react-icons/fi';
+
+import firebase from '../../services/firebaseConnection';
+
+//Funcionalidades, parte do cliente
+import { useState, useEffect, useContext } from 'react';// useContext - vai precisar do id do user por isso importar
+import { AuthContext } from '../../contexts/auth';
+import { toast } from 'react-toastify';
+
+export default function New(){
+
+    const [assunto, setAssunto]=useState('Suporte');
+    const [status, setStatus]=useState('Aberto');
+    const [complemento, setComplemento]=useState('');
+
+    //Funcionalidades, parte do cliente
+    const {user} =useContext(AuthContext);
+    const [customers, setCustomers]=useState([]);
+    const [loadCustomers, setLoadCustomers]=useState(true);//Para exibir ao usuário que está buscando info no BD
+    const [customerSelected, setCustomerSelected ]=useState(0);//Pegar o ID selecionado do cliente pois será tudo dinâmico
+    useEffect(()=>{
+        async function loadCustomers(){ // vai chamar "customers" no BD, verificar o nome correto que foi criado.
+            await firebase.firestore().collection('customers')
+            .get()
+            .then((snapshot)=>{
+                let lista = [];
+
+                snapshot.forEach((doc)=>{
+                    lista.push({
+                        id: doc.id,
+                        nomeFantasia: doc.data().nomeFantasia,
+                        cnpj: doc.data().cnpj,
+                    })
+                })
+                //Fazer a verificação
+                if(lista.length === 0){
+                    console.log('Nenhuma empresa encontrada');
+                    setCustomers([{ id:'1', nomeFantasia:'Nenhuma empresa encontrada'}]);//Caso erro, não pode ficar vazio, nesse caso vai ficar em "branco"
+                    setLoadCustomers(false);//Volta para false
+                    toast.error('Nenhuma empresa encontrada');
+                    return;
+                }//Se encontrou, passar a lista
+                setCustomers(lista);
+                setLoadCustomers(false);//Volta para false
+
+                //Passar tuddo isso para o formulário em <select>
+            })
+            .catch((error=>{
+                console.log(error);
+                setLoadCustomers(false);//Volta para false
+                setCustomers([{ id:'1', nomeFantasia:''}]);//Caso erro, não pode ficar vazio, nesse caso vai ficar em "branco"
+                toast.error('Erro! Algo inesperado ocorreu.')
+            }))
+        }
+
+        loadCustomers();
+    },[]);
 
 
 
 
+    function handleRegister(e){
+        e.preventDefault();
+        //alert('teste botão registrar')
+
+    }
 
 
+    //Trocar assunto
+    function handleChancheSelect(e){
+        setAssunto(e.target.value);
+        //console.log(e.target.value);
+    }
 
 
+    //Trocar status
+    function handleOptionChanche(e){
+       setStatus(e.target.value); 
+       //console.log(e.target.value);
+    }
 
 
+//Trocar cliente na opção do chamado
+async function handleChancheCustomers(e){
+   // console.log('INDEX do cliente selecionado: ', e.target.value );
+   // console.log('Cliente selecionado: ', customers[e.target.value])
+    setCustomerSelected(e.target.value);
+}
 
+    return(
+        <div>
+            <Header/>
+            
+            <div className='content'>
+                <Title name="Novo Chamado">
+                    <FiPlusCircle size={25}/>
+                </Title>
+
+                <div className='container'>
+                    <form className='form-profile'   onSubmit={handleRegister} >
+                        
+                        <label>Cliente</label>
+                        {loadCustomers ? (
+                            <input type='text' disabled={true} value="Carregando clientes..." />
+                        ):(
+
+
+                            <select value={customerSelected} onChange={handleChancheCustomers}>
+                            {customers.map((item, index)=>{
+                                return(
+                                <option key={item.id} value={index}>
+                                    {item.nomeFantasia} 
+                                    
+                                </option>
+                                                              
+                                )                                
+                            })}
+                        </select>
+
+                        )}
+                        
+
+                        <label>Assunto</label>
+                        <select value={assunto} onChange={handleChancheSelect}>
+                            <option value="Suporte">Suporte</option>
+                            <option value="Visita técnica">Visita técnica</option>
+                            <option value="Financeiro">Financeiro</option>
+                        </select>
+
+                        <label>Status</label>
+                        <div className='status'>
+                            <input type='radio' name='radio' value="Aberto"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Aberto'} 
+                            /> <span>Aberto</span>  {/*    checked={status === 'Aberto'}  Compara qual está marcado inicialmente */}
+
+                            <input type='radio' name='radio' value="Progresso"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Progresso'}
+                            /> <span>Progresso</span>
+
+                            <input type='radio' name='radio' value="Atendido"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Atendido'}
+                            /> <span>Atendido</span>
+                        </div>
+
+                        <label>Solicitação</label>
+                        <textarea type="text"  placeholder='Descreva...' 
+                        value={complemento}
+                        onChange={(e)=> setComplemento(e.target.value)}
+                        />
+
+                        <button type='submit'>Registrar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 
 
