@@ -4,6 +4,7 @@ npm install react-router-dom
 npm install react-router-dom@5.x   // Essa versão para usar Switch
 npm install react-toastify
 npm install react-icons
+npm install date-fns     //Para formatar data instalar date-fns no terminal. Veja a documentação em https://date-fns.org/
 
 
 
@@ -3788,7 +3789,7 @@ export default function New(){
 
         await firebase.firestore().collection('chamados')
         .add({
-            create: new Date(),
+            created: new Date(),
             cliente: customers[customerSelected].nomeFantasia,
             clienteId: customers[customerSelected].id,
             assunto: assunto,
@@ -3917,11 +3918,1357 @@ Em Dashboard/index.js:
 
 
 
+import './dashboard.css';
+// Importar useContext e AuthContext para poder deslogar
+//useEffect para fazer BUSCAS por chamados no DB
+import { useState, useEffect } from "react";
+import firebase from '../../services/firebaseConnection';
+
+
+import  Header  from "../../components/Header";
+import Title from '../../components/Title';
+import { FiMessageSquare, FiPlus, FiSearch, FiEdit2} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+//Para formatar data instalar. Veja a documentação em https://date-fns.org/
+  import {format} from 'date-fns';                  
+
+//useEffect para fazer BUSCAS por chamados no DB
+const listRef = firebase.firestore().collection('chamados').orderBy('created', 'desc');
+
+
+
+export default function Dashboard(){
+
+    //Para simular um chamado durante o desenvolvimento coloque 1, 
+    //mas para o uso normal, deixar em branco, inicia vazia.
+    const [chamados, setChamados]=useState([1]);// Será em um array pois terá uma lista.
+
+//useEffect para fazer BUSCAS por chamados no DB
+    const [loading, setLoading]=useState(true);//Carregando chamado
+    //buscar mais
+    const [loadingMore, setLoadingMore]=useState(false);
+    //para saber se a lista está vazia
+    const [isEmpty, setIsEmpty]=useState(false);
+    //Pega o último documento buscado
+    const [lastDocs, setLastDocs]=useState();
+    
+
+    useEffect(()=>{
+        loadChamados();
+        return()=>{}
+    },[]);
+
+    //Criando aqui fora o loadChamados poderá ser chamada em qualquer lugar a aplicação
+    async function loadChamados(){
+        await listRef.limit(5)
+        .get()
+        .then((snapshot)=>{
+            updateState(snapshot)
+        })
+        .catch((err)=>{
+            console.log('Erro ao buscar', err);
+            toast.error("Algo saiu errado.")
+            setLoadingMore(false);
+        })
+        setLoading(false);
+    }
+
+   async function updateState(snapshot){
+        const isCollectionEmpty =snapshot.size===0;
+        //se for diferente de vazia
+        if(!isCollectionEmpty){
+            let lista=[];
+            snapshot.forEach((doc)=>{
+                lista.push({ //Veja a lista criada no DB
+                    id: doc.id,
+                    assunto: doc.data().assunto,
+                    cliente: doc.data().cliente,
+                    clienteId: doc.data().clienteId,
+                    created: doc.data().created,
+                    //Para formatar data instalar date-fns no terminal. Veja a documentação em https://date-fns.org/
+                    //npm install date-fns    import {format} from 'date-fns';  
+                    createdFormat: format(doc.data().created.toDate(),'dd/MM/yyyy'),
+                    status: doc.data().status,
+                    complemento: doc.data().complemento
+
+                })
+            })
+            const lastDoc = snapshot.docs[snapshot.docs.length -1]; //Pega o último documento buscado
+            
+            setChamados(chamados=>[...chamados, ...lista]);
+            setLastDocs(lastDoc);
+        }else{
+            setIsEmpty(true);
+        }
+        setLoadingMore(false);
+   }
 
 
 
 
 
+    return(
+        <div>
+            <Header/>
+
+            <div className='content'>  
+                <Title name='Atendimentos'>
+                    <FiMessageSquare size={25}/>                    
+                </Title>
+
+
+{/*Se for igual a zero quer dizer que não há chamados */}
+                { chamados.length===0 ? (  
+                    <div className='container dashboard'>
+                        <span>Verificando... Nenhum chamado registrado.</span>
+
+                        <Link  to='/new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link>
+                    </div>
+
+                ) : (
+                    
+                   <>   {/*Pode usar um "Fragment" aqui para não alterar formatação */}
+
+                        <Link  to='/new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link> 
+
+
+                        {/*Tabelas dos chamados */}
+                        <table>
+                            <thead>{/*Cabeçalho */}
+                                <tr>
+                                    <th scope='col'>Cliente</th>
+                                    <th scope='col'>Assunto</th>
+                                    <th scope='col'>Status</th>
+                                    <th scope='col'>Cadastrado em</th>
+                                    <th scope='col'>#</th>                                    
+                                </tr>                                
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td data-label='Cliente'>cliente escola</td>
+                                    <td data-label='Assunto'>assunto</td>
+                                    <td data-label='Status'>
+                                        <span className='badge' style={{backgroundColor: '#5cb85c'}} >Aberto</span>
+                                    </td>
+                                    <td data-label='Cadastrado'>20/02/2022</td>
+                                    <td data-label='#'>
+                                        <button className='action' style={{backgroundColor:'#3583f6'  }}>
+                                            <FiSearch color='#fff' size={17} />
+                                        </button>
+                                        <button className='action' style={{backgroundColor:'#f6a935'  }}>
+                                            <FiEdit2 color='#fff' size={17} />
+                                        </button>
+                                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>          
+                   
+                   </>
+                )} 
+
+                
+            </div>           
+        </div>
+    )
+}
+
+
+
+----------Passar os itens buscados para Dashboard.
+Fazer uma renderização condicional:
+
+
+import './new.css';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+import { FiPlusCircle } from 'react-icons/fi';
+
+import firebase from '../../services/firebaseConnection';
+
+//Funcionalidades, parte do cliente
+import { useState, useEffect, useContext } from 'react';// useContext - vai precisar do id do user por isso importar
+import { AuthContext } from '../../contexts/auth';
+import { toast } from 'react-toastify';
+
+export default function New(){
+
+    const [assunto, setAssunto]=useState('Suporte');
+    const [status, setStatus]=useState('Aberto');
+    const [complemento, setComplemento]=useState('');
+
+    //Funcionalidades, parte do cliente
+    const {user} =useContext(AuthContext);
+    const [customers, setCustomers]=useState([]);
+    const [loadCustomers, setLoadCustomers]=useState(true);//Para exibir ao usuário que está buscando info no BD
+    const [customerSelected, setCustomerSelected ]=useState(0);//Pegar o ID selecionado do cliente pois será tudo dinâmico
+    useEffect(()=>{
+        async function loadCustomers(){ // vai chamar "customers" no BD, verificar o nome correto que foi criado.
+            await firebase.firestore().collection('customers')
+            .get()
+            .then((snapshot)=>{
+                let lista = [];
+
+                snapshot.forEach((doc)=>{
+                    lista.push({
+                        id: doc.id,
+                        nomeFantasia: doc.data().nomeFantasia,
+                        cnpj: doc.data().cnpj,
+                    })
+                })
+                //Fazer a verificação
+                if(lista.length === 0){
+                    console.log('Nenhuma empresa encontrada');
+                    setCustomers([{ id:'1', nomeFantasia:'Nenhuma empresa encontrada'}]);//Caso erro, não pode ficar vazio, nesse caso vai ficar em "branco"
+                    setLoadCustomers(false);//Volta para false
+                    toast.error('Nenhuma empresa encontrada');
+                    return;
+                }//Se encontrou, passar a lista
+                setCustomers(lista);
+                setLoadCustomers(false);//Volta para false
+
+                //Passar tuddo isso para o formulário em <select>
+            })
+            .catch((error=>{
+                console.log(error);
+                setLoadCustomers(false);//Volta para false
+                setCustomers([{ id:'1', nomeFantasia:''}]);//Caso erro, não pode ficar vazio, nesse caso vai ficar em "branco"
+                toast.error('Erro! Algo inesperado ocorreu.')
+            }))
+        }
+
+        loadCustomers();
+    },[]);
+
+
+
+
+    async function handleRegister(e){
+        e.preventDefault();
+        //alert('teste botão registrar')
+
+        await firebase.firestore().collection('chamados')
+        .add({
+            created: new Date(),
+            cliente: customers[customerSelected].nomeFantasia,
+            clienteId: customers[customerSelected].id,
+            assunto: assunto,
+            status: status,
+            complemento: complemento,
+            userId: user.uid,
+        })/*Aula 117*/
+        .then(()=>{
+            toast.success('Registrado com sucesso.');
+            setComplemento('');
+            setCustomerSelected(0);
+
+        })
+        .catch((err)=>{
+            console.log(err);
+            toast.error('Erro! Erro ao registrar.')
+        })
+    }
+    
+    //Trocar assunto
+    function handleChancheSelect(e){
+        setAssunto(e.target.value);
+        //console.log(e.target.value);
+    }
+
+
+    //Trocar status
+    function handleOptionChanche(e){
+       setStatus(e.target.value); 
+       //console.log(e.target.value);
+    }
+
+
+//Trocar cliente na opção do chamado
+async function handleChancheCustomers(e){
+   // console.log('INDEX do cliente selecionado: ', e.target.value );
+   // console.log('Cliente selecionado: ', customers[e.target.value])
+    setCustomerSelected(e.target.value);    
+}
+
+    return(
+        <div>
+            <Header/>
+            
+            <div className='content'>
+                <Title name="Novo Chamado">
+                    <FiPlusCircle size={25}/>
+                </Title>
+
+                <div className='container'>
+                    <form className='form-profile'   onSubmit={handleRegister} >
+                        
+                        <label>Cliente </label>
+                        {loadCustomers ? (
+                            <input type='text' disabled={true} value="Carregando clientes..." />
+                        ):(
+
+
+                        <select value={customerSelected} onChange={handleChancheCustomers}>
+                            {customers.map((item, index)=>{
+                                return(                                    
+                                <option key={item.id} value={index}>
+                                    {item.nomeFantasia}                                 
+                                </option>                                                             
+                                )                                
+                            })}         
+                                              
+                        </select>
+                        
+                        )}
+                        {/* Para exibir o CNPJ fora do select */}
+                      {customerSelected !== 0 && <p><strong>CNPJ: </strong>{customers[customerSelected].cnpj}</p>}
+                     
+
+                        
+
+                        <label>Assunto</label>
+                        <select value={assunto} onChange={handleChancheSelect}>
+                            <option value="Suporte">Suporte</option>
+                            <option value="Visita técnica">Visita técnica</option>
+                            <option value="Financeiro">Financeiro</option>
+                        </select>
+
+                        <label>Status do chamado</label>
+                        <div className='status'>
+                            <input type='radio' name='radio' value="Aberto"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Aberto'} 
+                            /> <span>Aberto</span>  {/*    checked={status === 'Aberto'}  Compara qual está marcado inicialmente */}
+
+                            <input type='radio' name='radio' value="Progresso"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Progresso'}
+                            /> <span>Progresso</span>
+
+                            <input type='radio' name='radio' value="Atendido"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Atendido'}
+                            /> <span>Atendido</span>
+                        </div>
+
+                        <label>Solicitação</label>
+                        <textarea type="text"  placeholder='Descreva...' 
+                        value={complemento}
+                        onChange={(e)=> setComplemento(e.target.value)}
+                        />
+
+                        <button type='submit'>Registrar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+
+--------------------dashboard botões buscar e editar: 
+
+
+import './dashboard.css';
+// Importar useContext e AuthContext para poder deslogar
+//useEffect para fazer BUSCAS por chamados no DB
+import { useState, useEffect } from "react";
+import firebase from '../../services/firebaseConnection';
+
+
+import  Header  from "../../components/Header";
+import Title from '../../components/Title';
+import { FiMessageSquare, FiPlus, FiSearch, FiEdit2} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+//Para formatar data instalar. Veja a documentação em https://date-fns.org/
+  import {format} from 'date-fns';                  
+
+//useEffect para fazer BUSCAS por chamados no DB
+const listRef = firebase.firestore().collection('chamados').orderBy('created', 'desc');
+
+
+
+export default function Dashboard(){
+
+    //Para simular um chamado durante o desenvolvimento coloque 1, 
+    //mas para o uso normal, deixar em branco, inicia vazia.
+    const [chamados, setChamados]=useState([]);// Será em um array pois terá uma lista.
+
+//useEffect para fazer BUSCAS por chamados no DB
+    const [loading, setLoading]=useState(true);//Carregando chamado
+    //buscar mais
+    const [loadingMore, setLoadingMore]=useState(false);
+    //para saber se a lista está vazia
+    const [isEmpty, setIsEmpty]=useState(false);
+    //Pega o último documento buscado
+    const [lastDocs, setLastDocs]=useState();
+
+     //botões buscar e editar. //Buscar
+    const [showPostModal, setShowPostModal]=useState(false);
+    const [detail, setDetail] = useState();//Detalhes do conteúdo
+
+
+    useEffect(()=> {
+
+//A função loadChamados() pode ser passada aqui para tirar aviso no console do navegador, mas não tem problema deixar assim.
+
+        loadChamados();    
+        return () => {    
+        }
+      }, []);
+
+    //Criando aqui fora o loadChamados poderá ser chamada em qualquer lugar a aplicação, mas pode ser passada dentro de useEffect
+    async function loadChamados(){
+        await listRef.limit(5)
+        .get()
+        .then((snapshot)=>{
+            updateState(snapshot)
+        })
+        .catch((err)=>{
+            console.log('Erro ao buscar', err);
+            toast.error("Algo saiu errado.")
+            setLoadingMore(false);
+        })
+        setLoading(false);
+    }
+
+   async function updateState(snapshot){
+        const isCollectionEmpty = snapshot.size===0;
+        //se for diferente de vazia
+        if(!isCollectionEmpty){
+            let lista=[];
+
+            snapshot.forEach((doc)=>{
+                lista.push({ //Veja a lista criada no DB
+                    id: doc.id,
+                    assunto: doc.data().assunto,
+                    cliente: doc.data().cliente,
+                    clienteId: doc.data().clienteId,
+                    created: doc.data().created,
+                    //Para formatar data instalar date-fns no terminal. Veja a documentação em https://date-fns.org/
+                    //npm install date-fns    import {format} from 'date-fns';  
+                    createdFormated: format(doc.data().created.toDate(), 'dd/MM/yyyy'),
+                    status: doc.data().status,
+                    complemento: doc.data().complemento
+                    
+
+                })
+            })
+            const lastDoc = snapshot.docs[snapshot.docs.length -1]; //Pega o último documento buscado
+            
+            setChamados(chamados=>[...chamados, ...lista]);
+            setLastDocs(lastDoc);
+        }else{
+            setIsEmpty(true);
+        }
+        setLoadingMore(false);
+   }
+
+
+   //botão de busca
+   async function handleMore(){
+    setLoadingMore(true);
+    await listRef.startAfter(lastDocs).limit(5)
+    .get()
+    .then((snapshot)=>{
+      updateState(snapshot);
+    })
+  }
+
+
+
+
+ //  Passar os itens buscados para Dashboard
+ if(loading){
+    return(
+        <div>
+            <Header/>
+
+            <div className='content'>  
+                <Title name='Atendimentos'>
+                    <FiMessageSquare size={25}/>                    
+                </Title>
+            </div>
+
+            <div className='container dashboard'>
+                <span>Buscando chamados...</span>
+            </div>
+        </div>
+    )
+ }
+
+
+
+ //botões buscar e editar.
+ //Buscar.  A ideia toogle é que sempre que tiver aberto, fecha e vice versa.
+ async function tooglePostModal(item){
+    //console.log(item);
+    setShowPostModal(!showPostModal); //Vai inverter true/false
+    setDetail(item);
+ }
+
+ 
+ 
+    return(
+        <div>
+            <Header/>
+
+            <div className='content'>  
+                <Title name='Atendimentos'>
+                    <FiMessageSquare size={25}/>                    
+                </Title>
+
+
+{/*Se for igual a zero quer dizer que não há chamados */}
+                { chamados.length===0 ? (  
+                    <div className='container dashboard'>
+                        <span>Verificando... Nenhum chamado registrado.</span>
+
+                        <Link  to='/new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link>
+                    </div>
+
+                ) : (
+                    
+                   <>   {/*Pode usar um "Fragment" aqui para não alterar formatação */}
+
+                        <Link  to='/new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link> 
+
+
+                        {/*Tabelas dos chamados */}
+                        <table>
+                            <thead>{/*Cabeçalho */}
+                                <tr>
+                                    <th scope='col'>Cliente</th>
+                                    <th scope='col'>Assunto</th>
+                                    <th scope='col'>Status</th>
+                                    <th scope='col'>Cadastrado em</th>
+                                    <th scope='col'>#</th>                                    
+                                </tr>                                
+                            </thead>
+
+                            <tbody>
+                                {/* Passar os itens buscados para Dashboard
+                                Essa parte toda tem que ser dinâmica, passar tr todo para dentro de .map() */}
+
+                                {chamados.map((item, index)=>{
+                                    return( //Agora é só distribuir todos os dados da lista aqui
+
+
+                                        <tr key={index}>
+                                            <td data-label='Cliente'>{item.cliente}</td>
+                                            <td data-label='Assunto'>{item.assunto}</td>
+                                            <td data-label='Status'>
+                                            <span className='badge' style={{ 
+                                               backgroundColor: item.status==='Aberto' ? '#ff0000' : 
+                                                                item.status==='Progresso' ? '#5cb85c' : 
+                                                                item.status==='Atendido' ? '#999' : ''
+                                            }} >{item.status}</span>
+
+                                            </td>
+                                            <td data-label='Cadastrado'>{item.createdFormated}</td>
+
+                                            <td data-label='#'>
+                                            <button className='action' style={{backgroundColor:'#3583f6'  }} 
+                                            onClick={()=> tooglePostModal(item)}>
+                                                <FiSearch color='#fff' size={17} />
+                                            </button>
+                                            <button className='action' style={{backgroundColor:'#f6a935'  }}>
+                                                <FiEdit2 color='#fff' size={17} />
+                                            </button>
+                                            
+                                            </td>
+                                        </tr>
+
+                                    )
+                                })}
+                                
+                            </tbody>
+                        </table>   
+
+                         {loadingMore && <h3 style={{textAlign: 'center', marginTop: 15 }}>Buscando dados...</h3>}
+            { !loadingMore && !isEmpty && <button className="btn-more" onClick={handleMore}>Buscar mais</button> }
+       
+                   
+                   </>
+                )} 
+
+                
+            </div>           
+        </div>
+    )
+}
+
+
+----------Nesse momento pode ser criado um componente para ser compartilhado:
+
+src/components/Modal.indexjs:
+
+
+export default function Modal(){
+    return(
+        <div>
+            teste Modal
+        </div>
+    )
+}
+
+
+-=-----------------Continuação. Importar modal na dashboard
+--------------------dashboard botões buscar e editar: 
+
+
+import './dashboard.css';
+// Importar useContext e AuthContext para poder deslogar
+//useEffect para fazer BUSCAS por chamados no DB
+import { useState, useEffect } from "react";
+import firebase from '../../services/firebaseConnection';
+
+
+import  Header  from "../../components/Header";
+import Title from '../../components/Title';
+import { FiMessageSquare, FiPlus, FiSearch, FiEdit2} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+//Para formatar data instalar. Veja a documentação em https://date-fns.org/
+  import {format} from 'date-fns';  
+  
+  //botões buscar e editar. Importar Modal
+  import Modal from '../../components/Modal';
+
+
+
+//useEffect para fazer BUSCAS por chamados no DB
+const listRef = firebase.firestore().collection('chamados').orderBy('created', 'desc');
+
+
+
+export default function Dashboard(){
+
+    //Para simular um chamado durante o desenvolvimento coloque 1, 
+    //mas para o uso normal, deixar em branco, inicia vazia.
+    const [chamados, setChamados]=useState([]);// Será em um array pois terá uma lista.
+
+//useEffect para fazer BUSCAS por chamados no DB
+    const [loading, setLoading]=useState(true);//Carregando chamado
+    //buscar mais
+    const [loadingMore, setLoadingMore]=useState(false);
+    //para saber se a lista está vazia
+    const [isEmpty, setIsEmpty]=useState(false);
+    //Pega o último documento buscado
+    const [lastDocs, setLastDocs]=useState();
+
+     //botões buscar e editar. //Buscar
+    const [showPostModal, setShowPostModal]=useState(false);
+    const [detail, setDetail] = useState();//Detalhes do conteúdo
+
+
+    useEffect(()=> {
+
+//A função loadChamados() pode ser passada aqui para tirar aviso no console do navegador, mas não tem problema deixar assim.
+
+        loadChamados();    
+        return () => {    
+        }
+      }, []);
+
+    //Criando aqui fora o loadChamados poderá ser chamada em qualquer lugar a aplicação, mas pode ser passada dentro de useEffect
+    async function loadChamados(){
+        await listRef.limit(5)
+        .get()
+        .then((snapshot)=>{
+            updateState(snapshot)
+        })
+        .catch((err)=>{
+            console.log('Erro ao buscar', err);
+            toast.error("Algo saiu errado.")
+            setLoadingMore(false);
+        })
+        setLoading(false);
+    }
+
+   async function updateState(snapshot){
+        const isCollectionEmpty = snapshot.size===0;
+        //se for diferente de vazia
+        if(!isCollectionEmpty){
+            let lista=[];
+
+            snapshot.forEach((doc)=>{
+                lista.push({ //Veja a lista criada no DB
+                    id: doc.id,
+                    assunto: doc.data().assunto,
+                    cliente: doc.data().cliente,
+                    clienteId: doc.data().clienteId,
+                    created: doc.data().created,
+                    //Para formatar data instalar date-fns no terminal. Veja a documentação em https://date-fns.org/
+                    //npm install date-fns    import {format} from 'date-fns';  
+                    createdFormated: format(doc.data().created.toDate(), 'dd/MM/yyyy'),
+                    status: doc.data().status,
+                    complemento: doc.data().complemento
+                    
+
+                })
+            })
+            const lastDoc = snapshot.docs[snapshot.docs.length -1]; //Pega o último documento buscado
+            
+            setChamados(chamados=>[...chamados, ...lista]);
+            setLastDocs(lastDoc);
+        }else{
+            setIsEmpty(true);
+        }
+        setLoadingMore(false);
+   }
+
+
+   //botão de busca
+   async function handleMore(){
+    setLoadingMore(true);
+    await listRef.startAfter(lastDocs).limit(5)
+    .get()
+    .then((snapshot)=>{
+      updateState(snapshot);
+    })
+  }
+
+
+
+
+ //  Passar os itens buscados para Dashboard
+ if(loading){
+    return(
+        <div>
+            <Header/>
+
+            <div className='content'>  
+                <Title name='Atendimentos'>
+                    <FiMessageSquare size={25}/>                    
+                </Title>
+            </div>
+
+            <div className='container dashboard'>
+                <span>Buscando chamados...</span>
+            </div>
+        </div>
+    )
+ }
+
+
+
+ //botões buscar e editar.
+ //Buscar.  A ideia toogle é que sempre que tiver aberto, fecha e vice versa.
+ async function tooglePostModal(item){
+    //console.log(item);
+    setShowPostModal(!showPostModal); //Vai inverter true/false
+    setDetail(item);
+ }
+
+
+ 
+    return(
+        <div>
+            <Header/>
+
+            <div className='content'>  
+                <Title name='Atendimentos'>
+                    <FiMessageSquare size={25}/>                    
+                </Title>
+
+
+{/*Se for igual a zero quer dizer que não há chamados */}
+                { chamados.length===0 ? (  
+                    <div className='container dashboard'>
+                        <span>Verificando... Nenhum chamado registrado.</span>
+
+                        <Link  to='/new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link>
+                    </div>
+
+                ) : (
+                    
+                   <>   {/*Pode usar um "Fragment" aqui para não alterar formatação */}
+
+                        <Link  to='/new' className='new' >
+                            <FiPlus color='fff' size={25} />
+                            Novo chamado
+                        </Link> 
+
+
+                        {/*Tabelas dos chamados */}
+                        <table>
+                            <thead>{/*Cabeçalho */}
+                                <tr>
+                                    <th scope='col'>Cliente</th>
+                                    <th scope='col'>Assunto</th>
+                                    <th scope='col'>Status</th>
+                                    <th scope='col'>Cadastrado em</th>
+                                    <th scope='col'>#</th>                                    
+                                </tr>                                
+                            </thead>
+
+                            <tbody>
+                                {/* Passar os itens buscados para Dashboard
+                                Essa parte toda tem que ser dinâmica, passar tr todo para dentro de .map() */}
+
+                                {chamados.map((item, index)=>{
+                                    return( //Agora é só distribuir todos os dados da lista aqui
+
+
+                                        <tr key={index}>
+                                            <td data-label='Cliente'>{item.cliente}</td>
+                                            <td data-label='Assunto'>{item.assunto}</td>
+                                            <td data-label='Status'>
+                                            <span className='badge' style={{ 
+                                               backgroundColor: item.status==='Aberto' ? '#ff0000' : 
+                                                                item.status==='Progresso' ? '#5cb85c' : 
+                                                                item.status==='Finalizado' ? '#999' : ''
+                                            }} >{item.status}</span>
+
+                                            </td>
+                                            <td data-label='Cadastrado'>{item.createdFormated}</td>
+
+                                            <td data-label='#'>
+                                            <button className='action' style={{backgroundColor:'#3583f6'  }} 
+                                            onClick={()=> tooglePostModal(item)}>
+                                                <FiSearch color='#fff' size={17} />
+                                            </button>
+                                            <button className='action' style={{backgroundColor:'#f6a935'  }}>
+                                                <FiEdit2 color='#fff' size={17} />
+                                            </button>
+                                            
+                                            </td>
+                                        </tr>
+
+                                    )
+                                })}
+                                
+                            </tbody>
+                        </table>   
+
+                         {loadingMore && <h3 style={{textAlign: 'center', marginTop: 15 }}>Buscando dados...</h3>}
+            { !loadingMore && !isEmpty && <button className="btn-more" onClick={handleMore}>Buscar mais</button> }
+       
+                   
+                   </>
+                )} 
+
+                
+            </div>     
+
+            {/*//botões buscar e editar. Importar Modal*/}
+            {showPostModal && (
+                <Modal
+                    conteudo={detail} close={tooglePostModal}
+                />
+            )}
+
+
+        </div>
+    )
+}
+
+
+
+-------------Atualizando src/components/Modal.indexjs:
+
+
+
+import './modal.css';
+import { FiX } from 'react-icons/fi';
+
+
+export default function Modal({conteudo, close}){
+    return(
+        <div className='modal'>
+            <div className='container'>
+                <button className='close' onClick={ close }>
+                    <FiX size={23} color='#fff'/>
+                </button>
+
+                <div>
+                    <h2>Detalhes do chamado:</h2>
+                    <div className='row'>
+                        <span>
+                            <strong>Cliente:</strong> <i>{conteudo.cliente}</i>
+                        </span>
+                    </div>
+
+
+                    <div className='row'>
+                        <span>
+                        <strong>Assunto:</strong> <i>{conteudo.assunto}</i>
+                        </span>
+                        <span>
+                        <strong>Cadastrado em:</strong><i>{conteudo.createdFormated}</i>
+                        </span>
+                    </div>
+
+
+                    <div className='row'>
+                        <span>
+                        <strong> Status:</strong> <i style={{color:'#fff', backgroundColor: conteudo.status==='Aberto' ? '#ff0000' : 
+                                                                conteudo.status==='Progresso' ? '#5cb85c' : 
+                                                                conteudo.status==='Finalizado' ? '#999' : ''
+                                    }}>{conteudo.status}</i>
+                        </span>
+                    </div>
+
+                    {/*Neste projeto o complemento ficou como opcional, mas no projeto real deve ser obrigatório */}
+                    {conteudo.complemento !== '' && (
+                        <>
+                        <h3>Complemento</h3>
+                        <p>{conteudo.complemento}</p>
+                        </>
+                    )}
+
+
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+
+
+-------------Atualizando src/components/Modal.modal.css:
+.modal{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    background: rgba(0,0,0,  0.7) ;
+    z-index: 99;
+}
+
+.modal .container{
+    position: fixed;
+    max-width: 600px;
+    top:15%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 5em 2em;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,  0.9);
+}
+
+.close{
+    background-color: #f65835;
+    border: 0;
+    color: #fff;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 5px;
+    border-radius: 5px;
+}
+
+.modal h2{
+    margin-bottom: 1.2em;
+    font-size: 1.8em;
+    color: #121212;
+}
+
+.modal h3{
+    font-size: 1.5em;
+}
+
+.modal span i {
+    font-weight: 400;
+    margin-right: 1em;
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+.row{
+    margin-bottom: 1em;
+}
+
+.modal p{
+    padding-top: 0.5em;
+    white-space: pre-wrap; /* Vai dar espaço entre um paragrafo e outro*/
+}
+
+
+
+
+---------------Botão editar, criar rota para o id.
+Em routes/index.js:
+
+
+// Switch - um componente por página
+import { Switch } from 'react-router-dom';
+import Route from './Route';
+
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+import Dashboard from '../pages/Dashboard';
+import Profile from '../pages/Profile';
+import Customers from '../pages/Customers';
+
+import New from '../pages/New';
+
+export default function Routes(){
+    return(
+        <Switch>
+            <Route exact path='/' component={SignIn} />
+            <Route exact path='/register' component={SignUp} />
+            
+            <Route exact path='/dashboard' component={Dashboard}  isPrivate  />
+            <Route exact path='/profile' component={Profile} isPrivate />
+            <Route exact path='/customers' component={ Customers } isPrivate />
+            <Route exact path='/new' component={ New } isPrivate />
+
+            <Route exact path='/new/:id' component={ New } isPrivate />
+
+        </Switch>
+    )
+}
+
+
+
+---------------Em new/index.js botão editar:
+
+
+import './new.css';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+import { FiPlusCircle } from 'react-icons/fi';
+
+import firebase from '../../services/firebaseConnection';
+
+//Funcionalidades, parte do cliente
+import { useState, useEffect, useContext } from 'react';// useContext - vai precisar do id do user por isso importar
+import { AuthContext } from '../../contexts/auth';
+import { toast } from 'react-toastify';
+
+//Botão editar.  Importar rota para pegar o ID
+import {useHistory, useParams} from 'react-router-dom';
+
+export default function New(){
+    //Botão editar.
+    const { id }=useParams();
+    const history = useHistory();
+
+
+...
+
+
+
+
+----------------------Dashboard/index.js:
+Alterar o button de editar por Link do import { Link } from 'react-router-dom';
+e acrescetar to={`/new/${item.id}`}
+
+
+Nessa parte:
+
+
+</td>
+<td data-label='Cadastrado'>{item.createdFormated}</td>
+<td data-label='#'>
+ <button className='action' style={{backgroundColor:'#3583f6'  }} 
+  onClick={()=> tooglePostModal(item)}>
+<FiSearch color='#fff' size={17} />
+   </button>
+  <Link className='action' style={{backgroundColor:'#f6a935'  }} to={`/new/${item.id}`}>
+  <FiEdit2 color='#fff' size={17} />
+</Link >
+</td>
+
+
+
+
+-----------------------------Atualizar New/index.js para verificar se quer editar ou não,
+veja em  async function loadCustomers(){
+
+
+
+
+
+ 
+import './new.css';
+import Header from '../../components/Header';
+import Title from '../../components/Title';
+import { FiPlusCircle } from 'react-icons/fi';
+
+import firebase from '../../services/firebaseConnection';
+
+//Funcionalidades, parte do cliente
+import { useState, useEffect, useContext } from 'react';// useContext - vai precisar do id do user por isso importar
+import { AuthContext } from '../../contexts/auth';
+import { toast } from 'react-toastify';
+
+//Botão editar.  Importar rota para pegar o ID
+import {useHistory, useParams} from 'react-router-dom';
+
+export default function New(){
+    //Botão editar.
+    const { id }=useParams();
+    const history = useHistory();
+    const [idCustomer, setIdCustomer]=useState(false);
+
+    const [assunto, setAssunto]=useState('Suporte');
+    const [status, setStatus]=useState('Aberto');
+    const [complemento, setComplemento]=useState('');
+
+    //Funcionalidades, parte do cliente
+    const {user} =useContext(AuthContext);
+    const [customers, setCustomers]=useState([]);
+    const [loadCustomers, setLoadCustomers]=useState(true);//Para exibir ao usuário que está buscando info no BD
+    const [customerSelected, setCustomerSelected ]=useState(0);//Pegar o ID selecionado do cliente pois será tudo dinâmico
+    useEffect(()=>{
+        async function loadCustomers(){ // vai chamar "customers" no BD, verificar o nome correto que foi criado.
+            await firebase.firestore().collection('customers')
+            .get()
+            .then((snapshot)=>{
+                let lista = [];
+
+                snapshot.forEach((doc)=>{
+                    lista.push({
+                        id: doc.id,
+                        nomeFantasia: doc.data().nomeFantasia,
+                        cnpj: doc.data().cnpj,
+                    })
+                })
+                //Fazer a verificação
+                if(lista.length === 0){
+                    console.log('Nenhuma empresa encontrada');
+                    setCustomers([{ id:'1', nomeFantasia:'Nenhuma empresa encontrada'}]);//Caso erro, não pode ficar vazio, nesse caso vai ficar em "branco"
+                    setLoadCustomers(false);//Volta para false
+                    toast.error('Nenhuma empresa encontrada');
+                    return;
+                }//Se encontrou, passar a lista
+                setCustomers(lista);
+                setLoadCustomers(false);//Volta para false
+
+//Botão editar, fazer verificação:
+                if(id){
+                    loadId(lista);
+                }
+
+
+
+                //Passar tuddo isso para o formulário em <select>
+            })
+            .catch((error=>{
+                console.log(error);
+                setLoadCustomers(false);//Volta para false
+                setCustomers([{ id:'1', nomeFantasia:''}]);//Caso erro, não pode ficar vazio, nesse caso vai ficar em "branco"
+                toast.error('Erro! Algo inesperado ocorreu.')
+            }))
+        }
+
+        loadCustomers();
+
+    },[id]);/*Botão editar, navegador solicitou isso, mas não precisa. 
+    Caso queira tirar as mensagens pode colocar todo o loadId para dentro do 
+    useEffect.
+    Agora precisa acertar o Botão registrar em handleRegister, fazer a verificação
+    para poder fazer o UPDATE */
+
+
+
+//Botão editar, fazer verificação no BD:
+    async function loadId(lista){
+        await firebase.firestore().collection('chamados').doc(id)
+        .get()
+        .then((snapshot)=>{//Se chegou até aqui é pq achou o id no DB
+            setAssunto(snapshot.data().assunto);
+            setStatus(snapshot.data().status);
+            setComplemento(snapshot.data().complemento);
+
+            //encontar index do cliente
+            let index = lista.findIndex(item=>item.id === snapshot.data().clienteId);
+            setCustomerSelected(index);
+            setIdCustomer(true);//Vai confirmar a rota com o id do DB
+
+        })//Foi devolvido do DB para a página new os dados selecionados em editar
+
+        .catch((err)=>{
+            console.log("Erro no ID passado.", err);
+            setIdCustomer(false);//Ta dizendo que o ID não existe
+        })
+    }
+
+
+
+    async function handleRegister(e){
+        e.preventDefault();
+        //alert('teste botão registrar')
+
+        //Botão editar. Se idCustomer tiver true é pq está tentando editar
+        if(idCustomer){
+            await firebase.firestore().collection('chamados')
+            .doc(id)
+            .update({
+                cliente: customers[customerSelected].nomeFantasia,
+                clienteId: customers[customerSelected].id,
+                assunto: assunto,
+                status: status,
+                complemento: complemento,
+                userId: user.uid,
+            })
+            .then(()=>{
+                toast.success('Editado com sucesso.');
+                setCustomerSelected(0);
+                setComplemento('');
+                history.push('/dashboard');//Após atualizar vai enviar para pg dashboard
+            })
+            .catch((err)=>{
+                toast.error('Erro ao editar. Tente novamente mais tarde.');
+                console.log('Erro ao editar:', err);
+            })
+            return; //Para sair aqui e não ir para baixo e cadastrar
+        }
+
+        await firebase.firestore().collection('chamados')
+        .add({
+            created: new Date(),
+            cliente: customers[customerSelected].nomeFantasia,
+            clienteId: customers[customerSelected].id,
+            assunto: assunto,
+            status: status,
+            complemento: complemento,
+            userId: user.uid,
+        })/*Aula 117*/
+        .then(()=>{
+            toast.success('Registrado com sucesso.');
+            setComplemento('');
+            setCustomerSelected(0);
+
+        })
+        .catch((err)=>{
+            console.log(err);
+            toast.error('Erro! Erro ao registrar.')
+        })
+    }
+    
+    //Trocar assunto
+    function handleChancheSelect(e){
+        setAssunto(e.target.value);
+        //console.log(e.target.value);
+    }
+
+
+    //Trocar status
+    function handleOptionChanche(e){
+       setStatus(e.target.value); 
+       //console.log(e.target.value);
+    }
+
+
+//Trocar cliente na opção do chamado
+async function handleChancheCustomers(e){
+   // console.log('INDEX do cliente selecionado: ', e.target.value );
+   // console.log('Cliente selecionado: ', customers[e.target.value])
+    setCustomerSelected(e.target.value);    
+}
+
+    return(
+        <div>
+            <Header/>
+            
+            <div className='content'>
+                <Title name="Novo Chamado">
+                    <FiPlusCircle size={25}/>
+                </Title>
+
+                <div className='container'>
+                    <form className='form-profile'   onSubmit={handleRegister} >
+                        
+                        <label>Cliente </label>
+                        {loadCustomers ? (
+                            <input type='text' disabled={true} value="Carregando clientes..." />
+                        ):(
+
+
+                        <select value={customerSelected} onChange={handleChancheCustomers}>
+                            {customers.map((item, index)=>{
+                                return(                                    
+                                <option key={item.id} value={index}>
+                                    {item.nomeFantasia}                                 
+                                </option>                                                             
+                                )                                
+                            })}         
+                                              
+                        </select>
+                        
+                        )}
+                        {/* Para exibir o CNPJ fora do select */}
+                      {customerSelected !== 0 && <p><strong>CNPJ: </strong>{customers[customerSelected].cnpj}</p>}
+                     
+
+                        
+
+                        <label>Assunto</label>
+                        <select value={assunto} onChange={handleChancheSelect}>
+                            <option value="Suporte">Suporte</option>
+                            <option value="Visita técnica">Visita técnica</option>
+                            <option value="Financeiro">Financeiro</option>
+                        </select>
+
+                        <label>Status do chamado</label>
+                        <div className='status'>
+                            <input type='radio' name='radio' value="Aberto"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Aberto'} 
+                            /> <span>Aberto</span>  {/*    checked={status === 'Aberto'}  Compara qual está marcado inicialmente */}
+
+                            <input type='radio' name='radio' value="Progresso"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Progresso'}
+                            /> <span>Progresso</span>
+
+                            <input type='radio' name='radio' value="Finalizado"
+                            onChange={handleOptionChanche}
+                            checked={status === 'Finalizado'}
+                            /> <span>Finalizado</span>
+                        </div>
+
+                        <label>Solicitação</label>
+                        <textarea type="text"  placeholder='Descreva...' 
+                        value={complemento}
+                        onChange={(e)=> setComplemento(e.target.value)}
+                        />
+
+                        <button type='submit'>Registrar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+-----Finalizou aqaui, mas está exibindo duplicado.
 
 
 
