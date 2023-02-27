@@ -1496,6 +1496,35 @@ className: 'sua-classe',
 
 
 
+888888888888888888888888888888888888888888888888888888888888888888
+888888888888888888888
+
+npm install firebase@^8.8.1
+
+
+
+
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";  
+import "firebase/compat/firestore";
+ 
+const firebaseConfig = {
+    apiKey: "AIzaSyBtW40qoIM9TpFyqVq9jB-eIUY2Rq5aqx24",
+    authDomain: "sistema-499d9.firebaseapp.com",
+    projectId: "sistema-499d9",
+    storageBucket: "sistema-499d9.appspot.com",
+    messagingSenderId: "430783269655",
+    appId: "1:430783269655:web:d69b19adf15252322aa198552",
+    measurementId: "G-B0BXE7EaeK9F"
+  };
+  
+  // Initialize Firebase
+ 
+  if(!firebase.apps.length){
+    firebase.initializeApp(firebaseConfig);
+  }
+ 
+  export default firebase;
 
 
 

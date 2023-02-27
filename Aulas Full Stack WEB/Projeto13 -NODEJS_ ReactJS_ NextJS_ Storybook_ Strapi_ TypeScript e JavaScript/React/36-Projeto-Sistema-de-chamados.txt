@@ -1,3 +1,5 @@
+npx create-react-app chamado
+
 
 npm install firebase
 npm install react-router-dom
@@ -10,6 +12,27 @@ npm install date-fns     //Para formatar data instalar date-fns no terminal. Vej
 
 
 Deixar somente Apps.js e index.js com o padrão e zerar o src/index.css:
+
+App.js:
+
+
+import React from 'react';
+
+function App() {
+  return (
+    <div >
+      app teste
+    </div>
+  );
+}
+
+export default App;
+
+
+
+
+
+index.css:
 
 *{
     margin: 0;
@@ -27,9 +50,28 @@ html, body, #root{
 }
 
 
+
+
+--------------------------------------------Importante deixar nesse formato, no padrão deu erro no final duplicando o resultado de busca
+src/
 ---------Importar o index.css em index.js: 
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import App from './App';
 import './index.css';
+
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+
+
 
 
 ---------Atualizar o index.css para este projeto, isso também 

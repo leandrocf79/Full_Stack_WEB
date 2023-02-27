@@ -27,7 +27,7 @@ export default App;
 
 
 
---------components/Nome/aluno.js:
+--------components/Alunos/aluno.js:
 
 
 import Nome from '../Nome';
