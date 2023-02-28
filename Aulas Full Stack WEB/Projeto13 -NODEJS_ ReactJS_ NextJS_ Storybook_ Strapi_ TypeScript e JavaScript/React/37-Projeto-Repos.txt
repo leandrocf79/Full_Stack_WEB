@@ -82,8 +82,8 @@ ReactDOM.render(
 npm install react-router-dom
  npm install react-router-dom@5.x    Para poder usar Switch(Projetos futuros de outros prof. Não precisa instalar isso. Tem outra forma de fazer.
 npm install styled-components		Vai fazer a função do CSS. USAR ACENTUAÇÃO DE CRASE `
-
-
+npm install react-icons
+npm install axios      //Para não ter que usar o fetch(). Faz requisições, passar parâmetros etc
 
 
 
@@ -188,7 +188,7 @@ http://localhost:3000/repositorio/teste
 
 
 ------------------Configurar estilos com styled-components. USAR ACENTUAÇÃO DE CRASE `
-Em src/pages/Main/styled.js :
+Em src/pages/Main/styles.js :
 
 
 
@@ -208,7 +208,7 @@ Em src/pages/Main/index.js:
 
 
 import React from 'react';
-import{Title} from './styled';
+import{Title} from './styles';
 
 export default function Main(){
     return(
@@ -223,6 +223,9 @@ export default function Main(){
 -----------TESTAR: 
 npm start
 http://localhost:3000/
+
+
+***Se o Google Chrome ficar com frescura utilize o FireFox para o desenvolvimento.
 
 
 
@@ -288,34 +291,266 @@ button{
 
 --------------------
 ----------------------
+Desenvolver o projeto
+
+npm install react-icons
 --------------------
+Vai dar erro abaixo porque a pg ainda não foi criada.
+Atualizar com Container para criar um desencadeamento de componentes Main/index.js:
+
+
+import React from 'react';
+
+import{Container} from './styles';
+
+export default function Main(){
+    return(
+        <Container>
+            <h1>Meus repositórios</h1>
+            <span>Teste tag span</span>
+        </Container>
+        
+    )
+}
+
+
+
+----------Atualizar styles.js:
+O """Container""" acima será uma div
+
+
+import styled from 'styled-components';
+
+export const Container = styled.div` //O que escrever aqui ele vai dar a caracteristica, h1, h2, div etc 
+
+    color: #FF0000;
+
+    span{
+         color: yellow;
+    }
+`;
+
+
+------------F5 no navegador
+--------Atualizar Main/index.js:
+
+import React from 'react';
+import { Container, Form, SubmitButton } from './styles';
+
+import { FaGithub, FaPlus } from 'react-icons/fa';
+
+export default function Main(){
+    return(
+        <Container>
+            <h1>
+                <FaGithub size={25}/>
+                Meus repositórios
+            </h1>
+            
+            {/*Para criar um desencadeamento novo, criar uma nova tag */}
+            <Form onSubmit={()=>{}}>
+
+                <input type='text' placeholder='Adicionar repositórios'/>
+                <SubmitButton>
+                    <FaPlus color='#fff' size={15}/>
+                </SubmitButton>
+
+            </Form>
+
+        </Container>
+        
+    )
+}
+
+
+
+
+----------Atualizar styles.js:
+
+
+import styled from 'styled-components';
+
+export const Container = styled.div`
+  max-width: 700px;
+  background: #FFF;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0,0,0, 0.2);
+  padding: 30px;
+  margin: 80px auto; /*Auto nas laterais vai deixar sempre centralizado*/
+
+  h1{
+    font-size: 20px;
+    display:flex;
+    align-items: center;
+    flex-direction:row;
+    
+    svg{
+      margin-right: 20px;
+    }
+
+  }
+`;
+
+
+
+export const Form = styled.form`
+  margin-top: 30px;
+  display:flex;
+  flex-direction: row;
+
+  input{
+    flex:1;
+    border: 1px solid #DDD;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 17px;
+  }  
+`;
+
+
+export const SubmitButton = styled.button`
+  background:#0D2636;
+  border: 0;
+  border-radius: 4px;
+  margin-left: 10px;
+  padding: 0 15px;
+  display: flex;   /*vai alinhar em todos os ângulos*/
+  justify-content: center;
+  align-items: center;
+`;
+
+
+
+--------------------Consumir API.
+importar useState. Neste ponto abaixo o cod já estará salvando dentro de newRepo.
+Main/index.js:
+
+
+
+
+import React, { useState } from 'react';
+import { Container, Form, SubmitButton } from './styles';
+
+import { FaGithub, FaPlus } from 'react-icons/fa';
+
+export default function Main(){
+
+    const [newRepo, setNewRepo]=useState('');
+
+    function handleInputChange(e){
+        setNewRepo(e.target.value);
+    }
+
+
+    return(
+        <Container>
+            
+            <h1>
+                <FaGithub size={25}/>
+                Meus repositórios
+            </h1>
+            
+            {/*Para criar um desencadeamento novo, criar uma nova tag */}
+            <Form onSubmit={()=>{}}>
+
+                <input type='text' placeholder='Adicionar repositórios'
+                value={ newRepo } onChange={ handleInputChange }
+                />
+                <SubmitButton>
+                    <FaPlus color='#fff' size={15}/>
+                </SubmitButton>
+
+            </Form>
+
+        </Container>
+        
+    )
+}
+
+
+
+-----------Ao clicar em enviar deve consumir API
+
+
+***O "type" será passado no styles.js para demoinstração.
+
+export const SubmitButton = styled.button.attrs({
+  type: 'submit'
+  })`
+
+
+
+Main/index.js:
+
+
+
+import React, { useState } from 'react';
+import { Container, Form, SubmitButton } from './styles';
+
+import { FaGithub, FaPlus } from 'react-icons/fa';
+
+export default function Main(){
+
+    const [newRepo, setNewRepo]=useState('');
+
+    function handleInputChange(e){
+        setNewRepo(e.target.value);
+    }
+
+    function handleSubmit(e){
+        e.preventDefault(); //Para não atualizar a pg quando clicar no botão
+        console.log(newRepo); //Para saber se tem algo na variável quando clicou. Veja em inspecionar/Console.
+
+    }
+
+
+    return(
+        <Container>
+            
+            <h1>
+                <FaGithub size={25}/>
+                Meus repositórios
+            </h1>
+            
+            {/*Para criar um desencadeamento novo, criar uma nova tag */}
+            <Form onSubmit={ handleSubmit }>
+
+                <input type='text' placeholder='Adicionar repositórios'
+                value={ newRepo } onChange={ handleInputChange }
+                />
+                <SubmitButton>
+                    <FaPlus color='#fff' size={15}/>
+                </SubmitButton>
+
+            </Form>
+
+        </Container>
+        
+    )
+}
 
 
 
 
 
+------------------
+Neste momento acima deveria usar o fetch(). Neste projeto será usada uma biblioteca chamada AXIOS
+
+Criar src/services/api.js para criar a base:
+
+import axios from "axios";
+
+const api = axios({
+    baseURL: 'https://api.github.com',
+})
+
+export default api;
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+----------------Main/index.js:
+Agora será possivel acessar a API
 
 
 
