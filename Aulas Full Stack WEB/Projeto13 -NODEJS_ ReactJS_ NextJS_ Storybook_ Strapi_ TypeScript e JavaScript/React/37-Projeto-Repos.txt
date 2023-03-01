@@ -1079,8 +1079,161 @@ export const List=styled.ul`
 `;
 
 
--------------------
+-------------------Criar botão deletar.
 Main/index.js:
+
+
+
+import React, {  useCallback, useState } from 'react';
+import { Container, Form, SubmitButton, List, DeleteButton } from './styles';
+import { FaGithub, FaPlus, FaSpinner, FaBars, FaTrash } from 'react-icons/fa';
+
+import api from '../../services/api';
+
+export default function Main(){
+
+    const [newRepo, setNewRepo]=useState('');
+    const [repositorios, setRepositorios] =useState([]);
+
+    const[loading, setLoading]=useState(false);
+
+    function handleInputChange(e){
+        setNewRepo(e.target.value);
+    }
+
+    const handleSubmit = useCallback((e)=>{
+        e.preventDefault();
+
+        async function submit(){
+            //vai tentar fazer a requisição
+            try{
+                setLoading(true);// true por estar tentando fazer a requisiçãoe depois dar um false lá em baixo
+
+                const response= await api.get(`repos/${ newRepo }`) 
+    
+            //Para salvar "full_name"
+            const data = {
+              name: response.data.full_name,
+            }
+
+            setRepositorios([...repositorios, data]);        
+            setNewRepo('');
+            //console.log(response.data)
+            }
+            catch(err){
+                console.log(err);
+
+            }finally{//para cancelar a busca 
+                setLoading(false); // Voltar para false
+            }
+        
+            
+            }
+        submit(); //Tem que chamar aqui para ser executada a função
+    },[newRepo, repositorios]);//Quando uma ou outra for atualizada vai chamar o useCallback
+      
+    
+
+    return(
+        <Container>
+            
+            <h1>
+                <FaGithub size={25}/>
+                Meus repositórios
+            </h1>
+            
+            {/*Para criar um desencadeamento novo, criar uma nova tag */}
+            <Form onSubmit={ handleSubmit }>
+
+                <input type='text' placeholder='Adicionar repositórios'
+                value={ newRepo } onChange={ handleInputChange }
+                />
+
+                {/*//vai tentar fazer a requisição loading, ir em Styles para configurar isso*/}
+                <SubmitButton loading={loading ? 1 : 0}>
+                    {loading ? (
+                        <FaSpinner color='#fff' size={15} />
+                    ) : (
+                        <FaPlus color='#fff' size={15}/>
+                    )}
+                    
+                </SubmitButton>
+
+            </Form>
+
+
+            {/*Listar na tela os repositórios */}
+            <List>
+                {repositorios.map(repo=>(
+                    <li key={repo.name}>
+                        <span> {/*Criar um componente para Delete  */}
+
+                            <DeleteButton onClick={()=>{}}>
+                                <FaTrash size={15}/>
+                            </DeleteButton>
+                            
+                            {repo.name}</span>
+                        <a href='#'>
+                            <FaBars size={20}/>
+                        </a>
+                    </li>
+                ))}
+            </List>             
+
+
+
+        </Container>
+        
+    )
+}
+
+
+
+
+
+------Acrescentar em styles.css:
+
+export const DeleteButton = styled.button.attrs({
+  type: 'button'
+})`
+  margin-left: 6px;
+  background: transparent;
+  color: #0d2636;
+  border: #0d2636;
+  padding: 5px 17px 0 0;
+  outline: 0;
+  border-radius: 5px;
+`;
+
+
+
+
+-------------------
+Implementar a função deletar Main/index.js:
+
+
+
+
+
+
+
+
+
+
+
+
+
+---TESTAR
+No projeto
+http://localhost:3000/
+
+Buscar por:
+facebook/react
+angular/angular
+
+
+
+
 
 
 
