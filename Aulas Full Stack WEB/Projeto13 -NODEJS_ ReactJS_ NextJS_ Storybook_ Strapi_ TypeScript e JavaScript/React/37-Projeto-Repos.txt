@@ -540,7 +540,7 @@ Criar src/services/api.js para criar a base:
 
 import axios from "axios";
 
-const api = axios({
+const api = axios.create({
     baseURL: 'https://api.github.com',
 })
 
@@ -550,15 +550,537 @@ export default api;
 
 
 ----------------Main/index.js:
-Agora será possivel acessar a API
+Agora será possivel acessar a API, esse modelo abaixo será modificado, é apenas demostração, MAS LEIA ele!
+
+import React, { useState } from 'react';
+import { Container, Form, SubmitButton } from './styles';
+import { FaGithub, FaPlus } from 'react-icons/fa';
+
+import api from '../../services/api';
+
+export default function Main(){
+
+    const [newRepo, setNewRepo]=useState('');
+
+    const [repositorios, setRepositorios] =useState('');
+
+    function handleInputChange(e){
+        setNewRepo(e.target.value);
+    }
+
+    async function handleSubmit(e){
+        e.preventDefault(); //Para não atualizar a pg quando clicar no botão
+        //console.log(newRepo); //Para saber se tem algo na variável quando clicou. Veja em inspecionar/Console.
+
+        //Importado api, agora é só fazer a requisição. 
+        //Lembrando que esse repos/ é do próprio repositório da requisição lá no Github
+        const response= await api.get(`repos/${ newRepo }`) // O que foi digitado no formulário será pesquisado aqui com ""newRepo"""
+//Aqui poderia usar o async e depois await, mas usar a biblioteca axios.
+//Para saber o que tem use console.log e digite algo como facebook/react no busca do projeto no navegador
+        console.log(response.data);
+       //api recebeu https://api.github.com
+
+       //Para salvar "full_name"
+       const data = {
+        name: response.data.full_name,
+       }//Criar uma const setRepositorios e trazer aqui para dentro
+
+       setRepositorios([...repositorios, data]); // vai pegar tudo que tem no repositório e data
+
+       //depois da requisição pode apagar a caixa de texto
+       setNewRepo('');
+
+    }
+
+
+    return(
+        <Container>
+            
+            <h1>
+                <FaGithub size={25}/>
+                Meus repositórios
+            </h1>
+            
+            {/*Para criar um desencadeamento novo, criar uma nova tag */}
+            <Form onSubmit={ handleSubmit }>
+
+                <input type='text' placeholder='Adicionar repositórios'
+                value={ newRepo } onChange={ handleInputChange }
+                />
+                <SubmitButton>
+                    <FaPlus color='#fff' size={15}/>
+                </SubmitButton>
+
+            </Form>
+
+        </Container>
+        
+    )
+}
 
 
 
 
+----------------Main/index.js:
+IMPORTAR USECALLBACK
+
+
+
+import React, {  useCallback, useState } from 'react';
+import { Container, Form, SubmitButton } from './styles';
+import { FaGithub, FaPlus } from 'react-icons/fa';
+
+import api from '../../services/api';
+
+export default function Main(){
+
+    const [newRepo, setNewRepo]=useState('');
+
+    const [repositorios, setRepositorios] =useState([]);
+
+    function handleInputChange(e){
+        setNewRepo(e.target.value);
+    }
+
+    const handleSubmit = useCallback((e)=>{
+        e.preventDefault();
+
+        async function submit(){
+        
+            const response= await api.get(`repos/${ newRepo }`) 
+    
+            //Para salvar "full_name"
+            const data = {
+              name: response.data.full_name,
+            }
+
+            setRepositorios([...repositorios, data]);        
+            setNewRepo('');
+            console.log(response.data)
+
+            }
+        submit(); //Tem que chamar aqui para ser executada a função
+    },[newRepo, repositorios]);//Quando uma ou outra for atualizada vai chamar o useCallback
+      
+    
+
+    return(
+        <Container>
+            
+            <h1>
+                <FaGithub size={25}/>
+                Meus repositórios
+            </h1>
+            
+            {/*Para criar um desencadeamento novo, criar uma nova tag */}
+            <Form onSubmit={ handleSubmit }>
+
+                <input type='text' placeholder='Adicionar repositórios'
+                value={ newRepo } onChange={ handleInputChange }
+                />
+                <SubmitButton>
+                    <FaPlus color='#fff' size={15}/>
+                </SubmitButton>
+
+            </Form>
+
+        </Container>
+        
+    )
+}
+
+
+---------------------Animações do botão de loading
+Main/index.js:
+
+
+
+import React, {  useCallback, useState } from 'react';
+import { Container, Form, SubmitButton } from './styles';
+import { FaGithub, FaPlus, FaSpinner } from 'react-icons/fa';
+
+import api from '../../services/api';
+
+export default function Main(){
+
+    const [newRepo, setNewRepo]=useState('');
+    const [repositorios, setRepositorios] =useState([]);
+
+    const[loading, setLoading]=useState(false);
+
+    function handleInputChange(e){
+        setNewRepo(e.target.value);
+    }
+
+    const handleSubmit = useCallback((e)=>{
+        e.preventDefault();
+
+        async function submit(){
+            //vai tentar fazer a requisição
+            try{
+                setLoading(true);// true por estar tentando fazer a requisiçãoe depois dar um false lá em baixo
+
+                const response= await api.get(`repos/${ newRepo }`) 
+    
+            //Para salvar "full_name"
+            const data = {
+              name: response.data.full_name,
+            }
+
+            setRepositorios([...repositorios, data]);        
+            setNewRepo('');
+            //console.log(response.data)
+            }
+            catch(err){
+                console.log(err);
+
+            }finally{//para cancelar a busca 
+                setLoading(false); // Voltar para false
+            }
+        
+            
+            }
+        submit(); //Tem que chamar aqui para ser executada a função
+    },[newRepo, repositorios]);//Quando uma ou outra for atualizada vai chamar o useCallback
+      
+    
+
+    return(
+        <Container>
+            
+            <h1>
+                <FaGithub size={25}/>
+                Meus repositórios
+            </h1>
+            
+            {/*Para criar um desencadeamento novo, criar uma nova tag */}
+            <Form onSubmit={ handleSubmit }>
+
+                <input type='text' placeholder='Adicionar repositórios'
+                value={ newRepo } onChange={ handleInputChange }
+                />
+
+                {/*//Quando tentar fazer a requisição loading, ir em Styles para configurar isso*/}
+                <SubmitButton loading={loading ? 1 : 0}>
+                    {loading ? (
+			<FaSpinner color='#fff' size={15} />
+                    ) : (
+                        <FaPlus color='#fff' size={15}/>
+                    )}
+                    
+                </SubmitButton>
+
+            </Form>
+
+        </Container>
+        
+    )
+}
 
 
 
 
+------styles.css:
+
+
+
+import styled, {keyframes, css} from 'styled-components';
+
+export const Container = styled.div`
+  max-width: 700px;
+  background: #FFF;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0,0,0, 0.2);
+  padding: 30px;
+  margin: 80px auto; /*Auto nas laterais vai deixar sempre centralizado*/
+
+  h1{
+    font-size: 20px;
+    display:flex;
+    align-items: center;
+    flex-direction:row;
+    
+    svg{
+      margin-right: 20px;
+    }
+
+  }
+`;
+
+
+
+export const Form = styled.form`
+  margin-top: 30px;
+  display:flex;
+  flex-direction: row;
+
+  input{
+    flex:1;
+    border: 1px solid #DDD;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 17px;
+  }  
+`;
+
+
+// Criar animação para &[disable] do botão. Passar de onde começa e termina
+const animate = keyframes`
+  from{
+    transforrm: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+`;
+
+
+export const SubmitButton = styled.button.attrs(props=>(  {
+  type: 'submit',
+
+//Quando tentar fazer a requisição loading
+  disable: props.loading,
+
+
+  }))`
+  background:#0D2636;
+  border: 0;
+  border-radius: 4px;
+  margin-left: 10px;
+  padding: 0 15px;
+  display: flex;   /*vai alinhar em todos os ângulos*/
+  justify-content: center;
+  align-items: center;
+
+  //importar  {keyframes, css} 
+  &[disable]{
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  ${props => props.loading && css`
+    svg{
+      animation: ${animate} 2s linear infinite;
+    }
+  `}
+`;
+
+
+
+-----------Listar na tela os repositórios.
+Main/index.js:
+
+
+import React, {  useCallback, useState } from 'react';
+import { Container, Form, SubmitButton, List } from './styles';
+import { FaGithub, FaPlus, FaSpinner, FaBars } from 'react-icons/fa';
+
+import api from '../../services/api';
+
+export default function Main(){
+
+    const [newRepo, setNewRepo]=useState('');
+    const [repositorios, setRepositorios] =useState([]);
+
+    const[loading, setLoading]=useState(false);
+
+    function handleInputChange(e){
+        setNewRepo(e.target.value);
+    }
+
+    const handleSubmit = useCallback((e)=>{
+        e.preventDefault();
+
+        async function submit(){
+            //vai tentar fazer a requisição
+            try{
+                setLoading(true);// true por estar tentando fazer a requisiçãoe depois dar um false lá em baixo
+
+                const response= await api.get(`repos/${ newRepo }`) 
+    
+            //Para salvar "full_name"
+            const data = {
+              name: response.data.full_name,
+            }
+
+            setRepositorios([...repositorios, data]);        
+            setNewRepo('');
+            //console.log(response.data)
+            }
+            catch(err){
+                console.log(err);
+
+            }finally{//para cancelar a busca 
+                setLoading(false); // Voltar para false
+            }
+        
+            
+            }
+        submit(); //Tem que chamar aqui para ser executada a função
+    },[newRepo, repositorios]);//Quando uma ou outra for atualizada vai chamar o useCallback
+      
+    
+
+    return(
+        <Container>
+            
+            <h1>
+                <FaGithub size={25}/>
+                Meus repositórios
+            </h1>
+            
+            {/*Para criar um desencadeamento novo, criar uma nova tag */}
+            <Form onSubmit={ handleSubmit }>
+
+                <input type='text' placeholder='Adicionar repositórios'
+                value={ newRepo } onChange={ handleInputChange }
+                />
+
+                {/*//vai tentar fazer a requisição loading, ir em Styles para configurar isso*/}
+                <SubmitButton loading={loading ? 1 : 0}>
+                    {loading ? (
+                        <FaSpinner color='#fff' size={15} />
+                    ) : (
+                        <FaPlus color='#fff' size={15}/>
+                    )}
+                    
+                </SubmitButton>
+
+            </Form>
+
+
+            {/*Listar na tela os repositórios */}
+            <List>
+                {repositorios.map(repo=>(
+                    <li key={repo.name}>
+                        <span>{repo.name}</span>
+                        <a href=''>
+                            <FaBars size={20}/>
+                        </a>
+                    </li>
+                ))}
+            </List>             
+
+
+
+        </Container>
+        
+    )
+}
+
+
+
+------styles.css:
+
+
+import styled, {keyframes, css} from 'styled-components';
+
+export const Container = styled.div`
+  max-width: 700px;
+  background: #FFF;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0,0,0, 0.2);
+  padding: 30px;
+  margin: 80px auto; /*Auto nas laterais vai deixar sempre centralizado*/
+
+  h1{
+    font-size: 20px;
+    display:flex;
+    align-items: center;
+    flex-direction:row;
+    
+    svg{
+      margin-right: 20px;
+    }
+
+  }
+`;
+
+
+
+export const Form = styled.form`
+  margin-top: 30px;
+  display:flex;
+  flex-direction: row;
+
+  input{
+    flex:1;
+    border: 1px solid #DDD;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 17px;
+  }  
+`;
+
+
+// Criar animação para &[disable] do botão. Passar de onde começa e termina
+const animate = keyframes`
+  from{
+    transforrm: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+`;
+
+
+export const SubmitButton = styled.button.attrs(props=>(  {
+  type: 'submit',
+
+//Quando tentar fazer a requisição loading
+  disable: props.loading,
+
+
+  }))`
+  background:#0D2636;
+  border: 0;
+  border-radius: 4px;
+  margin-left: 10px;
+  padding: 0 15px;
+  display: flex;   /*vai alinhar em todos os ângulos*/
+  justify-content: center;
+  align-items: center;
+
+  //importar  {keyframes, css} 
+  &[disable]{
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  ${props => props.loading && css`
+    svg{
+      animation: ${animate} 2s linear infinite;
+    }
+  `}
+`;
+
+
+export const List=styled.ul`
+  list-style: none;
+  margin-top: 20px;
+
+  li{
+    padding: 15px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    & + li{ //Só vai aplicar do SEGUNDO em diante
+      border-top: 1px solid 		#C0C0C0;
+    }
+
+    a{
+      color: #0d2636;
+      text-decoration: none;
+    }
+  }
+
+`;
+
+
+-------------------
+Main/index.js:
 
 
 
