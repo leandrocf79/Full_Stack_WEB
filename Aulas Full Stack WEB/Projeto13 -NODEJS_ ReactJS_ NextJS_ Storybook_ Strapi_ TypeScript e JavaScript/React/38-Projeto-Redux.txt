@@ -112,6 +112,8 @@ npm install -g json-server   para rodar API local
 npm install axios   para consumir API
 npm install react-icons --save
 npm install redux react-redux
+npm install immer   //Para trabalhar quando houver imutabilidade.
+
 
 ----------------------------------
 
@@ -876,6 +878,450 @@ export default function Header() {
    </header>
  );
 }
+
+
+
+---------------Buscar algum estado, conexão com reducer usar useSelector para adicionar reserva.
+pages/Reservas/index.js:
+
+Aqui será duplicada a quantidade de exibição quando reservado mais de um, depois será corrigido.
+
+
+import React from 'react';
+import { MdDelete } from 'react-icons/md';
+import './reservas.css';
+
+//Adicionar reserva
+import { useSelector } from 'react-redux';
+
+export default function Reservas() {
+
+//Adicionar reserva
+  const reserves = useSelector(state => state.reservar);
+//Veja em:  http://localhost:3000/reservas
+  //console.log('teste adicionar reserva. Reservas()', reserves );// Confirmado acesso ao reducer.
+
+ return (
+   <div>
+    <h1 className='title'>Você solicitou { reserves.length < 1 ? `${reserves.length} reserva` : `${reserves.length} reservas`} </h1>
+
+{/*//Adicionar reserva */}
+    {reserves.map(item=>(     
+
+      <div className='reservas' key={item.id}>{/*Toda vez que usar map() usar uma key no container */}
+        <img 
+          src={item.image}
+          alt={item.title}
+        />
+        <strong>{item.title}</strong>
+        <span>Quantidade: 2</span> 
+        <button
+          type='button'
+          onClick={()=>{}}
+        >
+          <MdDelete size={20} color='#191919'/>
+        </button>
+      </div>
+
+    ))}
+
+    
+      <footer>
+        <button type='button' >Solicitar reservas</button>
+      </footer>
+   </div>
+ );
+}
+
+
+
+
+-------------------------------------
+Aqui será aumentada a quantidade de itens na exibição.
+Para fazer isso vá em modules/reservar/reduce.js:
+
+
+
+export default function reservar( state =[], action ){
+    //console.log('Teste função reservar()');
+    //console.log(action);
+    //console.log(state);
+
+    switch(action.type){
+        case 'ADD_RESERVE':
+            return [ ...state, { //Aumentar itens na reserva em vez de duplicar.
+                ...action.trip,
+                amount: 1 //Aqui vai passar a quantidade de reserva. Ir para Reservas/index.js
+            }]; 
+        default: 
+            return state;   
+    }
+}
+
+
+
+
+
+--------------------------Reservas/index.js:
+Corrigindo duplicações. 
+
+
+import produce from "immer";
+
+export default function reservar( state =[], action ){
+    //console.log('Teste função reservar()');
+    //console.log(action);
+    //console.log(state);
+
+    switch(action.type){
+        case 'ADD_RESERVE': 
+            return produce(state, draft =>{
+
+                //Se já existir, somar +1
+                const tripIndex = draft.findIndex(trip => trip.id === action.trip.id)
+                if( tripIndex >= 0 ){
+                    draft[tripIndex].amount +=1;
+                }else{
+                    draft.push({
+                        ...action.trip,
+                        amount: 1
+                    });
+                }         
+
+            }); 
+        default: 
+            return state;   
+    }
+}
+
+
+/*Aumentar itens na reserva em vez de duplicar.
+Como é imutavel e não será possivel utilizar state.push()
+será necessário instalar uma biblioteca chamada Immer
+https://immerjs.github.io/immer/
+
+Vai ajudar com essa parte de imutabilidade.
+npm install immer
+
+produce() passar PRIMEIRO a state original e depois a cópia.
+produce(state, draft   //draft é a cópia
+
+*/
+
+
+------------------------
+------------------------Remover uma reserva.
+Reservas/index.js:
+
+
+import React from 'react';
+import { MdDelete } from 'react-icons/md';
+import './reservas.css';
+
+//Adicionar reserva   //Remover uma reserva.
+import { useSelector, useDispatch } from 'react-redux';
+
+export default function Reservas() {
+
+//Adicionar reserva
+  const reserves = useSelector(state => state.reservar);
+//Veja em:  http://localhost:3000/reservas
+  //console.log('teste adicionar reserva. Reservas()', reserves );// Confirmado acesso ao reducer.
+
+//Remover uma reserva.
+  const dispatch =useDispatch();
+
+
+//Remover uma reserva.
+function handleRemove(id){
+  //alert(id); //teste
+  //Agora precisa disparar uma ação para o reducer poder remover. Será utilizadop o useDispatch
+  dispatch({
+    type: 'REMOVE_RESERVE',
+    id   //id é o item que será enviado para reducer.js
+  })
+}
+
+ return (
+   <div>
+    <h1 className='title'>Você solicitou { reserves.length < 1 ? `${reserves.length} reserva` : `${reserves.length} reservas`} </h1>
+
+{/*//Adicionar reserva */}
+    {reserves.map(item=>(     
+
+      <div className='reservas' key={item.id}>{/*Toda vez que usar map() usar uma key no container */}
+        <img 
+          src={item.image}
+          alt={item.title}
+        />
+        <strong>{item.title}</strong>
+        <span>Quantidade: { item.amount }</span> {/*//Aumentar itens na reserva em vez de duplicar. */}
+        
+        {/*//Remover uma reserva. */}
+        <button
+          type='button'
+          onClick={()=> handleRemove(item.id) }
+        >
+          <MdDelete size={20} color='#191919'/>
+        </button>
+      </div>
+
+    ))}
+
+    
+      <footer>
+        <button type='button' >Solicitar reservas</button>
+      </footer>
+   </div>
+ );
+}
+
+
+
+--------Atualizar reducer.js:
+
+Criar um novo case para remover quantidade
+
+
+
+
+import produce from "immer";
+
+export default function reservar( state =[], action ){
+    //console.log('Teste função reservar()');
+    //console.log(action);
+    //console.log(state);
+
+    switch(action.type){
+        case 'ADD_RESERVE': 
+            return produce(state, draft =>{
+
+                //Se já existir, somar +1
+                const tripIndex = draft.findIndex(trip => trip.id === action.trip.id)
+                if( tripIndex >= 0 ){
+                    draft[tripIndex].amount +=1;
+                }else{
+                    draft.push({
+                        ...action.trip,
+                        amount: 1
+                    });
+                }         
+
+            });
+            
+        case 'REMOVE_RESERVE':
+            return produce(state, draft=>{
+                //Se já existir, subtrair 1
+                const tripIndex = draft.findIndex(trip => trip.id === action.id); // Aqui não tem o trip por estar enviando diretamente pelo id
+                
+                if(tripIndex >= 0 ){ //splice() será usado para excluir na posição 1. Primeiro objeto
+                    draft.splice(tripIndex, 1)
+                }
+                        
+            });
+
+        default: 
+            return state;   
+    }
+}
+
+
+------------------------------
+----------------------------
+------------------------------
+Pode acontecer de criar um site onde terá muitas actions.
+Por isso o ideal é separar isso para poder fazer manutenção em algum momento.
+Fica melhor organizado deixando tudo separado.
+
+modules/reservar/actions.js:
+
+
+
+export function addReserve(trip){
+    //Em pages/Home/index.js
+    return{
+        type: 'ADD_RESERVE',
+        trip    //Trip é o que esta recebendo por parâmetro. Será passado para modules/reservar/reducer.js
+    }
+}
+
+
+export function removeReserve(id){
+    //Em pages/Reservas/index.js
+    return{
+        type: 'REMOVE_RESERVE',
+        id   //id é o item que será enviado para reducer.js
+      }
+}
+
+
+
+
+-------------------importar addReserve
+-----------Agora precisa corrigir pages/Home/index.js:
+
+
+
+import React, {useState, useEffect} from 'react';
+import api from '../../services/api';
+import {MdFlightTakeoff} from 'react-icons/md';
+import './home.css';
+
+//Clique do botão reservar
+import { useDispatch } from 'react-redux';
+
+import { addReserve } from '../../store/modules/reservar/actions';
+
+export default function Home() {
+  const [trips, setTrips]= useState([]);
+
+  const dispatch = useDispatch();//Clique do botão reservar
+
+  useEffect(()=>{
+    async function loadApi(){
+      const response = await api.get('trips'); //Acessar trips em api
+      setTrips(response.data);
+      //console.log(response.data); //Verificar se está tudo ok
+    }
+
+    loadApi(); //Criou a função e sempre tem que chamar fora dela
+
+  }, []);
+
+
+//Clique do botão reservar.
+function handleAdd(trip){
+  //console.log(trip);// Passar uma ação para Redux. Obrigatório uso do type
+  dispatch( addReserve(trip) );
+}
+
+
+
+//veja http://localhost:3333/trips   para preencher esta parte
+ return (
+   <div>
+    <div className='box'>
+      {trips.map(trip=>(
+        <li key={trip.id}>
+          <img src={trip.image} alt={trip.title} />
+          <strong>{trip.title}</strong>
+          {/*<span>Status: {trip.status}</span> *Neste caso boolean pode fazer uma renderização condicional para exibir mensagens */}
+          <span>Status: {trip.status ? 'Disponível' : 'Indisponível no momento'}</span>
+
+{/*//Clique do botão reservar. Passar todo o conteudo da vigem com 'trip' para essa nova função*/}
+          <button type='button' 
+          onClick={()=> handleAdd(trip) }>
+            <div>
+              <MdFlightTakeoff size={18} color='#fff'/>
+            </div>
+            <span>Solicitar reserva</span>
+          </button>
+        
+        </li>
+
+      ))}
+
+    </div>
+   </div>
+ );
+}
+
+
+
+
+
+-------------------importar 
+-----------Agora precisa corrigir pages/Reservas/index.js:
+
+
+
+import React from 'react';
+import { MdDelete } from 'react-icons/md';
+import './reservas.css';
+
+//Adicionar reserva   //Remover uma reserva.
+import { useSelector, useDispatch } from 'react-redux';
+
+import { removeReserve } from '../../store/modules/reservar/actions';
+
+export default function Reservas() {
+
+//Adicionar reserva
+  const reserves = useSelector(state => state.reservar);
+//Veja em:  http://localhost:3000/reservas
+  //console.log('teste adicionar reserva. Reservas()', reserves );// Confirmado acesso ao reducer.
+
+//Remover uma reserva.
+  const dispatch =useDispatch();
+
+
+//Remover uma reserva.
+function handleRemove(id){
+  //alert(id); //teste
+  //Agora precisa disparar uma ação para o reducer poder remover. Será utilizadop o useDispatch
+  dispatch( removeReserve(id) )
+}
+
+ return (
+   <div>
+    <h1 className='title'>Você solicitou { reserves.length < 1 ? `${reserves.length} reserva` : `${reserves.length} reservas`} </h1>
+
+{/*//Adicionar reserva */}
+    {reserves.map(item=>(     
+
+      <div className='reservas' key={item.id}>{/*Toda vez que usar map() usar uma key no container */}
+        <img 
+          src={item.image}
+          alt={item.title}
+        />
+        <strong>{item.title}</strong>
+        <span>Quantidade: { item.amount }</span> {/*//Aumentar itens na reserva em vez de duplicar. */}
+        
+        {/*//Remover uma reserva. */}
+        <button
+          type='button'
+          onClick={()=> handleRemove(item.id) }
+        >
+          <MdDelete size={20} color='#191919'/>
+        </button>
+      </div>
+
+    ))}
+
+    
+      <footer>
+        <button type='button' >Solicitar reservas</button>
+      </footer>
+   </div>
+ );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
