@@ -1,0 +1,723 @@
+Crie uma pasta com nome em MINÚSCULO.
+Inicie um projeto novo:
+ npx create-react-app .   ( O PONTO VAI APROVEITAR  A MESMA PASTA, sem ter que criar nome novo)
+
+
+
+
+index.css:
+
+body {
+  padding: 0;
+  outline: 0;
+  margin: 0;
+  box-sizing: content-box;
+  background-color: #242424;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root{
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 0 20px 50px;
+  /* background-color: aquamarine;  Teste para visualizar o espaço reservado. Maximize a tela do navegador*/
+}
+
+button{
+  cursor: pointer;
+}
+
+
+
+
+
+--------------------------------------------
+
+src/
+---------Importar o index.css em index.js: 
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import App from './App';
+import './index.css';
+
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+
+-----------------------App.js:
+
+import React from 'react';
+
+export default function App() {
+  return (
+    <div className="App">
+      <h1> teste  App.js</h1>
+    </div>
+  );
+}
+
+
+-------------------------
+Criar src/pages/Home/index.js
+
+
+import React from 'react';
+
+export default function Home() {
+ return (
+   <div>
+	<h1>Home</h1>
+   </div>
+ );
+}
+
+----------------------
+Criar src/pages/Reservas/index.js:
+
+
+import React from 'react';
+
+export default function Reservas() {
+ return (
+   <div>
+	<h1>Reservas</h1>
+   </div>
+ );
+}
+
+
+---------------------------------
+
+ npm install react-router-dom
+npm install react-router-dom@5.x    Para poder usar Switch(Projetos futuros de outros prof. Não precisa instalar isso. Tem outra forma de fazer.
+
+npm install -g json-server   para rodar API local
+npm install axios   para consumir API
+npm install react-icons --save
+npm install redux react-redux
+
+----------------------------------
+
+Criar src/routes.js:
+
+import React from 'react';
+import {Switch, Route } from 'react-router-dom';
+
+import Home from './pages/Home';
+import Reservas from './pages/Reservas';
+
+export default function Routes(){
+    return(
+        <Switch>
+            <Route path='/'   exact   component={Home} />
+            <Route path='/reservas' component={Reservas} />
+        </Switch>
+    );
+}
+
+
+------------------Atualizar App.js:
+
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import Routes from './routes';
+
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes />
+    </BrowserRouter>
+  );
+}
+
+------------------Testar npm start
+http://localhost:3000
+http://localhost:3000/reservas
+
+
+
+------------------src/components/Header/index.js:
+
+import React from 'react';
+
+export default function Header() {
+ return (
+   <div>
+    <h1>Header...</h1>
+   </div>
+ );
+}
+
+
+----------------Atualizar App.js:
+
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import Routes from './routes';
+
+import Header from './components/Header';
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Header/>
+      <Routes />
+    </BrowserRouter>
+  );
+}
+
+
+------------------No navegador deve aparecer:
+Header...
+Home
+
+
+
+----------------------Atualizar Header:
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.svg';
+import './style.css';
+
+export default function Header() {
+ return (
+   <header className='container' >
+    <Link to='/'>
+      <img className='logo' src={logo} alt='Logo do projeto' />
+    </Link>
+
+    <Link className='reserva' to='/reservas'>
+      <div>
+        <strong>Minhas reservas</strong>
+        <span>0 reservas</span>
+      </div>
+    </Link>
+
+   </header>
+ );
+}
+
+
+
+
+------------Atualizar header.css:
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    padding: 10px 10px;
+}
+
+.logo{
+    max-width: 110px;
+}
+
+.reserva{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.reserva div{
+    text-align: right;
+    margin-right: 10px;    
+}
+
+.reserva strong{
+    color: #fff;
+    display: block;
+}
+
+.reserva span{
+    color: #ddd;
+    font-size: 15px;
+}
+
+
+
+--------------------------
+Após instalar 
+npm install -g json-server para consumir API
+
+REDUX/server.json
+
+Será colado um arquivo demonstrativo nele.
+
+
+
+{
+  "stock": [
+    {
+      "id": 1,
+      "amount": 10
+    },
+    {
+      "id": 4,
+      "amount": 5
+    },
+    {
+      "id": 22,
+      "amount": 3
+    }
+  ],
+  "trips": [
+    {
+      "id": 1,
+      "title": "Viagem Maceió 7 noites",
+      "status": true,
+      "image": "https://sujeitoprogramador.com/wp-content/uploads/2019/12/maceio.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Viagem Caribe 5 noites",
+      "status": true,
+      "image": "https://sujeitoprogramador.com/wp-content/uploads/2019/12/caribe.jpg"
+    },
+    {
+      "id": 22,
+      "title": "Viagem Fernando de Noronha 10 noites",
+      "status": true,
+      "image": "https://sujeitoprogramador.com/wp-content/uploads/2019/12/fernand-noronha.jpg"
+    }
+  ]
+}
+
+
+
+
+----------------------------Rodar essa API fake rsrs  (server.json é o nome do arquivo e 3333 é uma porta escolhida)
+json-server server.json -p 3333
+
+Irá rodar em: 
+ http://localhost:3333/stock
+  http://localhost:3333/trips
+
+*****Deixar esse terminal ABERTO para essa API rodar nesse servidor.
+ 
+Abrir novo terminal: Ctrl+Shift+'
+
+
+------------
+Para consumir API será utilizado o axios "npm install axios"
+
+
+Criar src/services/api.js:
+
+
+import axios from "axios";
+
+const api = axios.create({
+ baseURL: 'http://localhost:3333/'
+});
+
+export default api;
+
+
+
+
+-----------Para testar se está tudo certo vá em Home/index.js:
+
+
+
+import React, {useState, useEffect} from 'react';
+import api from '../../services/api';
+
+export default function Home() {
+  const [trips, setTrips]= useState([]);
+
+  useEffect(()=>{
+    async function loadApi(){
+      const response = await api.get('trips'); //Acessar trips em api
+      setTrips(response.data);
+      //console.log(response.data); //Verificar se está tudo ok
+    }
+
+    loadApi(); //Criou a função e sempre tem que chamar fora dela
+
+  }, []);
+
+
+ return (
+   <div>
+    <h1>Home</h1>
+   </div>
+ );
+}
+
+
+
+
+--------------------Estilizar Home/index.js:
+
+
+
+
+import React, {useState, useEffect} from 'react';
+import api from '../../services/api';
+import {MdFlightTakeoff} from 'react-icons/md';
+import './home.css';
+
+export default function Home() {
+  const [trips, setTrips]= useState([]);
+
+  useEffect(()=>{
+    async function loadApi(){
+      const response = await api.get('trips'); //Acessar trips em api
+      setTrips(response.data);
+      //console.log(response.data); //Verificar se está tudo ok
+    }
+
+    loadApi(); //Criou a função e sempre tem que chamar fora dela
+
+  }, []);
+
+//veja http://localhost:3333/trips   para preencher esta parte
+ return (
+   <div>
+    <div className='box'>
+      {trips.map(trip=>(
+        <li key={trip.id}>
+          <img src={trip.image} alt={trip.title} />
+          <strong>{trip.title}</strong>
+          {/*<span>Status: {trip.status}</span> *Neste caso boolean pode fazer uma renderização condicional para exibir mensagens */}
+          <span>Status: {trip.status ? 'Disponível' : 'Indisponível no momento'}</span>
+
+          <button type='button' 
+          onClick={()=>{}}>
+            <div>
+              <MdFlightTakeoff size={18} color='#fff'/>
+            </div>
+            <span>Solicitar reserva</span>
+          </button>
+        
+        </li>
+
+      ))}
+
+    </div>
+   </div>
+ );
+}
+
+
+
+
+---------------------- 
+Home/home.css:
+
+
+
+.box{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    list-style: none;    
+}
+
+.box li{
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+.box img{
+    max-width: 280px;
+    max-height: 220px;
+    border-radius: 5px;
+}
+
+.box strong{
+    font-size: 16px;
+    line-height: 20px;
+    color: #191919;
+    margin-top: 10px;
+}
+
+.box button{
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #191919;
+    border: 0;
+    border-radius: 5px;
+}
+
+.box button div{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+
+----------------Em http://localhost:3000/reservas
+
+Por enquanto simular para poder estilizar.
+src/Reservas/index.js:
+
+
+import React from 'react';
+import { MdDelete } from 'react-icons/md';
+import './reservas.css';
+
+export default function Reservas() {
+ return (
+   <div>
+    <h1 className='title'>Você solicitou 1 reserva</h1>
+    <div className='reservas'>
+      <img 
+      src="https://sujeitoprogramador.com/wp-content/uploads/2019/12/maceio.jpg"
+      alt='Maceio'
+      />
+      <strong>Viagem Maceió</strong>
+      <span>Quantidade: 2</span> 
+      <button
+      type='button'
+      onClick={()=>{}}
+      >
+        <MdDelete size={20} color='#191919'/>
+      </button>
+    </div>
+
+      <footer>
+        <button type='button' >Solicitar reservas</button>
+      </footer>
+   </div>
+ );
+}
+
+
+-------------src/Reservas/reserva.css:
+
+
+
+.title{
+    color: #fff;    
+}
+
+.reservas{
+    padding: 20px;
+    margin-bottom: 10px;
+    background: #fff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between; /*Espaçou tudo de uma vez */
+    align-items: center;
+}
+
+.reservas img{
+    height: 100px;    
+}
+
+.reservas button{
+    border: 0;
+    background-color: #fff;
+}
+
+footer button{
+    border: 0;
+    display: flex;
+    padding: 10px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+
+
+
+--------------------------Aqui será utilizado o redux
+npm install redux react-redux
+
+**Está em desuso 'createStore' o recomendado é usar 'configureStore' do
+npm install @reduxjs/toolkit
+
+
+Criar agora um diretório chamado store para armazenar tudo sobre redux.
+
+src/store/index.js:
+
+
+import { createStore } from 'redux';
+
+const store = createStore(reservar);
+
+export default store;
+
+
+
+-----------------Atualizar App.js para que todos os componente possam acessar Redux:
+
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import Routes from './routes';
+import Header from './components/Header';
+
+import { Provider } from 'react-redux';
+import store from './store';
+
+export default function App() {
+  return (
+    <Provider  store={store} >
+        <BrowserRouter>
+          <Header/>
+          <Routes />
+        </BrowserRouter>
+    </Provider>  
+  );
+}
+
+
+
+--------------------------Neste momento vai dar um ERRO. Não é possivel ter store vazio.
+Criar o primeiro reducer.
+
+
+src/store/index.js:
+
+
+
+/*
+npm install redux react-redux
+
+**Está em desuso 'createStore' o recomendado é usar 'configureStore' do
+npm install @reduxjs/toolkit
+
+*/
+
+import {createStore} from 'redux';
+//import { configureStore } from '@reduxjs/toolkit'
+
+function reservar(){
+    return[];
+}
+
+//const store = configureStore(reservar);
+const store = createStore(reservar);
+
+export default store;
+
+
+---------------Criar o modules para user, carrinho, checkout etc
+
+src/store/modules/reservar/reducer.js:
+
+
+Agora mover a função reservar() do store/index.js para reducer.js:
+
+
+export default function reservar(){
+    return[];
+}
+
+
+
+-----------------Em src/store/index.js:
+
+
+import reducer from './modules/reservar/reducer';
+
+import {createStore} from 'redux';
+//import { configureStore } from '@reduxjs/toolkit'
+
+//const store = configureStore(reducer);
+const store = createStore(reducer);
+
+export default store;
+
+
+--------Neste caso acima fica dificil importar todos os módulos que possam ser criados.
+Será corrigido da seguinte forma.
+
+Em modules/rootReducer.js:
+
+
+import { combineReducers } from "redux";
+
+import reservar from "./reservar/reducer";
+//exemplo:
+//import users from "./users/reducer";
+
+export default combineReducers({
+    reservar,
+    //user, // iria carregar todos.
+})
+
+
+
+
+
+-----------------Atualizar src/store/index.js:
+
+
+import rootReducer from './modules/rootReducer';
+
+import {createStore} from 'redux';
+//import { configureStore } from '@reduxjs/toolkit'
+
+//const store = configureStore(reducer);
+const store = createStore(rootReducer);
+
+export default store;
+
+
+---Atualizar src/store/index.js para:
+
+import { configureStore } from '@reduxjs/toolkit'
+
+import rootReducer from './modules/reservar/reducer';
+
+const store = configureStore({ reducer: rootReducer })
+
+export default store;
+
+
+
+
+------------------------------
+------------------------------
+Tratar agora da ação do botão "Solicitar reserva". Vai disparar uma ação para 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
