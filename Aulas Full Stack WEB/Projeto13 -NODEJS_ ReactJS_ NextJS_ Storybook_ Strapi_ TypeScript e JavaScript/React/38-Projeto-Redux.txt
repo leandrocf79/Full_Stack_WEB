@@ -690,7 +690,7 @@ export default store;
 
 import { configureStore } from '@reduxjs/toolkit'
 
-import rootReducer from './modules/reservar/reducer';
+import rootReducer from './modules/rootReducer';
 
 const store = configureStore({ reducer: rootReducer })
 
@@ -701,23 +701,181 @@ export default store;
 
 ------------------------------
 ------------------------------
-Tratar agora da ação do botão "Solicitar reserva". Vai disparar uma ação para 
+Tratar agora da ação do botão "Solicitar reserva". useDispatch vai disparar uma ação para Redux.
+
+Hme/index.js:
+
+
+
+
+import React, {useState, useEffect} from 'react';
+import api from '../../services/api';
+import {MdFlightTakeoff} from 'react-icons/md';
+import './home.css';
+
+//Clique do botão reservar
+import { useDispatch } from 'react-redux';
+
+export default function Home() {
+  const [trips, setTrips]= useState([]);
+
+  const dispatch = useDispatch();//Clique do botão reservar
+
+  useEffect(()=>{
+    async function loadApi(){
+      const response = await api.get('trips'); //Acessar trips em api
+      setTrips(response.data);
+      //console.log(response.data); //Verificar se está tudo ok
+    }
+
+    loadApi(); //Criou a função e sempre tem que chamar fora dela
+
+  }, []);
+
+
+//Clique do botão reservar.
+function handleAdd(trip){
+  //console.log(trip);// Passar uma ação para Redux. Obrigatório uso do type
+  dispatch({
+    type: 'ADD_RESERVE',
+    trip    //Trip é o que esta recebendo por parâmetro. Será passado para modules/reservar/reducer.js
+  })
+}
+
+
+
+//veja http://localhost:3333/trips   para preencher esta parte
+ return (
+   <div>
+    <div className='box'>
+      {trips.map(trip=>(
+        <li key={trip.id}>
+          <img src={trip.image} alt={trip.title} />
+          <strong>{trip.title}</strong>
+          {/*<span>Status: {trip.status}</span> *Neste caso boolean pode fazer uma renderização condicional para exibir mensagens */}
+          <span>Status: {trip.status ? 'Disponível' : 'Indisponível no momento'}</span>
+
+{/*//Clique do botão reservar. Passar todo o conteudo da vigem com 'trip' para essa nova função*/}
+          <button type='button' 
+          onClick={()=> handleAdd(trip) }>
+            <div>
+              <MdFlightTakeoff size={18} color='#fff'/>
+            </div>
+            <span>Solicitar reserva</span>
+          </button>
+        
+        </li>
+
+      ))}
+
+    </div>
+   </div>
+ );
+}
+
+
+
+
+
+-----------------modules/reservar/reducer.js:
 
 
 
 
 
 
+export default function reservar( state =[], action ){
+    //console.log('Teste função reservar()');
+    //console.log(action);
+    //console.log(state);
+
+    switch(action.type){
+        case 'ADD_RESERVE':
+            return [ ...state, action.trip ]; //Aqui vai acrescentar os itens clicados. Parecido com uma cesta de e-commerce. Será exibido em components/Header/index.js
+        default: 
+            return state;   
+    }
+}
 
 
 
+----------------------Atualizar Header/index.js:
+
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.svg';
+import './style.css';
+
+//Clique do botão reservar.
+import { useSelector } from 'react-redux';//Vai conectar Redux com reducer
+
+export default function Header() {
+
+//Clique do botão reservar.
+  const reserveSize = useSelector( state => state.reservar )
+  
+ // console.log(reserveSize);
+
+
+ return (
+   <header className='container' >
+    <Link to='/'>
+      <img className='logo' src={logo} alt='Logo do projeto' />
+    </Link>
+
+    <Link className='reserva' to='/reservas'>
+      <div>
+        <strong>Minhas reservas</strong>
+
+{/* Clique do botão reservar. */}
+        <span>{reserveSize.length > 1 ?  `${reserveSize.length} reservas` : `${reserveSize.length} reserva`}</span> 
+      </div>
+    </Link>
+
+   </header>
+ );
+}
+
+
+----------------------Atualizar Header/index.js CORRIGINDO length(dessa forma é melhor):
 
 
 
+import React from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.svg';
+import './style.css';
+
+//Clique do botão reservar.
+import { useSelector } from 'react-redux';//Vai conectar Redux com reducer
+
+export default function Header() {
+
+//Clique do botão reservar.
+  const reserveSize = useSelector( state => state.reservar.length )
+  
+ // console.log(reserveSize);
 
 
+ return (
+   <header className='container' >
+    <Link to='/'>
+      <img className='logo' src={logo} alt='Logo do projeto' />
+    </Link>
 
+    <Link className='reserva' to='/reservas'>
+      <div>
+        <strong>Minhas reservas</strong>
 
+{/* Clique do botão reservar. */}
+        <span>{reserveSize > 1 ?  `${reserveSize} reservas` : `${reserveSize} reserva`}</span> 
+      </div>
+    </Link>
+
+   </header>
+ );
+}
 
 
 
