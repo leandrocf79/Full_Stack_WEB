@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';//Vai conectar Redux com reducer
 export default function Header() {
 
 //Clique do botão reservar.
-  const reserveSize = useSelector( state => state.reservar.length )
+  const reserveSize = useSelector( state => state.reservar.length );
   
  // console.log(reserveSize);
 

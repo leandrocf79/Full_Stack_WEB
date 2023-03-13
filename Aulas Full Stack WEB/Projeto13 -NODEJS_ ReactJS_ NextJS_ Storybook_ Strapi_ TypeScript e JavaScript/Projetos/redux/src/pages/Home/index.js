@@ -6,7 +6,9 @@ import './home.css';
 //Clique do botão reservar
 import { useDispatch } from 'react-redux';
 
-export default function Home() {
+import { addReserveRequest } from '../../store/modules/reservar/actions';// Alterado para addReserveRequest para usar Redux Saga
+
+export default function Home( {history} ) {
   const [trips, setTrips]= useState([]);
 
   const dispatch = useDispatch();//Clique do botão reservar
@@ -24,12 +26,9 @@ export default function Home() {
 
 
 //Clique do botão reservar.
-function handleAdd(trip){
+function handleAdd(id){
   //console.log(trip);// Passar uma ação para Redux. Obrigatório uso do type
-  dispatch({
-    type: 'ADD_RESERVE',
-    trip    //Trip é o que esta recebendo por parâmetro. Será passado para modules/reservar/reducer.js
-  });
+  dispatch( addReserveRequest(id) )
 }
 
 
@@ -47,7 +46,7 @@ function handleAdd(trip){
 
 {/*//Clique do botão reservar. Passar todo o conteudo da vigem com 'trip' para essa nova função*/}
           <button type='button' 
-          onClick={()=> handleAdd(trip) }>
+          onClick={()=> handleAdd(trip.id) }>
             <div>
               <MdFlightTakeoff size={18} color='#fff'/>
             </div>

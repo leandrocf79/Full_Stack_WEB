@@ -30,3 +30,19 @@ footer button{
     margin-top: 10px;
     font-weight: bold;
 }
+
+
+/*Incrementar e decrementar quantidade de itens no pacote */
+.reservas #amount{
+    display: flex;
+    align-items: center;    
+}
+
+.reservas #amount input{
+    border: 1px solid #eee;
+    border-radius: 4px;
+    color: #242424;
+    padding: 5px;
+    width: 20px;  
+    text-align: center;  
+}

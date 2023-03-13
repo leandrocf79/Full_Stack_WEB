@@ -6,12 +6,27 @@ npm install @reduxjs/toolkit
 
 */
 
-import { configureStore } from '@reduxjs/toolkit'
-
+import { configureStore } from '@reduxjs/toolkit';
+import { applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga'
 import rootReducer from './modules/rootReducer';
+import rootSaga from './modules/rootSaga';
 
-const store = configureStore({ reducer: rootReducer })
+const sagaMiddleware = createSagaMiddleware();
+
+const enhancer = applyMiddleware(sagaMiddleware);
+
+const store = configureStore({
+  reducer: rootReducer,
+  enhancers : [enhancer]
+  
+});
+
+sagaMiddleware.run(rootSaga);
 
 export default store;
+
+
+
 
 

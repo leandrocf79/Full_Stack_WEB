@@ -1,18 +1,22 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import Routes from './routes';
 import Header from './components/Header';
-
 import { Provider } from 'react-redux';
 import store from './store';
 
-export default function App() {
+//onde será feita a navegação
+import history from './services/history';
+
+export default function App() {    // history={ history } apresentou erro na página
   return (
     <Provider  store={store} >
-        <BrowserRouter>
+
+        <Router history={ history }>
+
           <Header/>
           <Routes />
-        </BrowserRouter>
+        </Router>
     </Provider>  
   );
 }
