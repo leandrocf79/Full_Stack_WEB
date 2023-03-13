@@ -114,6 +114,8 @@ npm install react-icons --save
 npm install redux react-redux
 npm install immer   //Para trabalhar quando houver imutabilidade.
 
+npm install redux-saga
+
 
 ----------------------------------
 
@@ -1258,7 +1260,7 @@ export default function Reservas() {
 //Remover uma reserva.
 function handleRemove(id){
   //alert(id); //teste
-  //Agora precisa disparar uma ação para o reducer poder remover. Será utilizadop o useDispatch
+  //Agora precisa disparar uma ação para o reducer poder remover. Será utilizado o useDispatch
   dispatch( removeReserve(id) )
 }
 
@@ -1297,6 +1299,756 @@ function handleRemove(id){
 }
 
 
+----------------------------------
+-------------------------------
+----------------------------------Incrementar e decrementar quantidade de itens no pacote.
+
+Em pages/Reservas/index.js:
+A parte do botão vai ficar assim
+
+
+<strong>{item.title}</strong>
+
+        {/*Incrementar e decrementar quantidade de itens no pacote */}
+        <div id='amount'>
+          <button type='button' onClick={()=>{}}>
+          <MdRemoveCircle size={25} color='#191919'/>
+          </button>
+
+          <input type='text' readOnly value={ item.amount }></input> {/*//Aumentar itens na reserva em vez de duplicar. */}
+
+          <button type='button' onClick={()=>{}}>
+          <MdAddCircle size={25} color='#191919'/>
+          </button>
+        
+        </div>
+
+
+---------------------Atualizar
+pages/Reservas/reservas.css:
+
+
+.title{
+    color: #fff;    
+}
+
+.reservas{
+    padding: 20px;
+    margin-bottom: 10px;
+    background: #fff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between; /*Espaçou tudo de uma vez */
+    align-items: center;
+}
+
+.reservas img{
+    height: 100px;    
+}
+
+.reservas button{
+    border: 0;
+    background-color: #fff;
+}
+
+footer button{
+    border: 0;
+    display: flex;
+    padding: 10px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+
+/*Incrementar e decrementar quantidade de itens no pacote */
+.reservas #amount{
+    display: flex;
+    align-items: center;    
+}
+
+.reservas #amount input{
+    border: 1px solid #eee;
+    border-radius: 4px;
+    color: #242424;
+    padding: 5px;
+    width: 20px;  
+    text-align: center;  	  
+}
+
+
+
+-----------------------------Criar as funções em
+pages/Reservas/index.js:
+
+
+
+
+
+import React from 'react';
+import { MdDelete, MdAddCircle, MdRemoveCircle } from 'react-icons/md';
+import './reservas.css';
+
+//Adicionar reserva   //Remover uma reserva.
+import { useSelector, useDispatch } from 'react-redux';
+
+/*Incrementar e decrementar quantidade de itens no pacote */
+import { removeReserve, updateAmountReserve } from '../../store/modules/reservar/actions';
+
+export default function Reservas() {
+
+//Adicionar reserva
+  const reserves = useSelector(state => state.reservar);
+//Veja em:  http://localhost:3000/reservas
+  //console.log('teste adicionar reserva. Reservas()', reserves );// Confirmado acesso ao reducer.
+
+//Remover uma reserva.
+  const dispatch =useDispatch();
+
+
+//Remover uma reserva.
+function handleRemove(id){
+  //alert(id); //teste
+  //Agora precisa disparar uma ação para o reducer poder remover. Será utilizadop o useDispatch
+  dispatch( removeReserve(id) )
+}
+
+
+
+/*Incrementar e decrementar quantidade de itens no pacote */
+function decrementAmount(trip){
+  //console.log(trip);
+  //Está funcionando, agora precisa disparar uma ação. dispatch. Ir em modules/reservar/actoins.js
+  dispatch(updateAmountReserve(trip.id, trip.amount - 1 ))
+
+   //Agora precisa ir no reducer trabalhar essa action
+}
+
+/*Incrementar e decrementar quantidade de itens no pacote */
+function incrementAmount(trip){
+  //console.log(trip);
+  //Está funcionando, agora precisa disparar uma ação. dispatch. Ir em modules/reservar/actoins.js
+  dispatch(updateAmountReserve(trip.id, trip.amount + 1 ))
+
+  //Agora precisa ir no reducer trabalhar essa action
+}
+
+
+ return (
+   <div>
+    <h1 className='title'>Você solicitou { reserves.length < 1 ? `${reserves.length} reserva` : `${reserves.length} reservas`} </h1>
+
+{/*//Adicionar reserva */}
+    {reserves.map(item=>(     
+
+      <div className='reservas' key={item.id}>{/*Toda vez que usar map() usar uma key no container */}
+        <img 
+          src={item.image}
+          alt={item.title}
+        />
+        <strong>{item.title}</strong>
+
+        {/*Incrementar e decrementar quantidade de itens no pacote */}
+        <div id='amount'>
+          <button type='button' onClick={()=>decrementAmount(item)}>
+          <MdRemoveCircle size={25} color='#191919'/>
+          </button>
+
+          <input type='text' readOnly value={ item.amount }></input> {/*//Aumentar itens na reserva em vez de duplicar. */}
+
+          <button type='button' onClick={()=>incrementAmount(item)}>
+          <MdAddCircle size={25} color='#191919'/>
+          </button>
+        
+        </div>
+
+
+        {/*//Remover uma reserva. */}
+        <button
+          type='button'
+          onClick={()=> handleRemove(item.id) }
+        >
+          <MdDelete size={20} color='#191919'/>
+        </button>
+      </div>
+
+    ))}
+
+    
+      <footer>
+        <button type='button' >Solicitar reservas</button>
+      </footer>
+   </div>
+ );
+}
+
+
+
+
+------------modules/reservaar/actions.js:
+
+
+export function addReserve(trip){
+    //Em pages/Home/index.js
+    return{
+        type: 'ADD_RESERVE',
+        trip    //Trip é o que esta recebendo por parâmetro. Será passado para modules/reservar/reducer.js
+    }
+}
+
+
+export function removeReserve(id){
+    //Em pages/Reservas/index.js
+    return{
+        type: 'REMOVE_RESERVE',
+        id   //id é o item que será enviado para reducer.js
+      }
+}
+
+/*Incrementar e decrementar quantidade de itens no pacote */
+export function updateAmountReserve(id, amount){
+    //Necessário o Id e Quantidade
+    return{
+    type: 'UPDATE_RESERVE',
+    id,
+    amount
+    }
+}
+
+
+
+--------------modules/reservar/reducer.js:
+
+
+
+import produce from "immer";
+
+export default function reservar( state =[], action ){
+    //console.log('Teste função reservar()');
+    //console.log(action);
+    //console.log(state);
+
+    switch(action.type){
+        case 'ADD_RESERVE': 
+            return produce(state, draft =>{
+
+                //Se já existir, somar +1
+                const tripIndex = draft.findIndex(trip => trip.id === action.trip.id)
+                if( tripIndex >= 0 ){
+                    draft[tripIndex].amount +=1;
+                }else{
+                    draft.push({
+                        ...action.trip,
+                        amount: 1
+                    });
+                }         
+
+            });
+            
+        case 'REMOVE_RESERVE':
+            return produce(state, draft=>{
+                //Se já existir, subtrair 1
+                const tripIndex = draft.findIndex(trip => trip.id === action.id); // Aqui não tem o trip por estar enviando diretamente pelo id
+                
+                if(tripIndex >= 0 ){ //splice() será usado para excluir na posição 1. Primeiro objeto
+                    draft.splice(tripIndex, 1)
+                }
+                        
+            });
+
+        case 'UPDATE_RESERVE': { //Verificar se há <0
+            if(action.amount <= 0 ){
+                return state; //Não vai mudar nada. Vai parar em 1 item. Senão ele passa para o return abaixo e incrementa ou decrementa
+            }
+
+            return produce(state, draft=>{
+                //PRECISA DO INDEX
+                const tripIndex = draft.findIndex(trip => trip.id === action.id); //Produto encontrado
+
+                //CONVERTER string para Number() para fazer a verificação
+                if(tripIndex >= 0){
+                    draft[tripIndex].amount = Number(action.amount); //Produto acrescentado ou decrementado
+                }
+                
+                
+
+            });
+        }
+
+
+        default: 
+            return state;   
+    }
+}
+
+
+
+-------------------
+++++++++++++++++++++++++  npm install redux-saga
+
+-------------------
+Novo conceito para trabalhar com Redux Saga (é um Middleware).
+Ele fica no meio, fica facil fazer uma requisição HTTP, fazer uma chamada assincrona API e
+o Redux Saga dispara outra action. Lembrando que tem que ser async.
+
+Quando disparar uma action o Redux e reducer 'ouvem' essa action e
+retorna para o front-end e todos os componentes da aplicação conseguem 
+acessar, utilizar ou disparar mais alguma action com esse estado.
+
+
+-----------Criar 
+store/modules/reservar/sagas.js:
+
+
+//  async function 
+//Aqui será usado o function* Com asterisco que é um mais "poderoso" que async
+// * (generator) também tem essa função de esperar uma reaquisição para poder proceguir.
+
+
+/*Veja em actions que agora foram criadas 2 funções:
+addReserveRequest()  Quem ouve esse é o SAGA
+e
+addReserveSuccess()  Quem ouve esse é o REDUCER
+*/
+
+import { addReserveSuccess } from './actions';
+
+//No saga não faz requisições como foram feitas anteriormente neste projeto ''api.get()''. Importar "call"
+import { call, put, all, takeLatest } from 'redux-saga/effects';
+
+//Importar a API para fazer a requisição.
+import api from '../../../services/api';
+
+function* addtoReserve( { id } ){
+    //normalmente colocaria awayt para esperar, mas no saga é yield
+    const response = yield call (api.get, `trips/${id}`);//Aqui tem um porém. Veja comentário em modules/reservar/actions.js 
+
+//Aqui é a parte intermediária que pode distribuir para todas as partes. Usar put. importar de actions.js addReserveSuccess
+    yield put( addReserveSuccess(response.data) )
+}
+
+//Usar 'all' para disparar listeners para ele ficar 'ouvindo'. Usar takeLatest para chmar a 'action' correspondente. 
+export default all( [
+    takeLatest('ADD_RESERVE_REQUEST', addtoReserve) //Criar um novo módulo chamado rootSaga.js
+] )
+
+
+
+
+
+-----------------Atualizar reservar/actions.js:
+
+
+
+
+
+// export function addReserve(trip){
+
+/*
+export function addReserve(id){
+    //Em pages/Home/index.js
+    return{
+        type: 'ADD_RESERVE',
+        id    //Trip é o que esta recebendo por parâmetro. Será passado para modules/reservar/reducer.js
+    //Foi trocado por id. Veja comentário ***
+    }
+}
+
+
+*** Essa vigem podeira ter mais exemplos como voo, escala, valores, tempo, 
+companhia, hotel, hora de saída e chegada etc.
+Porém em "reservas" exibir apenas o nome da viagem. 'trip' está passando TODA  trip, mas o 'id' é suficiente.
+
+É preciso alterar em Home/index.js e mudar no botão handleAdd para (trip.id) e na função também,
+
+function handleAdd(id){
+  //console.log(trip);// Passar uma ação para Redux. Obrigatório uso do type
+  dispatch( addReserve(id) );
+}
+
+Quem vai receber a partir de agora não é mais o reducer, mas sim o Reducer Saga em sagas.js.
+
+Agora foram criadas 2 funções para distribuir:
+addReserveRequest()  Quem ouve esse é o SAGA
+e
+addReserveSuccess()  Quem ouve esse é o REDUCER
+*/
+
+export function addReserveRequest(id){ // Quem ouve esse é o SAGA
+    return{
+        type: 'ADD_RESERVE_REQUEST',
+        id    
+    }
+}
+
+export function addReserveSuccess(trip){  // Quem ouve esse é o REDUCER
+    return{
+        type: 'ADD_RESERVE-SUCCESS',
+        trip   
+    }
+}
+
+
+
+
+export function removeReserve(id){
+    //Em pages/Reservas/index.js
+    return{
+        type: 'REMOVE_RESERVE',
+        id   //id é o item que será enviado para reducer.js
+      }
+}
+
+/*Incrementar e decrementar quantidade de itens no pacote */
+export function updateAmountReserve(id, amount){
+    //Necessário o Id e Quantidade
+    return{
+    type: 'UPDATE_RESERVE',
+    id,
+    amount
+    }
+}
+
+
+
+
+
+-----------------Atualizar reservar/reducer.js:
+
+
+
+import produce from "immer";
+
+export default function reservar( state =[], action ){
+    //console.log('Teste função reservar()');
+    //console.log(action);
+    //console.log(state);
+
+    switch(action.type){
+        case 'ADD_RESERVE': 
+            return produce(state, draft =>{
+
+                //Se já existir, somar +1
+                const tripIndex = draft.findIndex(trip => trip.id === action.trip.id)
+                if( tripIndex >= 0 ){
+                    draft[tripIndex].amount +=1;
+                }else{
+                    draft.push({
+                        ...action.trip,
+                        amount: 1
+                    });
+                }         
+
+            });
+            
+        //case 'REMOVE_RESERVE': fOI ALTERADO PARA ADD_RESERVE-SUCCESS. Veja explicação em actions.js
+        case 'ADD_RESERVE-SUCCESS':
+            return produce(state, draft=>{
+                //Se já existir, subtrair 1
+                const tripIndex = draft.findIndex(trip => trip.id === action.id); // Aqui não tem o trip por estar enviando diretamente pelo id
+                
+                if(tripIndex >= 0 ){ //splice() será usado para excluir na posição 1. Primeiro objeto
+                    draft.splice(tripIndex, 1)
+                }
+                        
+            });
+
+        case 'UPDATE_RESERVE': { //Verificar se há <0
+            if(action.amount <= 0 ){
+                return state; //Não vai mudar nada. Vai parar em 1 item. Senão ele passa para o return abaixo e incrementa ou decrementa
+            }
+
+            return produce(state, draft=>{
+                //PRECISA DO INDEX
+                const tripIndex = draft.findIndex(trip => trip.id === action.id); //Produto encontrado
+
+                //CONVERTER string para Number() para fazer a verificação
+                if(tripIndex >= 0){
+                    draft[tripIndex].amount = Number(action.amount); //Produto acrescentado ou decrementado
+                }
+                
+                
+
+            });
+        }
+
+
+        default: 
+            return state;   
+    }
+}
+
+
+/*Aumentar itens na reserva em vez de duplicar.
+Como é imutavel e não será possivel utilizar state.push()
+será necessário instalar uma biblioteca chamada Immer
+https://immerjs.github.io/immer/
+
+Vai ajudar com essa parte de imutabilidade.
+npm install immer
+
+produce() passar PRIMEIRO a state original e depois a cópia.
+produce(state, draft   //draft é a cópia
+
+*/
+
+
+
+
+
+
+-----------------Atualizar Home/index.js:
+
+
+
+
+
+import React, {useState, useEffect} from 'react';
+import api from '../../services/api';
+import {MdFlightTakeoff} from 'react-icons/md';
+import './home.css';
+
+//Clique do botão reservar
+import { useDispatch } from 'react-redux';
+
+import { addReserveRequest } from '../../store/modules/reservar/actions';// Alterado para addReserveRequest para usar Redux Saga
+
+export default function Home() {
+  const [trips, setTrips]= useState([]);
+
+  const dispatch = useDispatch();//Clique do botão reservar
+
+  useEffect(()=>{
+    async function loadApi(){
+      const response = await api.get('trips'); //Acessar trips em api
+      setTrips(response.data);
+      //console.log(response.data); //Verificar se está tudo ok
+    }
+
+    loadApi(); //Criou a função e sempre tem que chamar fora dela
+
+  }, []);
+
+
+//Clique do botão reservar.
+function handleAdd(id){
+  //console.log(trip);// Passar uma ação para Redux. Obrigatório uso do type
+  dispatch( addReserveRequest(id) );
+}
+
+
+
+//veja http://localhost:3333/trips   para preencher esta parte
+ return (
+   <div>
+    <div className='box'>
+      {trips.map(trip=>(
+        <li key={trip.id}>
+          <img src={trip.image} alt={trip.title} />
+          <strong>{trip.title}</strong>
+          {/*<span>Status: {trip.status}</span> *Neste caso boolean pode fazer uma renderização condicional para exibir mensagens */}
+          <span>Status: {trip.status ? 'Disponível' : 'Indisponível no momento'}</span>
+
+{/*//Clique do botão reservar. Passar todo o conteudo da vigem com 'trip' para essa nova função*/}
+          <button type='button' 
+          onClick={()=> handleAdd(trip.id) }>
+            <div>
+              <MdFlightTakeoff size={18} color='#fff'/>
+            </div>
+            <span>Solicitar reserva</span>
+          </button>
+        
+        </li>
+
+      ))}
+
+    </div>
+   </div>
+ );
+}
+
+
+
+
+
+
+
+-------------------Em modules/rootSaga.js:
+
+
+import { all } from 'redux-saga/effects';
+import reservar from './reservar/sagas';
+
+export default function* rootSaga(){
+    return yield all( [
+        reservar,
+    ])
+} //Importar createSagaMiddleware no modules/index.js
+
+
+
+---------modules/index.js:
+
+
+import { configureStore } from '@reduxjs/toolkit';
+import { applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga'
+import rootReducer from './modules/rootReducer';
+import rootSaga from './modules/rootSaga';
+
+const sagaMiddleware = createSagaMiddleware();
+
+const enhancer = applyMiddleware(sagaMiddleware);
+
+const store = configureStore({
+  reducer: rootReducer,
+  enhancers: [enhancer]
+});
+
+sagaMiddleware.run(rootSaga);
+
+export default store;
+
+
+---------------------------O PROJETO ESTÁ COM ERRO AQUI:
+
+const store = configureStore({
+  reducer: rootReducer,
+  enhancers: [enhancer]
+});
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+Erro corrigido alterando em reducer.js:
+
+
+
+	case 'ADD_RESERVE-SUCCESS':
+            return produce(state, draft=>{
+                
+                //apagado itens aqui e atualizado com:
+                draft.push(action.trip);
+                             
+            });
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Para acertar agora essa parte seguinte: 
+
+
+REDUCER vai responsável apenas por add na lista e
+SAGA para verificar se já existe na lista e add
+
+
+
+----------------------importar select para ajustar o SAGA
+Em saga.js:
+
+
+
+
+//ajustar o SAGA. IMPORTAR updateAmountReserve
+import { addReserveSuccess, updateAmountReserve } from './actions';
+
+//ajustar o SAGA. IMPORTAR SELECT
+import {select, call, put, all, takeLatest } from 'redux-saga/effects';
+
+import api from '../../../services/api';
+
+function* addtoReserve( { id } ){
+
+    // ajustar o SAGA. Verificar se item já existe na lista. yield para esperar.
+    const tripExists = yield select(
+        state => state.reservar.find(trip => trip.id === id)//Para ver se encontra a viagem na lista
+    );
+    
+    //Se já existe na lista acrescentar em amount
+    if(tripExists){
+        const amount = tripExists.amount + 1;
+
+        yield put(updateAmountReserve(id, amount));
+
+
+    }//Se não existe Fazer a requisição e chamar o success
+    else{
+
+        const response = yield call (api.get, `trips/${id}`);
+        //Precisa avisar que é amount + 1
+        const data = {
+            ...response.data,
+            amount: 1
+        }
+
+        yield put( addReserveSuccess(data) )
+
+    }
+    
+}
+
+export default all( [
+    takeLatest('ADD_RESERVE_REQUEST', addtoReserve) //Criar um novo módulo chamado rootSaga.js
+] )
+
+
+------------reducer.js:
+
+import produce from "immer";
+
+export default function reservar( state =[], action ){
+    //console.log('Teste função reservar()');
+    //console.log(action);
+    //console.log(state);
+
+    switch(action.type){
+        case 'ADD_RESERVE': 
+            return produce(state, draft =>{
+
+                //Se já existir, somar +1
+                const tripIndex = draft.findIndex(trip => trip.id === action.trip.id)
+                if( tripIndex >= 0 ){
+                    draft[tripIndex].amount +=1;
+                }else{
+                    draft.push({
+                        ...action.trip,
+                        amount: 1
+                    });
+                }         
+
+            });
+            
+        //case 'REMOVE_RESERVE': fOI ALTERADO PARA ADD_RESERVE-SUCCESS. Veja explicação em actions.js
+        case 'ADD_RESERVE-SUCCESS':
+            return produce(state, draft=>{
+                
+                //apagado itens aqui e atualizado com:
+                draft.push(action.trip);
+                             
+            });
+
+        case 'UPDATE_RESERVE': { //Verificar se há <0
+            if(action.amount <= 0 ){
+                return state; //Não vai mudar nada. Vai parar em 1 item. Senão ele passa para o return abaixo e incrementa ou decrementa
+            }
+
+            return produce(state, draft=>{
+                //PRECISA DO INDEX
+                const tripIndex = draft.findIndex(trip => trip.id === action.id); //Produto encontrado
+
+                //CONVERTER string para Number() para fazer a verificação
+                if(tripIndex >= 0){
+                    draft[tripIndex].amount = Number(action.amount); //Produto acrescentado ou decrementado
+                }
+                
+                
+
+            });
+        }
+
+
+        default: 
+            return state;   
+    }
+}
 
 
 
@@ -1305,6 +2057,124 @@ function handleRemove(id){
 
 
 
+-----------------saga.js:
+
+
+//ajustar o SAGA. IMPORTAR updateAmountReserve
+import { addReserveSuccess, updateAmountReserve } from './actions';
+
+//ajustar o SAGA. IMPORTAR SELECT
+import {select, call, put, all, takeLatest } from 'redux-saga/effects';
+
+import api from '../../../services/api';
+
+function* addtoReserve( { id } ){
+
+    // ajustar o SAGA. Verificar se item já existe na lista. yield para esperar.
+    const tripExists = yield select(
+        state => state.reservar.find(trip => trip.id === id)//Para ver se encontra a viagem na lista
+    );
+    
+    //Se já existe na lista acrescentar em amount
+    if(tripExists){
+        const amount = tripExists.amount + 1;
+
+        yield put(updateAmountReserve(id, amount));
+
+
+    }//Se não existe Fazer a requisição e chamar o success
+    else{
+
+        const response = yield call (api.get, `trips/${id}`);
+        //Precisa avisar que é amount + 1
+        const data = {
+            ...response.data,
+            amount: 1
+        }
+
+        yield put( addReserveSuccess(data) )
+
+    }
+    
+}
+
+export default all( [
+    takeLatest('ADD_RESERVE_REQUEST', addtoReserve) //Criar um novo módulo chamado rootSaga.js
+] )
+
+
+
+----------------------------------
+----Se olhar lá na API em server.json amount tem um limite de quantidade disponível. 
+Acertar isso no projeto agora, não pode passar desse limite. O SAGA está no meio, antes do reducer, fazer por lá.
+
+http://localhost:3333/stock/1
+stock é o nome que já está na API.
+
+
+
+
+
+//ajustar o SAGA. IMPORTAR updateAmountReserve
+import { addReserveSuccess, updateAmountReserve } from './actions';
+
+//ajustar o SAGA. IMPORTAR SELECT
+import {select, call, put, all, takeLatest } from 'redux-saga/effects';
+
+import api from '../../../services/api';
+
+function* addtoReserve( { id } ){
+
+    // ajustar o SAGA. Verificar se item já existe na lista. yield para esperar.
+    const tripExists = yield select(
+        state => state.reservar.find(trip => trip.id === id)//Para ver se encontra a viagem na lista
+    );
+    
+/*  limite de quantidade disponível
+http://localhost:3333/stock/1
+stock é o nome que já está na API.
+*/
+        const myStock = yield call(api.get, `/stock/${id}`);
+        const stockAmount= myStock.data.amount;//Aqui já vai tewr a quantidade permitida no estoque
+        //Agora pegar o estoque atual
+        const currentStock = tripExists ? tripExists.amount : 0;
+        //agora tem que somar 
+        const amount = currentStock + 1;
+        //Validar isso
+        if(amount > stockAmount){
+            alert('Atingiu o limite disponível');
+            return;
+        }//Se não passou da quantidade permitida entra no proximo if para adicionar
+
+//*******IMPORTANTE******* Essa verificação vai ocorrer somente na parte http://localhost:3000/ 
+// no botão 'Solicitar reserva' que é o SAGA que está verificando 
+
+    //Se já existe na lista acrescentar em amount
+    if(tripExists){
+        //const amount = tripExists.amount + 1;// Essa validação passou para cima.
+
+        yield put(updateAmountReserve(id, amount));
+
+
+    }//Se não existe, Fazer a requisição e chamar o success. Saga está responsavel por isso
+    else{
+
+        const response = yield call (api.get, `trips/${id}`);
+        //Precisa avisar que é amount + 1
+        const data = {
+            ...response.data,
+            amount: 1
+        }
+
+        yield put( addReserveSuccess(data) )
+
+    }
+    
+}
+
+export default all( [
+    takeLatest('ADD_RESERVE_REQUEST', addtoReserve) //Criar um novo módulo chamado rootSaga.js
+] )
 
 
 
@@ -1312,16 +2182,274 @@ function handleRemove(id){
 
 
 
+-------------------Agora corrigir número limite em http://localhost:3000/reservas
+no botão + -
+Neste caso que é responsável por isso é o updateAmountReserve() que está em actions.js
+será substituido e e criado 2:
+
+
+
+/*http://localhost:3000/reservas  Corrigindo número limite de itens */
+export function updateAmountRequest(id, amount){ // Será ouvido pelo SAGA
+    //Necessário o Id e Quantidade
+    return{
+    type: 'UPDATE_RESERVE_REQUEST',
+    id,
+    amount
+    }
+}
+
+export function updateAmountSuccess(id, amount){ // Será ouvido pelo Reducer
+    //Necessário o Id e Quantidade
+    return{
+    type: 'UPDATE_RESERVE_SUCCESS',
+    id,
+    amount
+    }
+}
 
 
 
 
 
 
+-----CORRIGIR Reservas/index.js:
+
+Onde estiver updateAmountReserve trocar por updateAmountRequest. Veja no import tb
+
+
+-----CORRIGIR Reservar/sagas.js:
+updateAmountSuccess
+
+ 
+
+//ajustar o SAGA. IMPORTAR updateAmountReserve
+import { addReserveSuccess, updateAmountSuccess } from './actions';
+
+//ajustar o SAGA. IMPORTAR SELECT
+import {select, call, put, all, takeLatest } from 'redux-saga/effects';
+
+import api from '../../../services/api';
+
+function* addtoReserve( { id } ){
+
+    // ajustar o SAGA. Verificar se item já existe na lista. yield para esperar.
+    const tripExists = yield select(
+        state => state.reservar.find(trip => trip.id === id)//Para ver se encontra a viagem na lista
+    );
+    
+/*  limite de quantidade disponível
+http://localhost:3333/stock/1
+stock é o nome que já está na API.
+*/
+        const myStock = yield call(api.get, `/stock/${id}`);
+        const stockAmount= myStock.data.amount;//Aqui já vai tewr a quantidade permitida no estoque
+        //Agora pegar o estoque atual
+        const currentStock = tripExists ? tripExists.amount : 0;
+        //agora tem que somar 
+        const amount = currentStock + 1;
+        //Validar isso
+        if(amount > stockAmount){
+            alert('Atingiu o limite disponível');
+            return;
+        }//Se não passou da quantidade permitida entra no proximo if para adicionar
+
+//*******IMPORTANTE******* Essa verificação vai ocorrer somente na parte http://localhost:3000/ 
+// no botão 'Solicitar reserva' que é o SAGA que está verificando 
+
+    //Se já existe na lista acrescentar em amount
+    if(tripExists){
+        //const amount = tripExists.amount + 1;// Essa validação passou para cima.
+
+        yield put(updateAmountSuccess(id, amount));
+
+
+    }//Se não existe, Fazer a requisição e chamar o success. Saga está responsavel por isso
+    else{
+
+        const response = yield call (api.get, `trips/${id}`);
+        //Precisa avisar que é amount + 1
+        const data = {
+            ...response.data,
+            amount: 1
+        }
+
+        yield put( addReserveSuccess(data) )
+
+    }
+    
+}
+
+export default all( [
+    takeLatest('ADD_RESERVE_REQUEST', addtoReserve) //Criar um novo módulo chamado rootSaga.js
+] )
 
 
 
 
 
 
+---------Em reservar/sagas.js:
+
+
+//ajustar o SAGA. IMPORTAR updateAmountReserve
+import { addReserveSuccess, updateAmountSuccess } from './actions';
+
+//ajustar o SAGA. IMPORTAR SELECT
+import {select, call, put, all, takeLatest } from 'redux-saga/effects';
+
+import api from '../../../services/api';
+
+function* addtoReserve( { id } ){
+
+    // ajustar o SAGA. Verificar se item já existe na lista. yield para esperar.
+    const tripExists = yield select(
+        state => state.reservar.find(trip => trip.id === id)//Para ver se encontra a viagem na lista
+    );
+    
+/*  limite de quantidade disponível
+http://localhost:3333/stock/1
+stock é o nome que já está na API.
+*/
+        const myStock = yield call(api.get, `/stock/${id}`);
+        const stockAmount= myStock.data.amount;//Aqui já vai ter a quantidade permitida no estoque
+        //Agora pegar o estoque atual
+        const currentStock = tripExists ? tripExists.amount : 0;
+        //agora tem que somar 
+        const amount = currentStock + 1;
+        //Validar isso
+        if(amount > stockAmount){
+            alert('Atingiu o limite disponível');
+            return;
+        }//Se não passou da quantidade permitida entra no proximo if para adicionar
+
+//*******IMPORTANTE******* Essa verificação vai ocorrer somente na parte http://localhost:3000/ 
+// no botão 'Solicitar reserva' que é o SAGA que está verificando 
+
+    //Se já existe na lista acrescentar em amount
+    if(tripExists){
+        //const amount = tripExists.amount + 1;// Essa validação passou para cima.
+
+        yield put(updateAmountSuccess(id, amount));
+
+
+    }//Se não existe, Fazer a requisição e chamar o success. Saga está responsavel por isso
+    else{
+
+        const response = yield call (api.get, `trips/${id}`);
+        //Precisa avisar que é amount + 1
+        const data = {
+            ...response.data,
+            amount: 1
+        }
+
+        yield put( addReserveSuccess(data) )
+
+    }
+    
+}
+
+
+// http://localhost:3000/reservas  Corrigindo número limite de itens
+function* updateAmount( {id, amount} ){
+
+    //Fazer a comparação do estoque com a solicitação. amount é a quantidade atual
+    if (amount <= 0) return; //Neste caso pode escrever assim.
+
+    const myStock = yield call(api.get, `/stock/${id}`);
+    const stockAmount= myStock.data.amount;//Quantidade no estoque.
+
+    if(amount > stockAmount){
+        alert('Atingiu o limite disponível');
+        return;
+    }//Se não for maior pode chamar o put para disparar, chamar uma action e passar o id e quantidade
+
+    yield put(updateAmountSuccess(id, amount));
+    // Precisa corrigir em reducer. Não existe mais 'UPDATE_RESERVE', agora é 'UPDATE_RESERVE_SUCCESS'
+ 
+}
+
+export default all( [
+    takeLatest('ADD_RESERVE_REQUEST', addtoReserve), //Criar um novo módulo chamado rootSaga.js
+
+    takeLatest('UPDATE_RESERVE_REQUEST', updateAmount)
+
+] )
+
+
+
+---------Corrigindo reducer.js:
+
+import produce from "immer";
+
+export default function reservar( state =[], action ){
+    //console.log('Teste função reservar()');
+    //console.log(action);
+    //console.log(state);
+
+    switch(action.type){
+        case 'ADD_RESERVE': 
+            return produce(state, draft =>{
+
+                //Se já existir, somar +1
+                const tripIndex = draft.findIndex(trip => trip.id === action.trip.id)
+                if( tripIndex >= 0 ){
+                    draft[tripIndex].amount +=1;
+                }else{
+                    draft.push({
+                        ...action.trip,
+                        amount: 1
+                    });
+                }         
+
+            });
+            
+        //case 'REMOVE_RESERVE': fOI ALTERADO PARA ADD_RESERVE-SUCCESS. Veja explicação em actions.js
+        case 'ADD_RESERVE-SUCCESS':
+            return produce(state, draft=>{
+                
+                //apagado itens aqui e atualizado com:
+                draft.push(action.trip);
+                             
+            });
+
+        case 'UPDATE_RESERVE_SUCCESS': { //Verificar se há <0
+            
+            /* eSSA VERIFICAÇÃO já está sendo feita pelo SAGA em sagas.js    if (amount <= 0) return;
+            if(action.amount <= 0 ){
+                return state; //Não vai mudar nada. Vai parar em 1 item. Senão ele passa para o return abaixo e incrementa ou decrementa
+            }  */
+
+            return produce(state, draft=>{
+                //PRECISA DO INDEX
+                const tripIndex = draft.findIndex(trip => trip.id === action.id); //Produto encontrado
+
+               
+               //CONVERTER string para Number() para fazer a verificação
+                if(tripIndex >= 0){
+                    draft[tripIndex].amount = Number(action.amount); //Produto acrescentado ou decrementado
+                } 
+                
+            });
+        }
+
+
+        default: 
+            return state;   
+    }
+}
+
+
+/*Aumentar itens na reserva em vez de duplicar.
+Como é imutavel e não será possivel utilizar state.push()
+será necessário instalar uma biblioteca chamada Immer
+https://immerjs.github.io/immer/
+
+Vai ajudar com essa parte de imutabilidade.
+npm install immer
+
+produce() passar PRIMEIRO a state original e depois a cópia.
+produce(state, draft   //draft é a cópia
+
+*/
 
