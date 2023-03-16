@@ -1,0 +1,772 @@
+Para iniciar um projeto com NextJs
+pode ser pelo npx ou yarn a diferença é que yarn é mais rápida a instalação.
+ 
+Tem que instalar o instalador yarn antes com
+npm install --global yarn
+
+Verifique:
+yarn --version
+
+
+Podendo ainda acrescentar --typescript
+
+npx create-next-app@latest <nome> --typescript
+ou
+yarn create next-app <nome> --typescript
+
+Ctrl + ' 
+No terminal do VSCode:
+npx create-next-app@latest tarefas --typescript
+
+create-next-app@13.2.4
+Ok to proceed? (y)
+
+Would you like to use ESLint with this project? » No / Yes
+Neste projeto "No"
+
+Would you like to use `src/` directory with this project? » No / Yes
+Prefiro que inicie com a pasta src- Yes
+
+Would you like to use experimental `app/` directory with this project? » No / Yes
+No
+
+What import alias would you like configured? » @/*
+dar enter
+
+
+
+=====================================
+
+npm install next-auth     Para autenticações: https://next-auth.js.org/getting-started/example e https://next-auth.js.org/providers/google
+
+=====================================
+
+
+-----------------@
+cd tarefas
+-----------------@
+
+
+---------------
+Em src/pages deixar somente
+_app.tsx 
+e
+index.tsx
+---------------
+Deixar a pasta styles fora de src
+
+
+
+---------------
+Em src/pages/index.tsx:
+
+
+import Head from 'next/head'
+import styles from '../../styles/home.module.css'
+
+export default function Home() {
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Tarefas+ | Organize de forma fácil</title>        
+      </Head>
+      <h1>Projeto Tarefas com Next</h1> 
+      
+    </div>
+  )
+}
+
+
+--------corrigir nome na pasta styles
+para h minúnculo home.module.css e apagar tudo
+
+Em globals.css também apagar tudo, ele está sendo chamado em pages/_app.tsx
+
+----Em pages/_app.tsx corrigir importação do globals.css:
+
+import '../../styles/globals.css';
+import type { AppProps } from 'next/app';
+
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} /> {/*Aqui é o corpo da página */}
+}
+
+
+-------Testar:
+npm run dev
+ou
+yarn dev
+
+---------Fazer as configurações iniciais em globals.css:
+
+
+/*Pode importar uma fonte global: 
+https://fonts.google.com/specimen/Roboto
+e chamar em html como primeira opção:*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-family: "roboto", sans-serif;
+}
+
+
+------------
+Em public/assets
+para inserir as midias que serão utilizadas.
+
+------------------------------------------------
+------------------------------------------------
+Em pages/index.tsx:
+
+
+import Head from 'next/head'
+import styles from '../../styles/home.module.css'
+
+//Pode usar <img> se quiser, mas o Next tem um modelo que carrega melhor, tem mais performance. Image
+import Image from 'next/image';
+import homeimage from '../../public/assets/home-image.jpg';
+// Pode priorizar o carregamento escrevendo apenas priority. Não precisa ser priority={true}
+
+export default function Home() {
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Tarefas+ | Organize de forma fácil</title>        
+      </Head>
+      <main className={styles.main}>
+        <div className={styles.logoContent}>
+          <Image  className={styles.homeimage}
+                  alt="Logo Tarefas"
+                  src={homeimage}
+                  priority={true}
+          />
+        </div>
+        <h1 className={styles.title}>
+          Organize seus estudos e outras tarefas
+          <br/>do dia a dia.
+        </h1>
+      </main>
+      
+    </div>
+  )
+}
+
+
+
+---------------Estilizar isso em home.module.css:
+
+.container{
+    background-color: #0f0f0f;
+    width: 100%;
+    height: 100vh; /*para ocupar a tela toda*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logoContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.homeimage{
+    max-width: 480px;
+    object-fit: contain; /* Vai encaixar na largura sem distorcer */
+    width: auto;
+    height: auto;    
+    border-radius: 10px;    
+}
+
+.title{
+    color: #fff;
+    text-align: center;
+    margin: 28px;
+    line-height: 150%;
+}
+
+
+----------------------Criar cabeçalho e botões abaixo da imagem
+em pages/index.tsx:
+
+
+import Head from 'next/head'
+import styles from '../../styles/home.module.css'
+
+//Pode usar <img> se quiser, mas o Next tem um modelo que carrega melhor, tem mais performance. Image
+import Image from 'next/image';
+import homeimage from '../../public/assets/home-image.jpg';
+// Pode priorizar o carregamento escrevendo apenas priority. Não precisa ser priority={true}
+
+export default function Home() {
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Tarefas+ | Organize de forma fácil</title>        
+      </Head>
+      <main className={styles.main}>
+        <div className={styles.logoContent}>
+          <Image  className={styles.homeimage}
+                  alt="Logo Tarefas"
+                  src={homeimage}
+                  priority={true}
+          />
+        </div>
+        <h1 className={styles.title}>
+          Organize seus estudos e outras tarefas
+          <br/>do dia a dia.
+        </h1>
+
+        <div className={styles.infoContent}>
+          <section className={styles.box}>
+            <span>+12 posts</span>
+          </section>
+
+          <section className={styles.box}>
+            <span>+5 comentários</span>
+          </section>
+        </div>
+
+      </main>
+      
+    </div>
+  )
+}
+
+
+
+---------------Estilizar botões isso em home.module.css:     FICOU TOP !!!
+
+
+.container{
+    background-color: #0f0f0f;
+    width: 100%;
+    /* height: 100vh; para ocupar a tela toda, mas precisa descontar o tamanho total do cabeçalho para evitar barra de rolagem lateral*/
+    height: calc(100vh - 75px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logoContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.homeimage{
+    max-width: 480px;
+    object-fit: contain; /* Vai encaixar na largura sem distorcer */
+    width: auto;
+    height: auto;    
+    border-radius: 10px;    
+}
+
+.title{
+    color: #fff;
+    text-align: center;
+    margin: 28px;
+    line-height: 150%; /* espaçamento vertical*/
+}
+
+.infoContent{
+    display: flex; /* Já coloca um ao lado do outro*/
+    align-items: center;
+    justify-content: space-around; /* Espaço entre intens */
+}
+
+.box{
+    background-color: #fafafa;
+    padding: 15px 45px;
+    border-radius: 5px;
+    transition: transform 0.3s;
+}
+
+.box:hover{
+    transform: scale(1.08);
+}
+
+/* Caso o aparelho seja muito pequeno pode usar o media query */
+@media screen and (max-width: 580px){
+    .homeimage{
+        max-width: 80% ;
+    }
+
+    .title{
+        font-size: 20px;
+    }
+    .infoContent{
+        flex-direction: column;
+    }
+    .box{
+        width: 80%;
+        margin-bottom: 14px;
+        text-align: center;
+    }
+}
+
+
+
+
+-------------Criar src/components/header/index.tsx:
+
+
+
+import styles from './styles.module.css';
+
+export function Header(){
+    return(
+        <header>
+            <section>
+                <nav>
+                    <h1>Tarefas+</h1>
+
+                </nav>
+            </section>
+        </header>
+    )
+}
+
+
+/********* Esse cabeçalho pode ser importado para todas as páginas
+através do pages/_app.tsx   
+*/
+
+
+
+
+-------------Atualizar pages/_app.tsx:
+
+
+import '../../styles/globals.css';
+import type { AppProps } from 'next/app';
+import { Header } from '../components/header';
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <Header/>
+      <Component {...pageProps} /> {/*Aqui é o corpo da página */}
+      
+    </>
+  );
+}
+
+
+/*  LEMBRE-SE QUE PARA MAIS DE 1 ITEM PRECISA POR EM () 
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />   <-----------------AQUI
+}
+*/
+
+
+
+
+-------------Atualizar src/components/header/index.tsx:
+
+
+
+import styles from './styles.module.css';
+
+export function Header(){
+    return(
+        <header>
+            <section>
+                <nav>
+                    <h1>Tarefas+</h1>
+
+                </nav>
+            </section>
+        </header>
+    )
+}
+
+
+-------------
+Atualizar novamente:
+
+
+import styles from './styles.module.css';
+
+/* Para usar navegação importar Link */
+import Link from 'next/link';
+
+export function Header(){
+    return(
+        <header className={styles.header}>
+            <section className={styles.content}>
+                <nav className={styles.nav}>
+                    <Link href='/'>
+                        <h1 className={styles.logo}>
+                            Tarefas<span>+</span>
+                        </h1>
+                    </Link>
+		    
+		    <Link href='/dashboard' 
+                    className={styles.link}>
+                        Painel
+                    </Link>
+
+                </nav>
+
+		<button className={styles.loginButton}>Minha conta</button>
+
+            </section>
+        </header>
+    )
+}
+/********* Esse cabeçalho pode ser importado para todas as páginas
+através do pages/_app.tsx   
+*/
+
+
+
+
+
+
+
+-------------Criar src/components/header/styles.module.css:
+
+.header{
+    width: 100%;
+    height: 75px;     /* ESSA É A ALTURA DO CABEÇALHO. para evitar barra de rolgagem lateral foi usado height: calc(100vh - 75px); em home.modules.css */
+    background-color: #0f0f0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content{
+    padding: 0 18px;
+    width: 100%;
+    max-width: 1024px; /* Interessante colocar isso para não ficar muito largo em telas maiores */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* vai separar os botões */
+}
+
+.content a{
+    text-decoration: none;
+}
+
+.logo{
+    color: #fff;
+    font-size: 32px;
+}
+
+.logo span{
+    color: #ea3140;
+    padding: 3px;
+}
+
+.loginButton{
+    background: transparent;
+    padding: 8px 35px;
+    border-radius: 25px;
+    color: #fff;
+    border: 1.5px solid #fff; /* Lembre-se de por solid */
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.loginButton:hover{
+    transform: scale(1.08);
+    background-color: #fff;
+    color: #0f0f0f;
+    font-weight: bold;
+}
+
+.nav{
+    display: flex;
+    align-items: center;
+}
+
+.link{
+    background-color: #f1f1f1;
+    color: #0f0f0f;
+    padding: 5px 15px;
+    border-radius: 5px;
+    margin: 0 15px;
+}
+
+
+
+**************************************************
+------------------Sistemas de login real com gmail
+
+--------Criar pages/dashboard/index.tsx:
+
+
+/* Lembrando que sempre que for PÁGINA tem que que usar DEFAULT */
+
+import styles from './styles.module.css';
+import Head from 'next/head';
+
+export default function Dashboard(){
+    return(
+        <div className={styles.container}>
+            <Head>
+                <title>Painel de tarefas</title>
+            </Head>  
+            <h1>Página Painel</h1>          
+        </div>
+    )
+}
+
+
+
+------------------PARA TRABALHAR COM AUTENTICAÇÃO USAR UMA BIBLIOTECA CHAMADA 
+NextAuth.js
+
+Veja na coluna E em providers a 
+quantidade de autenticações possíveis em:
+https://next-auth.js.org/providers/
+
+Veja em Getting Started como iniciar:
+https://next-auth.js.org/getting-started/example
+
+ 
+Instalar o pacote de eutenticação:
+
+yarn add next-auth
+ou
+npm install next-auth
+
+*No site mostra que exemplo que tem que por provider ao redor da aplicação 
+pages/_app.jsx
+import { SessionProvider } from "next-auth/react"
+e pode preencher o fragment com isso.
+
+Pede também para passar a session <SessionProvider session={session}>
+
+--------------------------------Vai ficar assim
+Em pages/_app.tsx:
+
+import '../../styles/globals.css';
+import type { AppProps } from 'next/app';
+import { Header } from '../components/header';
+
+// Autenticação de email para acesso
+import { SessionProvider } from "next-auth/react"
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <SessionProvider session={pageProps.session}>
+      <Header/>
+      <Component {...pageProps} />{/*Aqui é o corpo da página */}
+      
+    </SessionProvider>
+  );
+}
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Está tudo na documentação
+
+-------https://next-auth.js.org/getting-started/example
+ainda pede para iniciar em 
+pages/api/auth/[...nextauth].js     Criar exatamente assim com os colchetes
+
+***** Por estar usando NEXT a exstenção será .ts   *****
+
+
+No site ir em providers e ver quais serão utilisadas:
+ https://next-auth.js.org/providers/google
+
+
+Configuration (Para gerar as credenciais)
+https://console.developers.google.com/apis/credentials
+
+Abrir: + CRIAR CREDENCIAIS / ID do cliente do OAuth / 
+CONFIGURAR TELA DE CONSENTIMENTO
+Externo
+CRIAR
+
+Nome do app
+project-TAREFAS-94...9
+O nome do aplicativo que precisa da permissão
+E-mail para suporte do usuário
+leandrocf79@gmail.com
+
+Ainda não tem as páginas, usar localhost por enquanto em
+Domínio do app:
+---
+Página inicial do aplicativo
+http://localhost:3000/
+Forneça aos usuários um link para sua página inicial
+Link da Política de Privacidade do aplicativo
+http://localhost:3000/
+Forneça aos usuários um link para sua Política de Privacidade pública
+Link dos Termos de Serviço do aplicativo
+http://localhost:3000/
+Forneça aos usuários um link para seus Termos de Serviço públicos
+---
+
+Domínios autorizados
+deixar como estiver lá
+
+Dados de contato do desenvolvedor
+Endereços de e-mail 
+leandrocf79@gmail.com
+
+	
+SALVAR E CONTINUAR
+
+--------
+Clicar em ADICIONAR OU REMOVER ESCOPOS
+
+** Por enquanto pode marcar somente:
+[v] See your primary Google Account email address
+[v] See your personal info, including any personal info you've made publicly available
+
+ATUALIZAR
+
+SALVAR E CONTINUAR até o fim
+
+-------------
+-----Na coluna da Esquerda tem Credenciais. Precisa gerar ID
+
++ CRIAR CREDENCIAIS / ID do cliente do OAuth
+
+
+Tipo de aplicativo
+Aplicativo da Web
+
+
+Nome
+Next Projeto Tarefas
+
+por enquanto:
+Origens JavaScript autorizadas
+Para usar com solicitações de um navegador
+URIs 1 
+http://localhost:3000
+
+---Redirecionamento
+
+URIs de redirecionamento autorizados
+Para usar com solicitações de um servidor da Web
+URIs 1 
+http://localhost:3000/api/auth/callback/google      <---Foi sugerido no: https://next-auth.js.org/providers/google 
+
+CRIAR
+
+
+-------Neste momento será gerada a API
+
+***Valores abaixo são demonstrativos***
+
+ID do cliente
+948545454545769-74d2ck45454545u7e6fapps.googleusercontent.com
+
+Chave secreta do cliente
+G45545PX-d545454aVon_eg678678678JM6M7sdfsAcwrEAv
+
+Data da criação
+16 de março de 2023 18:55:38 GMT-3
+
+Status
+Ativada
+
+--------------------------------
+Na raiz projeto, fora de qualquer diretório, criar 
+uma variável ambinete chamda .env
+Basta clicar fora de qualquer texto
+
+-----------
+DAR NOMES com letras maiúsculas e com Underline, SUGESTÃO:
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+-
+Passar o site.  
+-
+Criar uma JWT secret para ajudar na criptografia. 
+Para gerar uma é nteressante usar o site: https://www.md5hashgenerator.com/
+digitar algo e gerar
+copiar a MD5 Hash que foi gerada E COLAR EM "JWT_SECRET="
+
+-----------
+Agora no .env:
+
+GOOGLE_CLIENT_ID=948545454545769-74d2ck45454545u7e6fapps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=G45545PX-d545454aVon_eg678678678JM6M7sdfsAcwrEAv
+
+NEXTAUTH_URL=http://localhost:3000
+
+JWT_SECRET=5aeiou55blabla
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Tudo configurado. Agora ir em [...nextauth].ts :
+
+
+import NextAuth from "next-auth/next";
+import GoogleProvider from 'next-auth/providers/google';
+
+export const authOptions ={
+    providers:[
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
+        })
+    ], secret: process.env.JWT_SECRET as string
+}
+
+export default NextAuth(authOptions); //Passar para ser carregada
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
