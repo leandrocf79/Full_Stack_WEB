@@ -594,8 +594,9 @@ CONFIGURAR TELA DE CONSENTIMENTO
 Externo
 CRIAR
 
-Nome do app
-project-TAREFAS-94...9
+Nome do app ( AQUI VAI APARECER PARA O USUÁRIO QUANDO FOR FAZER O LOGIN)
+
+
 O nome do aplicativo que precisa da permissão
 E-mail para suporte do usuário
 leandrocf79@gmail.com
@@ -728,6 +729,218 @@ export const authOptions ={
 export default NextAuth(authOptions); //Passar para ser carregada
 
 
+--------------------------------
+--------------------------------
+---------O SISTEMA DE LOGIN ESTÁ NO HEADER no botão "Minha conta"
+Em components/header/index.tsx:
+
+useSession - Para saber se está logado.
+
+
+
+
+
+import styles from './styles.module.css';
+
+//SISTEMA DE LOGIN
+import { useSession, signIn, signOut } from 'next-auth/react';
+
+/* Para usar navegação importar Link */
+import Link from 'next/link';
+
+export function Header(){
+    //SISTEMA DE LOGIN. Criar o Hook
+    const {data: session, status} = useSession();
+
+
+    return(
+        <header className={styles.header}>
+            <section className={styles.content}>
+                <nav className={styles.nav}>
+                    <Link href='/'>
+                        <h1 className={styles.logo}>
+                            Tarefas<span>+</span>
+                        </h1>
+                    </Link>
+		
+		
+	{/* Essa parte será substituida!! */}
+                    <Link href='/dashboard' 
+                    className={styles.link}>
+                        Painel
+                    </Link>
+
+
+                </nav>
+
+                {/*SISTEMA DE LOGIN */}
+                { status === 'loading' ? (
+                    <></>
+                ): session ? (
+                    <>
+                        <div className={styles.loginName}>Olá {session?.user?.name}</div>
+                        <button className={styles.loginButton} onClick={ ()=> signOut() }> {/* Se estiver logado */}
+                            Sair                  
+                        </button>
+                        
+                    </>
+                ):(
+                    <button className={styles.loginButton} onClick={ ()=> signIn('google') }> {/* Se NÃO estiver logado. Esta utilizando um PROVIDER que é do google precisa informar que vai usar */}
+                        Minha conta                 
+                    </button>
+                )}
+
+                
+
+            </section>
+        </header>
+    )
+}
+/********* Esse cabeçalho pode ser importado para todas as páginas
+através do pages/_app.tsx   
+*/
+
+
+
+
+
+------------Só isso acima !!!
+
+Atualizei o styles.modules.css com
+.loginName{
+    color: #fff;
+}
+
+
+
+------------------------------------
+------------------------------------Em header/index.tsx:
+O botão "Meu painel" no cabeçalho é da página dashboard, precisa deixá-la no modo privado.
+
+Essa é a primeira parte:
+
+Substituir por essa parte!!
+
+
+                    {session?.user && (  
+                        <Link  href='/dashboard' 
+                            className={styles.link}>
+                            Painel
+                        </Link>
+                        )}
+
+
+
+
+Agora precisa proteger o link /dashboard no navegador, se tentar 
+acessar de forma anônima no navegador
+http://localhost:3000/dashboard
+vai acessar normalmente
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&
+ Poderia fazer a verificação do link dessa forma abaixo, mas
+será apresentada outra forma adiante.
+
+Para bloquear o acesso à página dashboard apenas para usuários 
+autenticados, você precisa verificar se existe uma sessão ativa 
+e redirecionar o usuário para a página de login caso contrário. 
+Você pode fazer isso usando o componente useEffect para verificar 
+a sessão e redirecionar o usuário se necessário. 
+Aqui está um exemplo:
+
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useSession } from 'next-auth/client';
+import styles from './Header.module.css';
+
+export default function Header() {
+  const [session, loading] = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !session) {
+      router.push('/login');
+    }
+  }, [loading, session, router]);
+
+  return (
+    <header className={styles.header}>
+      <nav className={styles.nav}>
+        <Link href="/">
+          <h1 className={styles.logo}>Tarefas</h1>
+        </Link>
+        {session?.user && (
+          <Link href="/dashboard" className={styles.link}>
+            Painel
+          </Link>
+        )}
+      </nav>
+      {session ? (
+        <button onClick={() => signOut()}>Sair</button>
+      ) : (
+        <button onClick={() => signIn()}>Entrar</button>
+      )}
+    </header>
+  );
+}
+
+Observe que verificamos se a sessão existe antes de renderizar o 
+link para a página dashboard. Além disso, usamos o useEffect 
+para verificar a sessão e redirecionar o usuário para a 
+página de login se necessário.
+
+&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+Segundo modo.
+
+Em pages/dashboard/index.tsx:
+
+
+
+
+
+/* Lembrando que sempre que for PÁGINA tem que que usar DEFAULT */
+
+import styles from './styles.module.css';
+import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+
+export default function Dashboard(){
+    return(
+        <div className={styles.container}>
+            <Head>
+                <title>Painel de tarefas</title>
+            </Head>  
+            <h1>Página Painel</h1>          
+        </div>
+    )
+}
+
+//proteger o link /dashboard no navegador. Server Side é sempre executado no lado do SERVIDOR.
+
+export const getServerSideProps: GetServerSideProps =async ( {req} ) => {//Escreva ""req"" de requisição. Importante ser apenas essas 3 letras
+    //console.log("Buscando pelo server side"); //Veja no   TERMINAL
+    //importar getSession para não ter que usar useEffect
+    const session = await getSession( {req} );
+    //console.log(session); //Veja no   TERMINAL
+    if( !session?.user ){
+        //Se não tem user, vá para home
+        return{
+            redirect: {
+                destination: '/', //Home
+                permanent: false
+            },
+        };
+
+    }
+
+    return{
+        props:{},
+    }
+}
 
 
 
@@ -735,14 +948,8 @@ export default NextAuth(authOptions); //Passar para ser carregada
 
 
 
-
-
-
-
-
-
-
-
+acessar de forma anônima no navegador não vai mais conseguir acesso
+http://localhost:3000/dashboard
 
 
 
