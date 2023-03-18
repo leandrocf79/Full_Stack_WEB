@@ -952,6 +952,236 @@ acessar de forma anônima no navegador não vai mais conseguir acesso
 http://localhost:3000/dashboard
 
 
+*******************Acessar com uma conta para visualizar as alterações no painel, dashboard.
+
+------Criar components/textarea/index.tsx:
+
+import styles from './styles.module.css';
+
+export function Textarea(){
+    return <textarea className={styles.textarea}></textarea>
+}
+
+------
+Em pages/dashboard/index.tsx:
+
+
+
+
+/* Lembrando que sempre que for PÁGINA tem que que usar DEFAULT */
+
+import styles from './styles.module.css';
+import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+
+//visualizar as alterações no painel
+import { Textarea } from '@/components/textarea';
+
+export default function Dashboard(){
+    return(
+        <div className={styles.container}>
+            <Head>
+                <title>Painel de tarefas</title>
+            </Head>  
+
+            {/* visualizar as alterações no painel */}
+            <main className={styles.main}>
+                <section className={styles.content}>
+                    <div className={styles.contentForm}>
+                        <h1 className={styles.title}>Qual sua tarefa?</h1>
+                        <form> {/*Criado o components/textarea para aproveitar esse formulários e trocar apenas o conteúdo textarea dele  */}
+                            <Textarea/>
+
+                            <div className={styles.checkboxArea}>
+                                <input type="checkbox"
+                                    className={styles.checkbox}                                
+                                />
+                                <label>Deixar tarefa publica?</label>
+                            </div>
+                            <button type='submit' className={styles.button}>
+                                Registrar
+                            </button>
+                        </form>
+                    </div>
+                </section>            
+            </main>  
+
+        </div>
+    )
+}
+
+//proteger o link /dashboard no navegador. Server Side é sempre executado no lado do SERVIDOR.
+
+export const getServerSideProps: GetServerSideProps =async ( {req} ) => {//Escreva ""req"" de requisição. Importante ser apenas essas 3 letras
+    //console.log("Buscando pelo server side"); //Veja no   TERMINAL
+    //importar getSession para não ter que usar useEffect
+    const session = await getSession( {req} );
+    //console.log(session); //Veja no   TERMINAL
+    if( !session?.user ){
+        //Se não tem user, vá para home
+        return{
+            redirect: {
+                destination: '/', //Home
+                permanent: false
+            },
+        };
+
+    }
+
+    return{
+        props:{},
+    }
+}
+
+
+----------Estilizar em pages/dashboard/styles.module.css:
+Precisa estilizar após esse o components/textarea/styles.module.css.
+
+
+
+
+.container{
+    width: 100%;
+}
+
+.content{
+    background-color: #0f0f0f;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contentForm{
+    max-width: 1024px;
+    width: 100%;
+    padding: 0 18px;
+    padding-bottom: 28px;
+    margin-top: 58px;
+}
+
+.title{
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+
+.checkboxArea label{
+    color: #fff;
+    margin-left: 8px;
+}
+
+.checkboxArea{
+    margin: 14px;
+}
+
+.checkbox{
+    width: 18px;
+    height: 18px;
+}
+
+.button{
+    width: 100%;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #3183ff;
+    padding: 10px 0;
+    font-size: 18px;
+}
+
+
+
+
+----------- components/textarea/styles.module.css:
+
+.textarea{
+    width: 100%;
+    resize: none;
+    height: 160px;
+    border-radius: 5px;
+    outline: none; /*remover a "contorno" padrão que aparece em torno de um elemento */
+    padding: 8px;
+}
+
+
+
+------Atualizar components/textarea/index.tsx:
+O objetivo aqui é deixar esse textarea dinâmico para poder ser usado em vários locais
+
+
+
+import styles from './styles.module.css';
+import { HTMLProps } from 'react';
+
+// ...rest - pegar todas as propriedades e dizer que só pode receber HTMLProps<> do tipo <HTMLTextAreaElement>
+export function Textarea( {...rest}: HTMLProps<HTMLTextAreaElement> ){
+    return <textarea className={styles.textarea} {...rest}></textarea>;
+} // Repassando propriedades em   {...rest}></textarea>
+
+
+
+
+-------------------Agora atualizar <Textarea/> em
+pages/dashboard/index.tsx:
+
+<Textarea placeholder='Digite sua tarefa...' />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
