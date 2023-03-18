@@ -1,0 +1,65 @@
+.header{
+    width: 100%;
+    height: 75px; /* ESSA É A ALTURA DO CABEÇALHO. para evitar barra de rolgagem lateral foi usado height: calc(100vh - 75px); em home.modules.css */
+    background-color: #0f0f0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content{
+    padding: 0 18px;
+    width: 100%;
+    max-width: 1024px; /* Interessante colocar isso para não ficar muito largo em telas maiores */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* vai separar os botões */
+}
+
+.content a{
+    text-decoration: none;
+}
+
+.logo{
+    color: #fff;
+    font-size: 32px;
+}
+
+.logo span{
+    color: #ea3140;
+    padding: 3px;
+}
+
+.loginButton{
+    background: transparent;
+    padding: 8px 35px;
+    border-radius: 25px;
+    color: #fff;
+    border: 1.5px solid #fff; /* Lembre-se de por solid */
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.loginButton:hover{
+    transform: scale(1.08);
+    background-color: #fff;
+    color: #0f0f0f;
+    font-weight: bold;
+}
+
+.nav{
+    display: flex;
+    align-items: center;
+}
+
+.link{
+    background-color: #f1f1f1;
+    color: #0f0f0f;
+    padding: 5px 15px;
+    border-radius: 5px;
+    margin: 0 15px;
+}
+
+.loginName{
+    color: #fff;
+}

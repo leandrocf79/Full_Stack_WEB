@@ -1,0 +1,16 @@
+/*Pode importar uma fonte global: 
+https://fonts.google.com/specimen/Roboto
+e chamar em html como primeira opção:*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-family: "roboto", sans-serif;
+}
+
+

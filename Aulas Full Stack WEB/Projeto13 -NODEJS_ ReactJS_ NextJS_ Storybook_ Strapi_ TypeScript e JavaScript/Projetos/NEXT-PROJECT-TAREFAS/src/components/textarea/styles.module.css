@@ -1,0 +1,8 @@
+.textarea{
+    width: 100%;
+    resize: none;
+    height: 160px;
+    border-radius: 5px;
+    outline: none; /*remover a "contorno" padrão que aparece em torno de um elemento */
+    padding: 8px;
+}
