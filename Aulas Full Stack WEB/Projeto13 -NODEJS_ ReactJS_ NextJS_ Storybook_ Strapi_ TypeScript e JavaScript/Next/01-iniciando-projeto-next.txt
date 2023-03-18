@@ -38,6 +38,8 @@ dar enter
 =====================================
 
 npm install next-auth     Para autenticações: https://next-auth.js.org/getting-started/example e https://next-auth.js.org/providers/google
+yarn add react-icons
+yarn add firebase
 
 =====================================
 
@@ -1066,6 +1068,7 @@ Precisa estilizar após esse o components/textarea/styles.module.css.
     margin-bottom: 8px;
 }
 
+/*visualizar as alterações no painel*/
 
 .checkboxArea label{
     color: #fff;
@@ -1130,15 +1133,853 @@ pages/dashboard/index.tsx:
 
 
 
+-------------------Agora criar a parte de listas em
+pages/dashboard/index.tsx:
+
+
+
+/* Lembrando que sempre que for PÁGINA tem que que usar DEFAULT */
+
+import styles from './styles.module.css';
+import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+
+//criar a parte de listas
+import { FiShare2 } from 'react-icons/fi';
+import { FaTrash } from 'react-icons/fa';
+
+//visualizar as alterações no painel
+import { Textarea } from '@/components/textarea';
+
+export default function Dashboard(){
+    return(
+        <div className={styles.container}>
+            <Head>
+                <title>Painel de tarefas</title>
+            </Head>  
+
+            {/* visualizar as alterações no painel */}
+            <main className={styles.main}>
+                <section className={styles.content}>
+                    <div className={styles.contentForm}>
+                        <h1 className={styles.title}>Qual sua tarefa?</h1>
+                        <form> {/*Criado o components/textarea para aproveitar esse formulários e trocar apenas o conteúdo textarea dele  */}
+                            <Textarea
+                                placeholder='Digite sua tarefa...'                            
+                            />
+
+                            <div className={styles.checkboxArea}>
+                                <input type="checkbox"
+                                    className={styles.checkbox}                                
+                                />
+                                <label>Deixar tarefa publica?</label>
+                            </div>
+                            <button type='submit' className={styles.button}>
+                                Registrar
+                            </button>
+                        </form>
+                    </div>
+                </section>  
+
+                {/*criar a parte de listas */}
+                <section className={styles.taskContainer}>
+                    <h1>Minhas tarefas</h1>
+
+                    <article className={styles.task}>
+                        <div className={styles.tagContainer}>
+                            <label className={styles.tag}>PÚBLICO</label>
+                            <button className={styles.shareButton}>
+                                <FiShare2
+                                    size={22}
+                                    color="#3183ff"
+
+                                />
+                            </button>
+                        </div>
+
+                        <div className={styles.taskContent}>
+                            <p>Minha primeira tarefa</p>
+                            <button className={styles.trashButton}>
+                                <FaTrash size={22}
+                                color='#ea3140'/>
+                            </button>
+                        </div>
+                    </article>
+                </section>
+
+            </main>  
+
+        </div>
+    )
+}
+
+//proteger o link /dashboard no navegador. Server Side é sempre executado no lado do SERVIDOR.
+
+export const getServerSideProps: GetServerSideProps =async ( {req} ) => {//Escreva ""req"" de requisição. Importante ser apenas essas 3 letras
+    //console.log("Buscando pelo server side"); //Veja no   TERMINAL
+    //importar getSession para não ter que usar useEffect
+    const session = await getSession( {req} );
+    //console.log(session); //Veja no   TERMINAL
+    if( !session?.user ){
+        //Se não tem user, vá para home
+        return{
+            redirect: {
+                destination: '/', //Home
+                permanent: false
+            },
+        };
+
+    }
+
+    return{
+        props:{},
+    }
+}
+
+
+
+
+--------------------------Estilizar dashboard:
+
+
+
+.container{
+    width: 100%;
+}
+
+.content{
+    background-color: #0f0f0f;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contentForm{
+    max-width: 1024px;
+    width: 100%;
+    padding: 0 18px;
+    padding-bottom: 28px;
+    margin-top: 58px;
+}
+
+.title{
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+/*visualizar as alterações no painel*/
+.checkboxArea label{
+    color: #fff;
+    margin-left: 8px;
+}
+
+.checkboxArea{
+    margin: 14px;
+}
+
+.checkbox{
+    width: 18px;
+    height: 18px;
+}
+
+.button{
+    width: 100%;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #3183ff;
+    padding: 10px 0;
+    font-size: 18px;
+}
+
+/*criar a parte de listas*/
+
+.taskContainer{
+    margin: 34px auto 0 auto;
+    padding: 0 18px;
+    width: 100%;
+    max-width: 1024px;
+    display: flex;
+    flex-direction: column;
+}
+
+.taskContainer a{
+    text-decoration: none;
+    color: #0f0f0f;
+}
+
+.taskContainer h1{
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 14px;
+}
+
+.task{
+    margin-bottom: 14px;
+    line-height: 150%; /*para facilitar a leitura*/
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;/*Vai alinhar à Direita*/
+    border: 1.5px solid #909090;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.tagContainer{
+    display: flex;
+    align-items: center; /*Vai alinhar altura com relação ao outro, centro horizontal*/
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.tag{
+    background-color: #3183ff;
+    padding: 2px 6px;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.shareButton, .trashButton{
+    background: transparent;
+    border: 0;
+    margin: 0 8px;
+    cursor: pointer;
+}
+
+.taskContent{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.taskContent p{
+    white-space: pre-wrap; /*Vai respeitar as quebras de linhas, novos paragrafos sem junta-los*/
+}
+
+
+
+
+#########################################################
+
+Criar as funcionalidades do projeto com banco de dados.
+
+#########################################################
+
+pages/dashboard/index.tsx:
+
+
+
+/* Lembrando que sempre que for PÁGINA tem que que usar DEFAULT */
+
+import styles from './styles.module.css';
+import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+
+//criar a parte de listas
+import { FiShare2 } from 'react-icons/fi';
+import { FaTrash } from 'react-icons/fa';
+
+//visualizar as alterações no painel
+import { Textarea } from '@/components/textarea';
+
+//funcionalidades do projeto com banco de dados
+import { ChangeEvent, useState } from 'react';
+
+
+export default function Dashboard(){
+    
+    //funcionalidades do projeto com banco de dados. Passar isso no textarea
+    const [input, setInput] = useState('');
+    const [publicTask, setPublicTask]=useState(false); //a caixa de seleção para tornar público inicia sempre como false
+
+
+//funcionalidades do projeto com banco de dados. Passar a tipagem
+    function handleChangePublic(event: ChangeEvent<HTMLInputElement>){
+        //console.log(event.target.checked)
+
+        //Se clicar na caixa passar para true
+        setPublicTask(event.target.checked)
+    }
+
+
+    return(
+        <div className={styles.container}>
+            <Head>
+                <title>Painel de tarefas</title>
+            </Head>  
+
+            {/* visualizar as alterações no painel */}
+            <main className={styles.main}>
+                <section className={styles.content}>
+                    <div className={styles.contentForm}>
+                        <h1 className={styles.title}>Qual sua tarefa?</h1>
+                        <form> {/*Criado o components/textarea para aproveitar esse formulários e trocar apenas o conteúdo textarea dele  */}
+                            
+                    {/*//funcionalidades do projeto com banco de dados */}
+                            <Textarea
+                                placeholder='Digite sua tarefa...'  
+                                value={input}  
+                                onChange={ (event: ChangeEvent<HTMLTextAreaElement>) => setInput(event.target.value)}                        
+                            />  {/* Essa parte:
+                            onChange={ (event) => setInput(event.target.value)}  
+                            vai dar erro no value. Não vai encontrar. Para corrigir isso deve informar 
+                             que ele é do textarea tipando o "event" com impotação de 'ChangeEvent'
+                             e dizer a qual elemento pertence, 'HTMLTextAreaElement'.
+                             */}
+
+
+                    {/*//funcionalidades do projeto com banco de dados */}
+                            <div className={styles.checkboxArea}> 
+                                <input type="checkbox"
+                                    className={styles.checkbox} 
+                                    checked={publicTask}
+                                    onChange={handleChangePublic}
+                                />{/*   Iniciar a caixa como true, MAS se fizer assim:
+                                checked={true} vai ficar marcada de forma permanente. 
+                                Corrigir com useState
+                                */}{/*
+                                        onChange={} foi iniciada diferente para aprendizado.
+                                        Utilizada uma função externa.
+                                */}
+
+
+                                <label>Deixar tarefa publica?</label>
+                            </div>
+                            <button type='submit' className={styles.button}>
+                                Registrar
+                            </button>
+                        </form>
+                    </div>
+                </section>  
+
+                {/*criar a parte de listas */}
+                <section className={styles.taskContainer}>
+                    <h1>Minhas tarefas</h1>
+
+                    <article className={styles.task}>
+                        <div className={styles.tagContainer}>
+                            <label className={styles.tag}>PÚBLICO</label>
+                            <button className={styles.shareButton}>
+                                <FiShare2
+                                    size={22}
+                                    color="#3183ff"
+
+                                />
+                            </button>
+                        </div>
+
+                        <div className={styles.taskContent}>
+                            <p>Minha primeira tarefa</p>
+                            <button className={styles.trashButton}>
+                                <FaTrash size={22}
+                                color='#ea3140'/>
+                            </button>
+                        </div>
+                    </article>
+                </section>
+
+            </main>  
+
+        </div>
+    )
+}
+
+//proteger o link /dashboard no navegador. Server Side é sempre executado no lado do SERVIDOR.
+
+export const getServerSideProps: GetServerSideProps =async ( {req} ) => {//Escreva ""req"" de requisição. Importante ser apenas essas 3 letras
+    //console.log("Buscando pelo server side"); //Veja no   TERMINAL
+    //importar getSession para não ter que usar useEffect
+    const session = await getSession( {req} );
+    //console.log(session); //Veja no   TERMINAL
+    if( !session?.user ){
+        //Se não tem user, vá para home
+        return{
+            redirect: {
+                destination: '/', //Home
+                permanent: false
+            },
+        };
+
+    }
+
+    return{
+        props:{},
+    }
+}
+
+
+$$$$$$$$$$$$$$$$$
+
+O BD escolhido é o Firebase certifique-se que esteja instalado
+
+yarn add firebase
+
+
+
+$$$$$$$$$$$$$$$$$  Registrar no FireBase
+
+https://firebase.google.com/?hl=pt
+
+Ir para o console / + Adicionar Projeto / 
+nextprojecttarefa
+* Ativar( o Goole Analytics neste Projeto ) isso é gratuito
+
+ao finalizar ir em icone 'web' </>
+Registrar app: Next Project Tarefas
+Desmarcar: Configure também o Firebase Hosting para este app.
+
+Registrar App
+
+---------------------Dados fictícios:
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAo_7KJMydasdas5464gbRdasda_1EeU",
+  authDomain: "nextprojecttarefa.firebaseapp.com",
+  projectId: "nextvdsvsdvsrefa",
+  storageBucket: "nextdvsvsdvsdfa.appspot.com",
+  messagingSenderId: "263456363904",
+  appId: "1:23316782904:web:b1a9b53453b657587hfgchbcvb032b6bcd",
+  measurementId: "G-GWRGERGERGR"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+
+-------------Inicializar  Firestore :
+
+Criação (build) / Firestore Database / Criar banco de dados
+(V) Iniciar no modo de teste
+southamerica-east1 (São Paulo)
+
+--Em regras ajustar mais tempo:
+ allow read, write: if
+          request.time < timestamp.date(2030, 4, 17);
+    }
+
+
+
+------------em src/services/firebaseConnection.ts  Somente:( ts ) 
+
+
+
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+//Importar também getFirestore que é o BD escolhido
+import { getFirestore } from 'firebase/firestore'
+
+const firebaseConfig = {
+	 ...
+	...
+};
+
+// Initialize Firebase. Trocar a variável padrão 'app' por firebaseApp. Fica melhor.
+//No caso aqui estou usando também o analytics ( const analytics = getAnalytics(app); ) vou trocar por 'db'
+const app = initializeApp(firebaseConfig);
+//const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
+export { db };
+
+
+
+--------------------
+
+--------------------Ajustar db no projeto. Em pages/dashboard/index.tsx.
+Na parte do formulário acrescentar onSubmit{} com uma função:
 
 
 
 
 
+/* Lembrando que sempre que for PÁGINA tem que que usar DEFAULT */
+
+import styles from './styles.module.css';
+import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+
+//criar a parte de listas
+import { FiShare2 } from 'react-icons/fi';
+import { FaTrash } from 'react-icons/fa';
+
+//visualizar as alterações no painel
+import { Textarea } from '@/components/textarea';
+
+//funcionalidades do projeto com banco de dados
+import { ChangeEvent, FormEvent, useState } from 'react';
+
+
+export default function Dashboard(){
+    
+    //funcionalidades do projeto com banco de dados. Passar isso no textarea
+    const [input, setInput] = useState('');
+    const [publicTask, setPublicTask]=useState(false); //a caixa de seleção para tornar público inicia sempre como false
+
+
+//funcionalidades do projeto com banco de dados. Passar a tipagem
+    function handleChangePublic(event: ChangeEvent<HTMLInputElement>){
+        //console.log(event.target.checked)
+
+        //Se clicar na caixa passar para true
+        setPublicTask(event.target.checked)
+    }
+
+
+//Ajustar db no projeto. Tem que tipar o evento importando FormEvent
+   function handleRegisterTask(event: FormEvent){
+    event.preventDefault();      // Para não atualizar a página. Em typeScript fica dessa forma.
+
+    //Se o input for vazio, não digitou nada. Não deixar enviar vazio para DB.
+    if(input === '') return;
+    alert('teste')
+
+   }
+
+
+
+    return(
+        <div className={styles.container}>
+            <Head>
+                <title>Painel de tarefas</title>
+            </Head>  
+
+            {/* visualizar as alterações no painel */}
+            <main className={styles.main}>
+                <section className={styles.content}>
+                    <div className={styles.contentForm}>
+                        <h1 className={styles.title}>Qual sua tarefa?</h1>
+
+                        {/**Ajustar db no projeto usando onSubmit{} nos formularios */}
+                        <form onSubmit={handleRegisterTask}> {/*Criado o components/textarea para aproveitar esse formulários e trocar apenas o conteúdo textarea dele  */}
+                            
+                    {/*//funcionalidades do projeto com banco de dados */}
+                            <Textarea
+                                placeholder='Digite sua tarefa...'  
+                                value={input}  
+                                onChange={ (event: ChangeEvent<HTMLTextAreaElement>) => setInput(event.target.value)}                        
+                            />  {/* Essa parte:
+                            onChange={ (event) => setInput(event.target.value)}  
+                            vai dar erro no value. Não vai encontrar. Para corrigir isso deve informar 
+                             que ele é do textarea tipando o "event" com impotação de 'ChangeEvent'
+                             e dizer a qual elemento pertence, 'HTMLTextAreaElement'.
+                             */}
+
+
+                    {/*//funcionalidades do projeto com banco de dados */}
+                            <div className={styles.checkboxArea}> 
+                                <input type="checkbox"
+                                    className={styles.checkbox} 
+                                    checked={publicTask}
+                                    onChange={handleChangePublic}
+                                />{/*   Iniciar a caixa como true, MAS se fizer assim:
+                                checked={true} vai ficar marcada de forma permanente. 
+                                Corrigir com useState
+                                */}{/*
+                                        onChange={} foi iniciada diferente para aprendizado.
+                                        Utilizada uma função externa.
+                                */}
+
+
+                                <label>Deixar tarefa publica?</label>
+                            </div>
+                            <button type='submit' className={styles.button}>
+                                Registrar
+                            </button>
+                        </form>
+                    </div>
+                </section>  
+
+                {/*criar a parte de listas */}
+                <section className={styles.taskContainer}>
+                    <h1>Minhas tarefas</h1>
+
+                    <article className={styles.task}>
+                        <div className={styles.tagContainer}>
+                            <label className={styles.tag}>PÚBLICO</label>
+                            <button className={styles.shareButton}>
+                                <FiShare2
+                                    size={22}
+                                    color="#3183ff"
+
+                                />
+                            </button>
+                        </div>
+
+                        <div className={styles.taskContent}>
+                            <p>Minha primeira tarefa</p>
+                            <button className={styles.trashButton}>
+                                <FaTrash size={22}
+                                color='#ea3140'/>
+                            </button>
+                        </div>
+                    </article>
+                </section>
+
+            </main>  
+
+        </div>
+    )
+}
+
+//proteger o link /dashboard no navegador. Server Side é sempre executado no lado do SERVIDOR.
+
+export const getServerSideProps: GetServerSideProps =async ( {req} ) => {//Escreva ""req"" de requisição. Importante ser apenas essas 3 letras
+    //console.log("Buscando pelo server side"); //Veja no   TERMINAL
+    //importar getSession para não ter que usar useEffect
+    const session = await getSession( {req} );
+    //console.log(session); //Veja no   TERMINAL
+    if( !session?.user ){
+        //Se não tem user, vá para home
+        return{
+            redirect: {
+                destination: '/', //Home
+                permanent: false
+            },
+        };
+
+    }
+
+    return{
+        props:{},
+    }
+}
+
+
+
+--------------------------Finalmente registrar no BD as tarefas !!!
+
+Em pages/dashboard/index.tsx importar db e addDoc, Collection
 
 
 
 
+
+/* Lembrando que sempre que for PÁGINA tem que que usar DEFAULT */
+
+import styles from './styles.module.css';
+import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+
+//criar a parte de listas
+import { FiShare2 } from 'react-icons/fi';
+import { FaTrash } from 'react-icons/fa';
+
+//visualizar as alterações no painel
+import { Textarea } from '@/components/textarea';
+
+//funcionalidades do projeto com banco de dados
+import { ChangeEvent, FormEvent, useState } from 'react';
+
+//registrar no BD as tarefas
+import { db } from '../../services/firebaseConnection';
+import { addDoc, collection } from 'firebase/firestore';
+
+
+//registrar no BD as tarefas. HomeProps dizer o que tem dentro de {user} e o tipo
+interface HomeProps{
+    user:{
+        email: string
+    }
+}
+
+
+//registrar no BD as tarefas. Vai dar erro no {user}, precisa fazer a tipagem do typesript 
+export default function Dashboard( {user}: HomeProps ){
+    
+    //funcionalidades do projeto com banco de dados. Passar isso no textarea
+    const [input, setInput] = useState('');
+    const [publicTask, setPublicTask]=useState(false); //a caixa de seleção para tornar público inicia sempre como false
+
+
+//funcionalidades do projeto com banco de dados. Passar a tipagem
+    function handleChangePublic(event: ChangeEvent<HTMLInputElement>){
+        //console.log(event.target.checked)
+
+        //Se clicar na caixa passar para true
+        setPublicTask(event.target.checked)
+    }
+
+
+//Ajustar db no projeto. Tem que tipar o evento importando FormEvent
+//registrar no BD as tarefas. Passar para assincrona - async
+   async function handleRegisterTask(event: FormEvent){
+    event.preventDefault();      // Para não atualizar a página. Em typeScript fica dessa forma.
+
+    //Se o input for vazio, não digitou nada. Não deixar enviar vazio para DB.
+    if(input === '') return;
+    //alert('teste')
+
+    //registrar no BD as tarefas
+    //addDoc para criar um id aleatório e passar o nome da collection que será criada no db
+    try{
+        await addDoc(collection(db, "nexttask"),{
+            tarefa: input,
+            created: new Date(),
+            user: user?.email,
+            public: publicTask
+        });
+        setInput(''); //Para voltar vazio
+        setPublicTask(false); //Voltar para false para próxima tarefa
+        alert('Tarefa salva no BD')
+    }catch(err){
+        console.log('Erro:', err);
+        alert('Erro em registrar as tarefas no BD .')
+
+    }
+
+    /*
+    tarefa: input,          -Recebe o que digitar no input
+    created: new Date(),    -Data atual do registro
+    user: user?.email,      -Se usuário logado
+    public: publicTask      -Se a tarefa é publica ou não
+    
+    *** Veja lá no final do cod o retun
+    */
+
+   }
+
+
+
+    return(
+        <div className={styles.container}>
+            <Head>
+                <title>Painel de tarefas</title>
+            </Head>  
+
+            {/* visualizar as alterações no painel */}
+            <main className={styles.main}>
+                <section className={styles.content}>
+                    <div className={styles.contentForm}>
+                        <h1 className={styles.title}>Qual sua tarefa?</h1>
+
+                        {/**Ajustar db no projeto usando onSubmit{} nos formularios */}
+                        <form onSubmit={handleRegisterTask}> {/*Criado o components/textarea para aproveitar esse formulários e trocar apenas o conteúdo textarea dele  */}
+                            
+                    {/*//funcionalidades do projeto com banco de dados */}
+                            <Textarea
+                                placeholder='Digite sua tarefa...'  
+                                value={input}  
+                                onChange={ (event: ChangeEvent<HTMLTextAreaElement>) => setInput(event.target.value)}                        
+                            />  {/* Essa parte:
+                            onChange={ (event) => setInput(event.target.value)}  
+                            vai dar erro no value. Não vai encontrar. Para corrigir isso deve informar 
+                             que ele é do textarea tipando o "event" com impotação de 'ChangeEvent'
+                             e dizer a qual elemento pertence, 'HTMLTextAreaElement'.
+                             */}
+
+
+                    {/*//funcionalidades do projeto com banco de dados */}
+                            <div className={styles.checkboxArea}> 
+                                <input type="checkbox"
+                                    className={styles.checkbox} 
+                                    checked={publicTask}
+                                    onChange={handleChangePublic}
+                                />{/*   Iniciar a caixa como true, MAS se fizer assim:
+                                checked={true} vai ficar marcada de forma permanente. 
+                                Corrigir com useState
+                                */}{/*
+                                        onChange={} foi iniciada diferente para aprendizado.
+                                        Utilizada uma função externa.
+                                */}
+
+
+                                <label>Deixar tarefa publica?</label>
+                            </div>
+                            <button type='submit' className={styles.button}>
+                                Registrar
+                            </button>
+                        </form>
+                    </div>
+                </section>  
+
+                {/*criar a parte de listas */}
+                <section className={styles.taskContainer}>
+                    <h1>Minhas tarefas</h1>
+
+                    <article className={styles.task}>
+                        <div className={styles.tagContainer}>
+                            <label className={styles.tag}>PÚBLICO</label>
+                            <button className={styles.shareButton}>
+                                <FiShare2
+                                    size={22}
+                                    color="#3183ff"
+
+                                />
+                            </button>
+                        </div>
+
+                        <div className={styles.taskContent}>
+                            <p>Minha primeira tarefa</p>
+                            <button className={styles.trashButton}>
+                                <FaTrash size={22}
+                                color='#ea3140'/>
+                            </button>
+                        </div>
+                    </article>
+                </section>
+
+            </main>  
+
+        </div>
+    )
+}
+
+//proteger o link /dashboard no navegador. Server Side é sempre executado no lado do SERVIDOR.
+
+//Get server side props para fazer a verificação se tem usuário logado
+export const getServerSideProps: GetServerSideProps =async ( {req} ) => {//Escreva ""req"" de requisição. Importante ser apenas essas 3 letras
+    //console.log("Buscando pelo server side"); //Veja no   TERMINAL
+    //importar getSession para não ter que usar useEffect
+    const session = await getSession( {req} );
+    //console.log(session); //Veja no   TERMINAL
+    if( !session?.user ){
+        //Se não tem user, vá para home
+        return{
+            redirect: {
+                destination: '/', //Home
+                permanent: false
+            },
+        };
+
+    }
+
+    //registrar no BD as tarefas. Precisa retornar uma propriedade para o componente props
+    //email: session?.user?.email agora a função Dashboard() pode receber essa propriedade "user"
+    return{
+        props:{
+            user:{
+                email: session?.user?.email
+            }
+        },
+    }
+}
+
+
+***************************************
+
+TESTAR COM LOGIN DE USUÁRIOS DIFERENTES
+
+http://localhost:3000/dashboard
+https://console.firebase.google.com/project/nextprojecttarefa/firestore/data/~2Fnexttask~2FpiDE4uY984aYzt7tL7hq?hl=pt
+
+***************************************
 
 
 
