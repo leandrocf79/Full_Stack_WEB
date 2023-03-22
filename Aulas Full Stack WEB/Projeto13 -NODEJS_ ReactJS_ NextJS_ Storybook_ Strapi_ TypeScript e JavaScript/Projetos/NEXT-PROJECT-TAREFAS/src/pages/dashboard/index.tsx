@@ -13,12 +13,15 @@ import { FaTrash } from 'react-icons/fa';
 import { Textarea } from '@/components/textarea';
 
 //funcionalidades do projeto com banco de dados
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 
 //registrar no BD as tarefas
 import { db } from '../../services/firebaseConnection';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, query, orderBy, where, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 
+
+//Link tarefa pública
+import Link from 'next/link';
 
 //registrar no BD as tarefas. HomeProps dizer o que tem dentro de {user} e o tipo
 interface HomeProps{
@@ -28,6 +31,15 @@ interface HomeProps{
 }
 
 
+//listar itens para função de REALTIME. Por estar usando TypeScript pode criar um array com objetos
+interface TasckProps{
+    id: string;
+    created: Date;
+    public: boolean;
+    tarefa: string;
+    user: string;
+}
+
 //registrar no BD as tarefas. Vai dar erro no {user}, precisa fazer a tipagem do typesript 
 export default function Dashboard( {user}: HomeProps ){
     
@@ -35,6 +47,58 @@ export default function Dashboard( {user}: HomeProps ){
     const [input, setInput] = useState('');
     const [publicTask, setPublicTask]=useState(false); //a caixa de seleção para tornar público inicia sempre como false
 
+    //listar itens para função de REALTIME. Usar typescript, vai ficar melhor para criar um array com objetos
+    //const [task, setTask] = useState([]);
+    const [task, setTask] = useState<TasckProps[]>([]);
+
+
+//listar itens para função de REALTIME
+    useEffect(()=>{ 
+        async function loadTarefas(){
+            //Buscar no bd a coleção que quer acessar
+            const tarefasRef = collection(db, "nexttask" )
+            //Criar filtro para ordenar por ordem de criação e exibir SOMENTE conteúdo do user logado com where('user', '==', user?.email) 
+            const q = query(
+                tarefasRef,
+                orderBy("created", "desc"),
+                where('user', '==', user?.email)
+
+            )
+            //Agora pode buscar usando realtime passando a referência query para receber o retorno"CallBack" com snapshot para ter acesso a todos os dados do user
+           
+            onSnapshot(q, (snapshot)=>{ //http://localhost:3000/dashboard   Dar um F5
+
+                //console.log(snapshot);// Vai reclamar que "where" precisa de index. Veja anotações na documentação própria deste projeto.
+/*Na lista em inspecionar/console veja que agora tem acesso a todos os dados que podem ser usados no projeto */
+                //alert("snapshot foi lido")
+
+                //Agora que está tudo ok, precisa criar um local para armazenar usando typescript
+                let lista = [] as TasckProps[];
+                //Agora pode percorrrer todos os elementos que achou em snapshot com NOMES EXATAMENTE IGUAIS AO CRIADOS NO DB
+                snapshot.forEach( (doc)=>{
+                    lista.push( {    //Só vai conseguir passar aqui o que foi chamado na tipagem
+                        id: doc.id,
+                        tarefa: doc.data().tarefa,
+                        created: doc.data().created,
+                        user: doc.data().user,
+                        public: doc.data().public
+                     })
+                })
+                //console.log(lista)
+                //alert('lista carregada no console')
+
+                //Testado. Passar para useState
+                setTask(lista);
+
+                //Pronto. Agora pode char isso lá no article para exibir todos os itens na página
+
+
+            })
+        }//Lembrar sempre de CHAMAR A FUNÇÃO
+
+        loadTarefas();
+
+    },[user?.email]) //Por estar usando algo externo passar user?.email como DEPENDÊNCIA.
 
 //funcionalidades do projeto com banco de dados. Passar a tipagem
     function handleChangePublic(event: ChangeEvent<HTMLInputElement>){
@@ -83,7 +147,28 @@ export default function Dashboard( {user}: HomeProps ){
 
    }
 
+//Se estiver pública a postagem. Lembrando que id foi passado como string.
+async function handleShare(id: string){
+    //console.log("ID do user: ", id);//Clicar no botão do link na página de postagem http://localhost:3000/dashboard 
+    //Para dar uma funcionalidade como COPIAR automáticamente o link passar função para async e clipboard para copiar:
+    await navigator.clipboard.writeText(
+        /* `http://localhost:3000/task/${id}`  // Para não ter que fazer assim e ter que mudar depois, pode usar uma funcionalidade do lado do cliente.
+        Vá em    .env      e crie NEXT_PUBLIC_URL=http://localhost:3000    SEM BARRA no final
+        */
 
+        `${process.env.NEXT_PUBLIC_URL}/task/${id}` //Parar projeto!! Ctrl+C para carregar novamente .env      
+
+
+    );  alert("URL do link copiado com sucesso.")
+}
+
+
+//Criar funcionalidade DELETAR tarefa. Importar doc e deleteDoc
+    async function handleDeleteTask(id: string) {
+        const docRef = doc(db, "nexttask",  id); //Referência. Agora é só deletar passando a referência:
+        await deleteDoc(docRef);// vai deletar a tarefa que passsar com id
+
+    }
 
     return(
         <div className={styles.container}>
@@ -141,26 +226,57 @@ export default function Dashboard( {user}: HomeProps ){
                 <section className={styles.taskContainer}>
                     <h1>Minhas tarefas</h1>
 
-                    <article className={styles.task}>
-                        <div className={styles.tagContainer}>
-                            <label className={styles.tag}>PÚBLICO</label>
-                            <button className={styles.shareButton}>
+{/**listar itens para função de REALTIME. Lembrar de por uma key obrigatória*/}
+
+                    {task.map((item)=>(
+
+                    <article key={item.id}     className={styles.task}>
+
+                       {/*Só exibir botão "PÚBLICO"  se estiver público o conteúdo*/} 
+                       {item.public && (
+
+                            <div className={styles.tagContainer}>
+                                <label className={styles.tag}>PÚBLICO</label>
+                                <button className={styles.shareButton} onClick={ ()=> handleShare(item.id)}>Copiar link: 
                                 <FiShare2
                                     size={22}
                                     color="#3183ff"
 
                                 />
-                            </button>
-                        </div>
+                                 </button>
+                            </div>
+
+                       )}
+                        
 
                         <div className={styles.taskContent}>
-                            <p>Minha primeira tarefa</p>
-                            <button className={styles.trashButton}>
+
+         {/*listar itens para função de REALTIME. Agora pode corrigir o parágrafo
+           <p>Minha primeira tarefa</p>
+         */}  
+         {/* //Link tarefa pública. vai navegar o usuário*/}       
+                        {item.public ? (
+                            <Link  href={ `/task/${item.id}` }>
+                              <p>{item.tarefa}</p>
+                            </Link>
+                        ):(                            
+                            <p>{item.tarefa}</p>
+                        ) }  
+                        {/**Se não for pública, deixar somente o parágrafo sem link*/}
+
+
+                            {/**Criar funcionalidade DELETAR tarefa. Para passar o id:   handleDeleteTask(item.id) */}
+                            <button className={styles.trashButton} onClick={ ()=> handleDeleteTask(item.id)}>
                                 <FaTrash size={22}
                                 color='#ea3140'/>
                             </button>
                         </div>
                     </article>
+
+                    ))}
+
+
+                    
                 </section>
 
             </main>  

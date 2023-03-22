@@ -1,0 +1,114 @@
+.container{
+    width: 100%;
+    max-width: 1024px;
+    margin: 40px auto 0 auto; /* até aqui vai alinhar tudo */
+    padding: 0 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* até aqui vai centralizaar tudo na página */
+}
+
+.main{
+    width: 100%;/* ele está dentro do container de no máximo 1024px */
+}
+
+.main h1{
+    margin-bottom: 15px;
+}
+
+ /* Crie uma tarefa com texto grande  https://www.lipsum.com/
+ */
+
+.task{
+    border: 1.5px solid #909090;
+    padding: 15px;
+    line-height: 100%; /* Para distanciar quebra de linha */
+    border-radius: 5px;
+    display: flex;   
+    justify-content: center;
+    align-items: center;
+}
+
+.task p{
+    white-space: pre-wrap; /* Para quebrar de linha */
+    width: 100%;
+} /* Veja como fico responsivo. Show de bola */
+
+/* Parte dos comentários */
+.comentsContainer{
+    margin: 18px 0;
+    width: 100%;
+    max-width: 1024px;
+}
+
+.comentsContainer h2{
+    margin: 15px 0;
+}
+
+.button{
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 5px;
+    border: 0;
+    color: #fff;
+    background-color: #3183ff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/*  Limitar comentários */
+.warning {
+    color: rgb(255, 0, 0);
+  }
+
+  /* //Permitir na postagem somente o nome do usuário com cadastro. 
+  Usar disabled={true} para testar css e depois substituir o true por disabled={ !session?.user }
+  
+  no botão permitir somente logados e
+  acertar isso no CSS com tom de cor mais fraco para "desabilitado"*/
+  .button:disabled {
+    cursor: not-allowed;
+    background-color: rgba(49, 131, 255, 0.421);
+    color: rgba(255, 0, 0, 0.69);
+  }
+
+
+
+  /*exibir comentários abaixo da parte de edição.*/
+.comment{
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.comment p {
+    margin-top: 15px;
+    white-space: pre-wrap;
+
+}
+
+.headComment{
+    display: flex;
+    align-items: center;
+}
+
+.commentsLabel{
+    background-color: #CCC;
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.buttonTrash{
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: #ea3140;
+}
+
+.buttonTrash:hover {
+    color: rgb(111, 5, 5);     
+}
+
