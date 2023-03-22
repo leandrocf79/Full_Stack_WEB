@@ -3,7 +3,10 @@ pode ser pelo npx ou yarn a diferença é que yarn é mais rápida a instalação.
  
 Tem que instalar o instalador yarn antes com
 npm install --global yarn
+O comando Shift + Alt + F
+ indentação automática
 
+--------------------------
 Verifique:
 yarn --version
 
@@ -2331,7 +2334,7 @@ Criar índice
 
 
 -----
-*****Criar outro invertido:
+*****Criar outro invertido 
 
 Código do conjunto
 nexttask
@@ -3964,15 +3967,6 @@ Precisa buscar todos os comentários que tenham o mesmo taskId
 
 
 
-
-
-
-
-
-
-aparagar:
-
-
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import styles from './styles.module.css';
@@ -3999,6 +3993,10 @@ interface TaskProps{
         user: string,
         taskId: string
     } //Para saber o que cada um é (bool, string) basta olhar no terminal com console.log(task); habilitado
+    
+    //exibir esses comentários abaixo da parte de edição. Passar como array por ser uma lista. Precisa criar uma const[coments] em Task
+    allComments: CommentProps[]
+    
 }
 
 
@@ -4019,7 +4017,8 @@ interface CommentProps{
 //Enviar objetos para a página task. Precisa acrescentar item na função. O typescript quer saber o que tem nele, criar uma tipagem para ele
 //export default function Task(  {item}  ){
 //Passada a tipagem, agora item vai respeitar ela acrescentando TaskProps
-export default function Task( {item}:TaskProps ){
+//exibir comentários abaixo da parte de edição passando allComments. Vai reclamar any, tipar ele com interface TaskProps{
+export default function Task( {item, allComments}:TaskProps ){
 
 
 //passar o texto para a variável input para poder colocar o nome do user nas mensagens
@@ -4038,6 +4037,14 @@ export default function Task( {item}:TaskProps ){
 
 //Permitir na postagem somente o nome do usuário com cadastro. Usar disable={true} no botão para permitir somente logados
     const { data: session } = useSession();
+
+
+    //exibir esses comentários abaixo da parte de edição.
+    //const [comments, setComments] = useState(allComments || []);// Vai iniciar com todos os comentários ou vazio. e Pode tipar ela 
+    const [comments, setComments] = useState<CommentProps[]>(allComments || []); //Tipando ela fica blindada para não acontecer outra coisa que não seja o array dos objetos
+//Tudo pronto. Agora é só utilizar abaixo de <section
+
+
 
 
 //passar o texto para a variável input para poder colocar o nome do user nas mensagens
@@ -4106,6 +4113,21 @@ export default function Task( {item}:TaskProps ){
                 </form>
             </section>
 
+
+            {/* //exibir esses comentários abaixo da parte de edição. LEMBRAR DE PASSAR A PROPRIEDADE KEY*/}
+            <section className={styles.commentsContainer}>
+                <h2>Todos os comentários</h2>
+
+                {comments.length === 0 && (<span>Nenhun comentário foi encontrado...</span>)}
+
+                {comments.map( ( item )=>(
+                    <article key={ item.id } className={styles.comment}>
+                        <p>{item.comment}</p>
+                    </article>
+                ))}
+
+            </section>
+
             </main>
         </div>
     )
@@ -4141,7 +4163,7 @@ export const getServerSideProps: GetServerSideProps = async ( {params} )=>{
         })
     }) 
     // VEJA NO TERMINAL
-   // console.log(allComments); //Para saber se está passando todos os comentários
+   // console.log(allComments); //Para saber se está passando todos os comentários. Passar allComments para o componente return{ props  e também para Task()
 
     //Fazer a verificação
     if( snapshot.data() === undefined && !snapshot.data()?.public ){ //Se ele não encontrar tarefa. Caso tente digitar algo que não existe direcionar para home, por isso usar o "permanent: false"
@@ -4182,11 +4204,1023 @@ export const getServerSideProps: GetServerSideProps = async ( {params} )=>{
 
 
     return{
-        props: { //Enviar objetos para a página task
+        props: { //Enviar objetos para a página task, //exibir comentários abaixo da parte de edição.
             item: task,
+            allComments: allComments
         }
     }
 }
+
+
+
+
+
+----------------Estilizar comentários em [id].tsx
+
+
+
+{/* //exibir esses comentários abaixo da parte de edição. LEMBRAR DE PASSAR A PROPRIEDADE KEY*/}
+            <section className={styles.commentsContainer}>
+                <h2>Todos os comentários</h2>
+
+                {comments.length === 0 && (<span>Nenhun comentário foi encontrado...</span>)}
+
+                {comments.map( ( item )=>(
+                    <article key={ item.id } className={styles.comment}>
+                        <div className={styles.headComment}>
+                            <label className={styles.commentsLabel}>{item.name}</label>
+                            <button className={styles.buttonTrash}>
+                                <FaTrash size={18} color='#ea3140'/> 
+                            </button>
+                        </div>
+                        <p>{item.comment}</p>
+                    </article>
+                ))}
+
+            </section>
+
+
+
+--------------Css do [id].tsx:
+
+
+.container{
+    width: 100%;
+    max-width: 1024px;
+    margin: 40px auto 0 auto; /* até aqui vai alinhar tudo */
+    padding: 0 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* até aqui vai centralizaar tudo na página */
+}
+
+.main{
+    width: 100%;/* ele está dentro do container de no máximo 1024px */
+}
+
+.main h1{
+    margin-bottom: 15px;
+}
+
+ /* Crie uma tarefa com texto grande  https://www.lipsum.com/
+ */
+
+.task{
+    border: 1.5px solid #909090;
+    padding: 15px;
+    line-height: 100%; /* Para distanciar quebra de linha */
+    border-radius: 5px;
+    display: flex;   
+    justify-content: center;
+    align-items: center;
+}
+
+.task p{
+    white-space: pre-wrap; /* Para quebrar de linha */
+    width: 100%;
+} /* Veja como fico responsivo. Show de bola */
+
+/* Parte dos comentários */
+.comentsContainer{
+    margin: 18px 0;
+    width: 100%;
+    max-width: 1024px;
+}
+
+.comentsContainer h2{
+    margin: 15px 0;
+}
+
+.button{
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 5px;
+    border: 0;
+    color: #fff;
+    background-color: #3183ff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/*  Limitar comentários */
+.warning {
+    color: rgb(255, 0, 0);
+  }
+
+  /* //Permitir na postagem somente o nome do usuário com cadastro. 
+  Usar disabled={true} para testar css e depois substituir o true por disabled={ !session?.user }
+  
+  no botão permitir somente logados e
+  acertar isso no CSS com tom de cor mais fraco para "desabilitado"*/
+  .button:disabled {
+    cursor: not-allowed;
+    background-color: rgba(49, 131, 255, 0.421);
+    color: rgba(255, 0, 0, 0.69);
+  }
+
+
+
+  /*exibir comentários abaixo da parte de edição.*/
+.comment{
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.comment p {
+    margin-top: 15px;
+    white-space: pre-wrap;
+
+}
+
+.headComment{
+    display: flex;
+    align-items: center;
+}
+
+.commentsLabel{
+    background-color: #CCC;
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.buttonTrash{
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+
+
+
+
+-------------[id].tsx
+Deixar o botão excluir somente do usuário logado, 
+sem ter o botão lixeira aparecendo de outro usuário
+
+
+
+
+{comments.map((item) => (
+                        <article key={item.id} className={styles.comment}>
+                            <div className={styles.headComment}>
+                                <label className={styles.commentsLabel}>{item.name}</label>
+
+                                {/* Deixar o botão excluir somente do usuário logado, 
+                                    sem ter o botão lixeira aparecendo de outro usuário                                
+                                Se o email do comentário for igual ao do que está logado exibir lixeira de excluir */}
+                                {item.user === session?.user?.email && (
+
+                                    <button className={styles.buttonTrash}>
+                                        <FaTrash size={18} color='#ea3140' />
+                                    </button>
+                                )}
+
+
+                            </div>
+                            <p>{item.comment}</p>
+                        </article>
+                    ))}
+
+
+
+
+-------------[id].tsx
+Depois de registrar atualizar a lista automaticamente.
+Registrar chama o handleCommente() e depois limpa o input. Adicionar mais uma tarefa:
+
+
+
+
+
+
+
+import { GetServerSideProps } from "next";
+import Head from "next/head";
+import styles from './styles.module.css';
+
+//Pull dos detalhes da tarefa no servidor
+import { db } from "@/services/firebaseConnection";
+import { doc, collection, query, where, getDoc, addDoc, getDocs } from 'firebase/firestore'; // getDocs com 's'. No plural para pegar TODOS os documentos.
+
+//CRIAR A PARTE DE COMENTÁRIOS.
+import { Textarea } from "@/components/textarea";
+
+//Permitir na postagem somente o nome do usuário com cadastro.
+//Limitar comentários
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useSession } from "next-auth/react";
+import { FaTrash } from "react-icons/fa";
+
+
+//Enviar objetos para a página task. Tipagem para "item"
+interface TaskProps {
+    item: {//Dentro dele tem as propriedades que foram exibidas no terminal em console.log(task);
+        tarefa: string,
+        public: boolean,
+        created: string,
+        user: string,
+        taskId: string
+    } //Para saber o que cada um é (bool, string) basta olhar no terminal com console.log(task); habilitado
+
+    //exibir esses comentários abaixo da parte de edição. Passar como array por ser uma lista. Precisa criar uma const[coments] em Task
+    allComments: CommentProps[]
+
+}
+
+
+
+//exibir esses comentários abaixo da parte de edição. Pasar o que vai ter nela. Veja como aparece no BD uma mensagem ja criada
+interface CommentProps {
+    id: string,
+    comment: string,
+    taskId: string,
+    user: string,
+    name: string,
+}
+
+
+
+
+
+//Enviar objetos para a página task. Precisa acrescentar item na função. O typescript quer saber o que tem nele, criar uma tipagem para ele
+//export default function Task(  {item}  ){
+//Passada a tipagem, agora item vai respeitar ela acrescentando TaskProps
+//exibir comentários abaixo da parte de edição passando allComments. Vai reclamar any, tipar ele com interface TaskProps{
+export default function Task({ item, allComments }: TaskProps) {
+
+
+    //passar o texto para a variável input para poder colocar o nome do user nas mensagens
+    const [input, setInput] = useState('');
+
+    //Limitar comentários
+    const [comment, setComment] = useState('');
+
+    const handleCommentUser = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setComment(event.target.value);
+        setInput(event.target.value);
+    };
+    const count = comment.length;//Até aqui para limitar comentários e adicionar em Textarea: 
+    //maxLength={200} 
+    //onChange={handleCommentChange}
+
+    //Permitir na postagem somente o nome do usuário com cadastro. Usar disable={true} no botão para permitir somente logados
+    const { data: session } = useSession();
+
+
+    //exibir esses comentários abaixo da parte de edição.
+    //const [comments, setComments] = useState(allComments || []);// Vai iniciar com todos os comentários ou vazio. e Pode tipar ela 
+    const [comments, setComments] = useState<CommentProps[]>(allComments || []); //Tipando ela fica blindada para não acontecer outra coisa que não seja o array dos objetos
+    //Tudo pronto. Agora é só utilizar abaixo de <section
+
+
+
+
+    //passar o texto para a variável input para poder colocar o nome do user nas mensagens
+    async function handleComent(event: FormEvent) {
+        event.preventDefault(); //Para não atualizar a página
+        //alert('teste: function handleComent()')
+
+        if (input === "") return; //Não permitir comentários vazios
+        if (!session?.user?.email || !session?.user?.name) return; //Não permitir comentários sem nome ou email
+
+        try {
+            const docRef = await addDoc(collection(db, "comments"), { // Vai criar uma nova coleção para salvar comentários no BD com nome de ''comments'' 
+                comment: input,
+                created: new Date(),
+                user: session?.user?.email,
+                name: session?.user?.name,
+                taskId: item?.taskId,
+            }); //Acima é o cadastro no BD
+
+           // Depois de registrar atualizar a lista automaticamente. O comment foi digitado no input
+            const data = {
+                id: docRef.id,
+                comment: input,
+                user: session?.user?.email,
+                name: session?.user?.name,
+                taskId: item?.taskId
+            }//Manter esse comentário e adicionar a mais com data. Passar tudo para uma useState de comentários
+            setComments( (oldItens)=>[ ...oldItens, data ]);
+
+
+            setInput('');  //Apagar o input após enviar
+            setComment('')// Zerar o contador de caracteres
+
+
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+
+    return (
+        <div className={styles.container}>
+            <Head>
+                <title>Detalhes da tarefa</title>
+            </Head>
+
+            <main className={styles.main}>
+                <h1>Tarefa</h1>
+
+                {/* //Enviar objetos para a página task. */}
+                <article className={styles.task}>
+                    <p>
+                        {item.tarefa}
+                    </p>
+                </article>
+
+                {/* CRIAR A PARTE DE COMENTÁRIOS. Vai ser interessante importar Textarea*/}
+                <section className={styles.commentsContainer}>
+                    <h2>Deixar comentário</h2>
+                    <form onSubmit={handleComent}>
+                        <Textarea
+                            value={input}
+                            placeholder="Digite seu comentário..."
+                            maxLength={200}
+                            onChange={handleCommentUser}
+                        />
+
+                        <span className={count >= 170 ? styles.warning : ""}>
+                            {count} / 200 caracteres
+                        </span>
+
+                        <button className={styles.button}
+                            disabled={!session?.user}
+                        >{session?.user ? "Enviar comentário" : "Faça login para enviar comentário"}
+                        </button>
+                    </form>
+                </section>
+
+
+                {/* //exibir esses comentários abaixo da parte de edição. LEMBRAR DE PASSAR A PROPRIEDADE KEY*/}
+                <section className={styles.commentsContainer}>
+                    <h2>Todos os comentários</h2>
+
+                    {comments.length === 0 && (<span>Nenhun comentário foi encontrado...</span>)}
+
+                    {comments.map((item) => (
+                        <article key={item.id} className={styles.comment}>
+                            <div className={styles.headComment}>
+                                <label className={styles.commentsLabel}>{item.name}</label>
+
+                                {/* Deixar o botão excluir somente do usuário logado, 
+                                    sem ter o botão lixeira aparecendo de outro usuário                                
+                                Se o email do comentário for igual ao do que está logado exibir lixeira de excluir */}
+                                {item.user === session?.user?.email && (
+
+                                    <button className={styles.buttonTrash}>
+                                        <FaTrash size={18} color='#ea3140' />
+                                    </button>
+                                )}
+
+
+                            </div>
+                            <p>{item.comment}</p>
+                        </article>
+                    ))}
+
+                </section>
+
+            </main>
+        </div>
+    )
+}
+
+//Aqui não precisa usar o useEffect, a informação pode ser trazida do servidor (server side)
+// Os dois pontos é para usar a tipagem do typescript
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    // params? com interrogação  caso o usuário tente acessar digitando algo no link
+    const idTask = params?.id as string;
+    //console.log("Id recebido no [id].tsx: ",id);//Veja no TERMINAL ao atualizar uma página task
+
+    //Pull dos detalhes da tarefa no servidor
+    const docRef = doc(db, 'nexttask', idTask);
+    //Buscar informação do BD
+    const snapshot = await getDoc(docRef);
+
+
+    //exibir esses comentários abaixo da parte de edição. taskId foi o nome dado no BD. --> onde taskID for igual ao id da tarefa que é idTask 
+    const q = query(collection(db, 'comments'), where('taskId', '==', idTask));
+    const snapshotComments = await getDocs(q); // getDocs com 's'. No plural para pegar TODOS os documentos.
+    //o snapshotComments vai recever tudo. Agora montar o array como será exibido
+    //let allComments = []; //Dessa forma vai pedir uma tipagem para não ficar any, ela não sabe o que ela é ainda. Fazer a interface acima de Task()
+    let allComments: CommentProps[] = []; //Se passar o mouse sobre ele, vai mostrar como array
+    //Aqui terá o retorno. Usar forEach para percorrer todos eles
+    snapshotComments.forEach((doc) => {
+        allComments.push({
+            id: doc.id,
+            comment: doc.data().comment,
+            taskId: doc.data().taskId,
+            user: doc.data().user,
+            name: doc.data().name
+        })
+    })
+    // VEJA NO TERMINAL
+    // console.log(allComments); //Para saber se está passando todos os comentários. Passar allComments para o componente return{ props  e também para Task()
+
+    //Fazer a verificação
+    if (snapshot.data() === undefined && !snapshot.data()?.public) { //Se ele não encontrar tarefa. Caso tente digitar algo que não existe direcionar para home, por isso usar o "permanent: false"
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
+    //IMPORTANTÍSSIMO
+    //Outros usuários acessar apenas tarefas PÚBLICAS. "public" foi o nome dado no BD.            
+    if (!snapshot.data()?.public) {//Se NÃO for pública:
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
+    // console.log(snapshot.data()); //Veja no TERMINAL ao atualizar uma página task
+
+    /*Obviamente que poderia ter sido feito assim:
+    if( snapshot.data() === undefined && !snapshot.data()?.public )  
+    Foram separados apenas para entendimento*/
+
+    //A data está vindo como Timestamp, exemplo, 20032023. Converter created com data formatada, 20/03/2023.
+    const miliseconds = snapshot.data()?.created?.seconds * 1000;
+    const task = {
+        tarefa: snapshot.data()?.tarefa,
+        public: snapshot.data()?.public,
+        created: new Date(miliseconds).toLocaleDateString(),
+        user: snapshot.data()?.user,
+        taskId: idTask
+    }
+    console.log(task);
+
+
+
+    return {
+        props: { //Enviar objetos para a página task, //exibir comentários abaixo da parte de edição.
+            item: task,
+            allComments: allComments
+        }
+    }
+}
+
+
+
+---------------deletar os comentários em [id].tsx
+
+
+
+  //deletar os comentários. Importar deleteDoc. "comments" é a collection criada no BD
+    async function handleDeleteComments(id: string) {
+
+        try {
+
+            const docRef = doc(db, "comments", id); //Essa é a referência a ser deletada. Deletar:
+            await deleteDoc( docRef );
+
+            alert("Comentário apagado");
+
+        } catch (err) {
+            console.log(err);
+        }
+    }//Essa função precisa ser chamada no botão deletar como onClick={ ()=> handleDeleteComments( item.id )}
+
+
+
+
+-------------Comentários foi apagado agora precisa informar para useState que foi apagado:
+
+
+
+
+    //deletar os comentários. Importar deleteDoc. "comments" é a collection criada no BD
+    async function handleDeleteComments(id: string) {
+
+        try {
+
+            const docRef = doc(db, "comments", id); //Essa é a referência a ser deletada. Deletar:
+            await deleteDoc( docRef );
+
+           // alert("Comentário apagado");
+
+           //Comentários foi apagado agora precisa informar para useState que foi apagado. filter() Vai percorrer todos os itens dos comentarios
+           const deleteComment = comments.filter( ( item )=> item.id !== id );
+
+           console.log(deleteComment);
+
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    }//Essa função precisa ser chamada no botão deletar como onClick={ ()=> handleDeleteComments( item.id )}
+
+
+
+
+------------------Finalizado a parte [id].tsx. Ficou assim:
+
+
+
+import { GetServerSideProps } from "next";
+import Head from "next/head";
+import styles from './styles.module.css';
+
+//Pull dos detalhes da tarefa no servidor
+import { db } from "@/services/firebaseConnection";
+import { doc, collection, query, where, getDoc, addDoc, getDocs, deleteDoc } from 'firebase/firestore'; // getDocs com 's'. No plural para pegar TODOS os documentos.
+
+//CRIAR A PARTE DE COMENTÁRIOS.
+import { Textarea } from "@/components/textarea";
+
+//Permitir na postagem somente o nome do usuário com cadastro.
+//Limitar comentários
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useSession } from "next-auth/react";
+import { FaTrash } from "react-icons/fa";
+
+
+//Enviar objetos para a página task. Tipagem para "item"
+interface TaskProps {
+    item: {//Dentro dele tem as propriedades que foram exibidas no terminal em console.log(task);
+        tarefa: string,
+        public: boolean,
+        created: string,
+        user: string,
+        taskId: string
+    } //Para saber o que cada um é (bool, string) basta olhar no terminal com console.log(task); habilitado
+
+    //exibir esses comentários abaixo da parte de edição. Passar como array por ser uma lista. Precisa criar uma const[coments] em Task
+    allComments: CommentProps[]
+
+}
+
+
+
+//exibir esses comentários abaixo da parte de edição. Pasar o que vai ter nela. Veja como aparece no BD uma mensagem ja criada
+interface CommentProps {
+    id: string,
+    comment: string,
+    taskId: string,
+    user: string,
+    name: string,
+}
+
+
+
+
+
+//Enviar objetos para a página task. Precisa acrescentar item na função. O typescript quer saber o que tem nele, criar uma tipagem para ele
+//export default function Task(  {item}  ){
+//Passada a tipagem, agora item vai respeitar ela acrescentando TaskProps
+//exibir comentários abaixo da parte de edição passando allComments. Vai reclamar any, tipar ele com interface TaskProps{
+export default function Task({ item, allComments }: TaskProps) {
+
+
+    //passar o texto para a variável input para poder colocar o nome do user nas mensagens
+    const [input, setInput] = useState('');
+
+    //Limitar comentários
+    const [comment, setComment] = useState('');
+
+    const handleCommentUser = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setComment(event.target.value);
+        setInput(event.target.value);
+    };
+    const count = comment.length;//Até aqui para limitar comentários e adicionar em Textarea: 
+    //maxLength={200} 
+    //onChange={handleCommentChange}
+
+    //Permitir na postagem somente o nome do usuário com cadastro. Usar disable={true} no botão para permitir somente logados
+    const { data: session } = useSession();
+
+
+    //exibir esses comentários abaixo da parte de edição.
+    //const [comments, setComments] = useState(allComments || []);// Vai iniciar com todos os comentários ou vazio. e Pode tipar ela 
+    const [comments, setComments] = useState<CommentProps[]>(allComments || []); //Tipando ela fica blindada para não acontecer outra coisa que não seja o array dos objetos
+    //Tudo pronto. Agora é só utilizar abaixo de <section
+
+
+
+
+    //passar o texto para a variável input para poder colocar o nome do user nas mensagens
+    async function handleComent(event: FormEvent) {
+        event.preventDefault(); //Para não atualizar a página
+        //alert('teste: function handleComent()')
+
+        if (input === "") return; //Não permitir comentários vazios
+        if (!session?.user?.email || !session?.user?.name) return; //Não permitir comentários sem nome ou email
+
+        try {
+            const docRef = await addDoc(collection(db, "comments"), { // Vai criar uma nova coleção para salvar comentários no BD com nome de ''comments'' 
+                comment: input,
+                created: new Date(),
+                user: session?.user?.email,
+                name: session?.user?.name,
+                taskId: item?.taskId,
+            }); //Acima é o cadastro no BD
+
+            // Depois de registrar atualizar a lista automaticamente. O comment foi digitado no input
+            const data = {
+                id: docRef.id,
+                comment: input,
+                user: session?.user?.email,
+                name: session?.user?.name,
+                taskId: item?.taskId
+            }//Manter esse comentário e adicionar a mais com data. Passar tudo para uma useState de comentários
+            setComments((oldItens) => [...oldItens, data]);
+
+
+            setInput('');  //Apagar o input após enviar
+            setComment('')// Zerar o contador de caracteres
+
+
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+
+    //deletar os comentários. Importar deleteDoc. "comments" é a collection criada no BD
+    async function handleDeleteComments(id: string) {
+
+        try {
+
+            const docRef = doc(db, "comments", id); //Essa é a referência a ser deletada. Deletar:
+            await deleteDoc(docRef);
+
+            // alert("Comentário apagado");
+
+            //Comentários foi apagado agora precisa informar para useState que foi apagado. filter() Vai percorrer todos os itens dos comentarios
+            const deleteComment = comments.filter((item) => item.id !== id);//Deixar apenas os que NÃO clicou deletar
+
+            //console.log(deleteComment);//Conferido. Agora passar para useState
+            setComments(deleteComment);
+
+
+        } catch (err) {
+            console.log(err);
+        }
+    }//Essa função precisa ser chamada no botão deletar como onClick={ ()=> handleDeleteComments( item.id )}
+
+
+
+    return (
+        <div className={styles.container}>
+            <Head>
+                <title>Detalhes da tarefa</title>
+            </Head>
+
+            <main className={styles.main}>
+                <h1>Tarefa</h1>
+
+                {/* //Enviar objetos para a página task. */}
+                <article className={styles.task}>
+                    <p>
+                        {item.tarefa}
+                    </p>
+                </article>
+
+                {/* CRIAR A PARTE DE COMENTÁRIOS. Vai ser interessante importar Textarea*/}
+                <section className={styles.commentsContainer}>
+                    <h2>Deixar comentário</h2>
+                    <form onSubmit={handleComent}>
+                        <Textarea
+                            value={input}
+                            placeholder="Digite seu comentário..."
+                            maxLength={200}
+                            onChange={handleCommentUser}
+                        />
+
+                        <span className={count >= 170 ? styles.warning : ""}>
+                            {count} / 200 caracteres
+                        </span>
+
+                        <button className={styles.button}
+                            disabled={!session?.user}
+                        >{session?.user ? "Enviar comentário" : "Faça login para enviar comentário"}
+                        </button>
+                    </form>
+                </section>
+
+
+                {/* //exibir esses comentários abaixo da parte de edição. LEMBRAR DE PASSAR A PROPRIEDADE KEY*/}
+                <section className={styles.commentsContainer}>
+                    <h2>Todos os comentários</h2>
+
+                    {comments.length === 0 && (<span>Nenhun comentário foi encontrado...</span>)}
+
+                    {comments.map((item) => (
+                        <article key={item.id} className={styles.comment}>
+                            <div className={styles.headComment}>
+                                <label className={styles.commentsLabel}>{item.name}</label>
+
+                                {/* Deixar o botão excluir somente do usuário logado, 
+                                    sem ter o botão lixeira aparecendo de outro usuário                                
+                                Se o email do comentário for igual ao do que está logado exibir lixeira de excluir */}
+                                {item.user === session?.user?.email && (
+
+                                    <button className={styles.buttonTrash} onClick={() => handleDeleteComments(item.id)}>
+                                        <FaTrash size={18} />
+                                    </button>
+                                )}
+
+
+                            </div>
+                            <p>{item.comment}</p>
+                        </article>
+                    ))}
+
+                </section>
+
+            </main>
+        </div>
+    )
+}
+
+//Aqui não precisa usar o useEffect, a informação pode ser trazida do servidor (server side)
+// Os dois pontos é para usar a tipagem do typescript
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    // params? com interrogação  caso o usuário tente acessar digitando algo no link
+    const idTask = params?.id as string;
+    //console.log("Id recebido no [id].tsx: ",id);//Veja no TERMINAL ao atualizar uma página task
+
+    //Pull dos detalhes da tarefa no servidor
+    const docRef = doc(db, 'nexttask', idTask);
+    //Buscar informação do BD
+    const snapshot = await getDoc(docRef);
+
+
+    //exibir esses comentários abaixo da parte de edição. taskId foi o nome dado no BD. --> onde taskID for igual ao id da tarefa que é idTask 
+    const q = query(collection(db, 'comments'), where('taskId', '==', idTask));
+    const snapshotComments = await getDocs(q); // getDocs com 's'. No plural para pegar TODOS os documentos.
+    //o snapshotComments vai recever tudo. Agora montar o array como será exibido
+    //let allComments = []; //Dessa forma vai pedir uma tipagem para não ficar any, ela não sabe o que ela é ainda. Fazer a interface acima de Task()
+    let allComments: CommentProps[] = []; //Se passar o mouse sobre ele, vai mostrar como array
+    //Aqui terá o retorno. Usar forEach para percorrer todos eles
+    snapshotComments.forEach((doc) => {
+        allComments.push({
+            id: doc.id,
+            comment: doc.data().comment,
+            taskId: doc.data().taskId,
+            user: doc.data().user,
+            name: doc.data().name
+        })
+    })
+    // VEJA NO TERMINAL
+    // console.log(allComments); //Para saber se está passando todos os comentários. Passar allComments para o componente return{ props  e também para Task()
+
+    //Fazer a verificação
+    if (snapshot.data() === undefined && !snapshot.data()?.public) { //Se ele não encontrar tarefa. Caso tente digitar algo que não existe direcionar para home, por isso usar o "permanent: false"
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
+    //IMPORTANTÍSSIMO
+    //Outros usuários acessar apenas tarefas PÚBLICAS. "public" foi o nome dado no BD.            
+    if (!snapshot.data()?.public) {//Se NÃO for pública:
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
+    // console.log(snapshot.data()); //Veja no TERMINAL ao atualizar uma página task
+
+    /*Obviamente que poderia ter sido feito assim:
+    if( snapshot.data() === undefined && !snapshot.data()?.public )  
+    Foram separados apenas para entendimento*/
+
+    //A data está vindo como Timestamp, exemplo, 20032023. Converter created com data formatada, 20/03/2023.
+    const miliseconds = snapshot.data()?.created?.seconds * 1000;
+    const task = {
+        tarefa: snapshot.data()?.tarefa,
+        public: snapshot.data()?.public,
+        created: new Date(miliseconds).toLocaleDateString(),
+        user: snapshot.data()?.user,
+        taskId: idTask
+    }
+    console.log(task);
+
+
+
+    return {
+        props: { //Enviar objetos para a página task, //exibir comentários abaixo da parte de edição.
+            item: task,
+            allComments: allComments
+        }
+    }
+}
+
+
+
+
+
+---------------Página home pelo pages/index.tsx.
+
+Trazer do lado do servidor as informações para atualizar os botões de 
+postagens  e  comentários. Será feita de uma forma diferente do que já foi apresentada apenas para aprendizado
+
+Poderia pegar do getServerSide e mostrar pronto. Pode ainda usar useEfect.
+
+Como não é uma informação relevante, pode usar "geração de página estática"
+Ao tipar ja importou automaticamente o GetStaticProps
+
+*******Montado de forma estática depois tem que fazer o REVALIDATE...
+
+
+import Head from 'next/head'
+import styles from '../../styles/home.module.css'
+
+//Pode usar <img> se quiser, mas o Next tem um modelo que carrega melhor, tem mais performance. Image
+import Image from 'next/image';
+import homeimage from '../../public/assets/home-image.jpg';
+import { GetStaticProps } from 'next';
+// Pode priorizar o carregamento escrevendo apenas priority. Não precisa ser priority={true}
+
+//atualizar os botões de postagens  e  comentários
+import { collection, getDocs } from 'firebase/firestore'; // getDocs com 's'. No plural para pegar TODOS os documentos.
+import { db } from '@/services/firebaseConnection';
+
+//atualizar os botões de postagens  e  comentários
+interface HomeProps {//Vai receber as propriedades criadas em getStaticProps
+  posts: number;
+  comments: number;
+}
+
+export default function Home({ posts, comments }: HomeProps) { // tipado  { posts, comments }: HomeProps agora pode distribuir 
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Tarefas+ | Organize de forma fácil</title>
+      </Head>
+      <main className={styles.main}>
+        <div className={styles.logoContent}>
+          <Image className={styles.homeimage}
+            alt="Logo Tarefas"
+            src={homeimage}
+            priority={true}
+          />
+        </div>
+        <h1 className={styles.title}>
+          Organize seus estudos e outras tarefas
+          <br />do dia a dia.
+        </h1>
+
+        <div className={styles.infoContent}>
+          <section className={styles.box}>
+            <span>+{posts} posts</span> {/* atualizar os botões de postagens  e  comentários */}
+          </section>
+
+          <section className={styles.box}>
+            <span>+{comments} comentários</span> {/* atualizar os botões de postagens  e  comentários */}
+          </section>
+        </div>
+
+      </main>
+
+    </div>
+  )
+}
+
+
+
+//atualizar os botões de postagens  e  comentários
+export const getStaticProps: GetStaticProps = async () => {
+
+  //Buscar do BD a contagem. Importar collection e getDocs. Importar db
+  const commentRef = collection(db, 'comments');   //'comments' nome dado para collection no BD
+  //Fazer o mesmo com as tarefas
+  const postRef = collection(db, 'nexttask');
+
+  const commentSnapshot = await getDocs(commentRef);//Aqui terá o resultado do documento
+  const postSnapshot = await getDocs(postRef);
+
+  return {
+    props: {
+      posts: postSnapshot.size || 0,
+      comments: commentSnapshot.size || 0
+
+
+    }//    commentSnapshot.size || 0     zero caso não tenha nada
+  }//Receber isso para o componente export default function Home()
+}
+
+
+
+
+
+
+---------REVALIDATE na página pages/index.tsx para revalidar o número de postagens
+
+LOCALMENTE funciona sem o 'revalidate', mas em produção PRECISA DELE
+
+Exemplo, se em 60 segundos entrarem 400 usuários no site serão evitados 400 requisições 
+
+Usar:
+
+//REVALIDATE para revalidar o número de postagens
+    revalidate: 60,  //Revalidada a cada 60 segundos. Qualquer dúvida veja aula 50
+
+
+---------Finalizando a página ficou assim:
+
+
+
+
+import Head from 'next/head'
+import styles from '../../styles/home.module.css'
+
+//Pode usar <img> se quiser, mas o Next tem um modelo que carrega melhor, tem mais performance. Image
+import Image from 'next/image';
+import homeimage from '../../public/assets/home-image.jpg';
+import { GetStaticProps } from 'next';
+// Pode priorizar o carregamento escrevendo apenas priority. Não precisa ser priority={true}
+
+//atualizar os botões de postagens  e  comentários
+import { collection, getDocs } from 'firebase/firestore'; // getDocs com 's'. No plural para pegar TODOS os documentos.
+import { db } from '@/services/firebaseConnection';
+
+//atualizar os botões de postagens  e  comentários
+interface HomeProps {//Vai receber as propriedades criadas em getStaticProps
+  posts: number;
+  comments: number;
+}
+
+export default function Home({ posts, comments }: HomeProps) { // tipado  { posts, comments }: HomeProps agora pode distribuir 
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Tarefas+ | Organize de forma fácil</title>
+      </Head>
+      <main className={styles.main}>
+        <div className={styles.logoContent}>
+          <Image className={styles.homeimage}
+            alt="Logo Tarefas"
+            src={homeimage}
+            priority={true}
+          />
+        </div>
+        <h1 className={styles.title}>
+          Organize seus estudos e outras tarefas
+          <br />do dia a dia.
+        </h1>
+
+        <div className={styles.infoContent}>
+          <section className={styles.box}>
+            <span>+{posts} posts</span> {/* atualizar os botões de postagens  e  comentários */}
+          </section>
+
+          <section className={styles.box}>
+            <span>+{comments} comentários</span> {/* atualizar os botões de postagens  e  comentários */}
+          </section>
+        </div>
+
+      </main>
+
+    </div>
+  )
+}
+
+
+
+//atualizar os botões de postagens  e  comentários
+export const getStaticProps: GetStaticProps = async () => {
+
+  //Buscar do BD a contagem. Importar collection e getDocs. Importar db
+  const commentRef = collection(db, 'comments');   //'comments' nome dado para collection no BD
+  //Fazer o mesmo com as tarefas
+  const postRef = collection(db, 'nexttask');
+
+  const commentSnapshot = await getDocs(commentRef);//Aqui terá o resultado do documento
+  const postSnapshot = await getDocs(postRef);
+
+  return {
+    props: {   //    commentSnapshot.size || 0     zero caso não tenha nada
+      posts: postSnapshot.size || 0,
+      comments: commentSnapshot.size || 0
+
+
+    },
+
+    //REVALIDATE para revalidar o número de postagens
+    revalidate: 60,  //Revalidada a cada 60 segundos
+
+
+  }//Receber isso para o componente export default function Home()
+}
+
+
 
 
 
