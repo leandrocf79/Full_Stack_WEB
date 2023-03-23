@@ -1,0 +1,979 @@
+Para iniciar um projeto com NextJs
+pode ser pelo npx ou yarn a diferença é que yarn é mais rápida a instalação.
+ 
+Tem que instalar o instalador yarn antes com
+npm install --global yarn
+
+O comando Shift + Alt + F
+ indentação automática
+
+--------------------------
+Verifique:
+yarn --version
+
+
+Formas de começar. 
+yarn create-next-app NOME-DO-PROJETO --typescript
+
+OU
+ yarn create next-app .    Com ponto para usar a propria pasta que acessou como nome do projeto
+
+-----
+
+Pode instalar o TypeScrip como dependência de Desenvolvimento
+yarn add typescript -D
+
+Instalar as tipagens
+yarn add @types/react @types/node -D
+
+
+Substituir as extenções para tsx em src/pages
+
+
+
+----------------- _app.tsx  SEM tipagem:
+
+
+
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}
+
+export default MyApp
+
+
+----------------- _app.tsx  Usando tipagem após instalar TypeScript:
+
+
+import { AppProps } from 'next/app';
+
+import '../styles/global.scss';
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />
+}
+
+export default MyApp
+
+
+
+--------------------- src/pages/_document.tsx podem ser colocadas itens que serão utilizados uma única vez
+No _document.tsx tem as configurações do HEAD
+
+
+
+import Document, { Html, Head, Main, NextScript} from 'next/document';
+
+//utilizada fonte Poppins com vários tamahos wght@400;500;700;900
+export default class MyDocument extends Document{
+  render(){
+    return(
+      <Html>
+        <Head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet" />
+          <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        </Head>
+        <body>
+          <Main/>
+          <NextScript/>
+        </body>
+      </Html>
+    )
+  }
+}
+
+
+----------------pages/styles/global.scss     Veja é assim: scss
+Configurar os estilos padrão
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root{// Pode usar extenções SASS. São essas variáveis abaixo. Pode instalar a extenção Sass 
+  
+  --white: #FFF;
+
+  --gray-100: #AFAFAF;
+  --gray-200: #525252; // Divisor
+  --gray-700: #15171b; //Background header
+  --gray-900: #111113; // Background body;
+
+  --blue-900: #1fa4e5; //CTA - Buttons
+  --yellow-500: #FFBE16;
+
+}
+
+
+@media (max-width: 1080px){
+  html{
+    font-size: 93.75%; // Vai gerar 15px
+  }
+}
+
+@media (max-width: 720px){
+  html{
+    font-size: 87.5%; // Vai gerar 14px
+  }
+}
+
+body{
+  background: var(--gray-900);
+}
+
+//fonte padrão para todos os elementos
+body, input, textarea, select, button{
+  font: 400 1rem 'Poppins', sans-serif;
+}
+
+button{
+  cursor: pointer;
+}
+
+a{
+  color: inherit;
+  text-decoration: none;
+}
+
+
+
+------------------------
+HEADER não é uma página, criar src/components/Header/index.tsx:
+
+instalar:
+npx @next/codemod new-link .
+
+e coloque "legacyBehavior" dentro da tag Link para não dar erro:
+
+
+import styles from './styles.module.scss';
+import Image from 'next/image';
+import logo from '../../../public/images/logo.svg';
+
+import Link from 'next/link';
+
+export function Header() {
+  return (
+    <header className={styles.headerContainer}>
+      <div className={styles.headerContent}>
+        <a>
+          <Image src={logo} alt="Sujeito Programador Logo" />
+        </a>
+
+        <nav>
+          <Link href="/" legacyBehavior>
+            <a>Home</a>
+          </Link>
+          <Link href="/posts" legacyBehavior>
+            <a>Conteúdos</a>
+          </Link>
+          <Link href="/sobre" legacyBehavior>
+            <a>Quem somos?</a>
+          </Link>
+        </nav>
+
+        <a className={styles.readyButton} type="button" href="https://sujeitoprogramador.com" legacyBehavior>COMEÇAR</a>
+
+      </div>
+    </header>
+  )
+}
+
+
+
+
+
+-------------------------
+src/components/Header/styles.modules.scss:
+
+
+
+
+.headerContainer{
+  height: 6rem;
+  border-bottom: 1px solid var(--gray-200);
+  background: var(--gray-700);
+}
+
+.headerContent{
+  max-width: 1120px;
+  height: 6rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+
+  display: flex;
+  align-items: center;
+
+  img{
+    cursor: pointer;
+  }
+
+  nav{
+    margin-left: 5rem;
+    height: 6rem;
+
+    a{
+      display: inline-block;
+      position: relative;
+      padding: 0 0.5rem;
+      height: 6rem;
+      line-height: 6rem;
+      color: var(--gray-100);
+      transition: color 0.2s;
+
+      & + a {
+        margin-left: 2rem;
+      }
+
+      &:hover{
+        color: var(--white);
+      }
+
+	 //Quando for link ativo
+      &.active{
+        color: var(--yellow-500);
+        font-weight: bold;
+      }
+
+    }
+  }
+}
+
+.readyButton{
+  margin-left: auto;
+  height: 3rem;
+  border-radius: 3rem;
+  background: var(--blue-900);
+  border:0;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-weight: bold;
+  transition: filter 0.2s;
+
+  &:hover{
+    filter: brightness(1.1)
+  }
+}
+
+
+@media (max-width: 870px){
+  .headerContainer{
+    height: 11rem;
+    padding: 0.5rem 0;
+  }
+
+  .headerContent{
+    display: flex;
+    flex-direction: column;
+
+    nav{
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .readyButton{
+      display: none;
+    }    
+  }
+}
+
+
+
+----------------Atualizar src/components/Header/index.tsx:
+
+import Document, { Html, Head, Main, NextScript} from 'next/document';
+
+export default class MyDocument extends Document{
+  render(){
+    return(
+      <Html>
+        <Head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet" />
+          <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        </Head>
+        <body>
+          <Main/>
+          <NextScript/>
+        </body>
+      </Html>
+    )
+  }
+}
+
+
+
+-----------------Criar src/components/ActiveLink/index.tsx:
+
+
+import { ReactElement, cloneElement } from 'react';
+import { useRouter } from 'next/router';
+import Link, { LinkProps } from 'next/link';
+
+interface ActiveLinkProps extends LinkProps{
+  children: ReactElement;
+  activeClassName: string;
+}
+
+export function ActiveLink({ children, activeClassName, ...rest }: ActiveLinkProps){
+  const { asPath } = useRouter(); 
+
+  const className = asPath === rest.href ? activeClassName : '';
+  //Se a rota/pagina que estamos acessando for igual ao link que ele clicou entao ativamos o classname
+
+  return(
+    <Link {...rest} legacyBehavior>
+      {cloneElement(children, {
+        className
+      })}
+    </Link>
+  )
+}
+
+
+-------------------Substituir o link padrão por ActiveLink
+
+
+
+import styles from './styles.module.scss';
+import Image from 'next/image';
+import logo from '../../../public/images/logo.svg';
+
+import { ActiveLink } from '../ActiveLink';
+
+export function Header(){
+  return(
+    <header className={styles.headerContainer}>
+      <div className={styles.headerContent}>
+        <ActiveLink href="/" activeClassName={styles.active} >
+          <a>
+           <Image src={logo} alt="Sujeito Programador Logo"/>
+          </a>
+        </ActiveLink>
+
+        <nav>
+          <ActiveLink href="/" activeClassName={styles.active}>
+            <a>Home</a>
+          </ActiveLink>
+
+          <ActiveLink  href="/posts" activeClassName={styles.active}>
+            <a>Conteúdos</a>
+          </ActiveLink>
+
+          <ActiveLink  href="/sobre" activeClassName={styles.active}>
+            <a>Quem somos?</a>
+          </ActiveLink>
+        </nav>
+
+        <a className={styles.readyButton} type="button" href="https://sujeitoprogramador.com">COMEÇAR</a>
+
+      </div>
+    </header>
+  )
+}
+
+
+
+
+---------------------------home.modules.scss:
+
+
+
+.container{
+  display: block;
+}
+
+.containerHeader{
+  min-height: calc(100vh - 5rem);
+  margin: 0 auto;
+  max-width: 1120px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  img{
+    max-width: 640px;
+  }
+}
+
+.ctaText{
+  max-width: 600px;
+
+  h1{
+    font-size: 3.5rem;
+    line-height: 4.5rem;
+    font-weight: 900;
+    margin-top: 2.5rem;
+    color: var(--white);
+  }
+
+  span{
+    font-size: 1rem;
+    line-height: 2.25rem;
+    color: var(--white);
+  }
+
+  button{
+    background-color: var(--blue-900);
+    border:0;
+    padding: 1rem 1.8rem;
+    margin-top: 2.5rem;
+    border-radius: 7px;
+    color: var(--white);
+    font-weight: bold;
+  }
+}
+
+
+
+
+
+
+--------------------------Atualizar pages/index.tsx:
+Por enquanto imagens estáticas, depois serão imagens dinâmicas!
+
+
+import Head from 'next/head';
+import styles from '../styles/home.module.scss';
+
+export default function Home() {
+  return (
+   <>
+    <Head>
+      <title>Apaixonado por tecnologia - Sujeito Programador</title>
+    </Head>
+    <main className={styles.container}>
+      <div className={styles.containerHeader}>
+        <section className={styles.ctaText}>
+          <h1>Levando você ao próximo nível!</h1>
+          <span>Uma plataforma com cursos que vão do zero até o profissional na pratica, direto ao ponto aplicando o que usamos no mercado de trabalho. ??</span>
+          <a>
+            <button>
+              COMEÇAR AGORA!
+            </button>
+          </a>
+        </section>
+
+        <img 
+            src="/images/banner-conteudos.png" 
+            alt="Conteúdos Sujeito Programador" 
+        />
+      </div>
+
+      <hr className={styles.divisor} />
+
+      <div className={styles.sectionContent}>
+        <section>
+          <h2>Aprenda criar aplicativos para Android e iOS</h2>
+          <span>Você vai descobrir o jeito mais moderno de desenvolver apps nativos para iOS e Android, construindo aplicativos do zero até aplicativos.</span>
+        </section>
+
+        <img src="/images/financasApp.png" alt="Conteúdos desenvolvimento de apps" />
+      </div>
+
+      <hr className={styles.divisor} />
+
+      <div className={styles.sectionContent}>
+        <img src="/images/webDev.png" alt="Conteúdos desenvolvimento de aplicacoes web" />
+
+        <section>
+          <h2>Aprenda criar sistemas web</h2>
+          <span>Criar sistemas web, sites usando as tecnologias mais modernas e requisitadas pelo mercado.</span>
+        </section>
+      </div>
+
+
+    </main>
+   </>
+  )
+}
+
+
+
+------------------------Atualizar home.modules.scss:
+
+
+
+.container{
+  display: block;
+}
+
+.containerHeader{
+  min-height: calc(100vh - 5rem);
+  margin: 0 auto;
+  max-width: 1120px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  img{
+    max-width: 640px;
+  }
+}
+
+.ctaText{
+  max-width: 600px;
+
+  h1{
+    font-size: 3.5rem;
+    line-height: 4.5rem;
+    font-weight: 900;
+    margin-top: 2.5rem;
+    color: var(--white);
+  }
+
+  span{
+    font-size: 1rem;
+    line-height: 2.25rem;
+    color: var(--white);
+  }
+
+  button{
+    background-color: var(--blue-900);
+    border:0;
+    padding: 1rem 1.8rem;
+    margin-top: 2.5rem;
+    border-radius: 7px;
+    color: var(--white);
+    font-weight: bold;
+  }
+}
+
+.divisor{
+  width: 100%;
+  bottom: 0;
+  height: 1px;
+  border-color: var(--gray-200)
+}
+
+
+.sectionContent{
+  margin: 5.5rem auto;
+  max-width: 1120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  section{
+    max-width: 670px;
+  }
+
+
+  img{
+    max-width: 550px;
+  }
+
+  h2{
+    font-size: 2.2rem;
+    line-height: 4.5rem;
+    font-weight: 900;
+    margin-top: 2.2rem;
+    color: var(--white);
+  }
+
+  span{
+    font-size: 1rem;
+    line-height: 2.25rem;
+    color: var(--white);
+  }
+}
+
+
+------------FOOTER
+--------------------------Atualizar pages/index.tsx:
+quality={100}  significa que se pode reduzer a qualidade da imagem para exibição
+
+
+
+import Head from 'next/head';
+import styles from '../styles/home.module.scss';
+
+import Image from 'next/image';
+
+import techsImage from '../../public/images/techs.svg';
+
+export default function Home() {
+  return (
+   <>
+    <Head>
+      <title>Apaixonado por tecnologia - Sujeito Programador</title>
+    </Head>
+    <main className={styles.container}>
+      <div className={styles.containerHeader}>
+        <section className={styles.ctaText}>
+          <h1>Levando você ao próximo nível!</h1>
+          <span>Uma plataforma com cursos que vão do zero até o profissional na pratica, direto ao ponto aplicando o que usamos no mercado de trabalho. ??</span>
+          <a>
+            <button>
+              COMEÇAR AGORA!
+            </button>
+          </a>
+        </section>
+
+        <img 
+            src="/images/banner-conteudos.png" 
+            alt="Conteúdos Sujeito Programador" 
+        />
+      </div>
+
+      <hr className={styles.divisor} />
+
+      <div className={styles.sectionContent}>
+        <section>
+          <h2>Aprenda criar aplicativos para Android e iOS</h2>
+          <span>Você vai descobrir o jeito mais moderno de desenvolver apps nativos para iOS e Android, construindo aplicativos do zero até aplicativos.</span>
+        </section>
+
+        <img src="/images/financasApp.png" alt="Conteúdos desenvolvimento de apps" />
+      </div>
+
+      <hr className={styles.divisor} />
+
+      <div className={styles.sectionContent}>
+        <img src="/images/webDev.png" alt="Conteúdos desenvolvimento de aplicacoes web" />
+
+        <section>
+          <h2>Aprenda criar sistemas web</h2>
+          <span>Criar sistemas web, sites usando as tecnologias mais modernas e requisitadas pelo mercado.</span>
+        </section>
+      </div>
+
+      <div className={styles.nextLevelContent}>
+        <Image quality={100} src={techsImage} alt="Tecnologias" />
+        <h2>Mais de <span className={styles.alunos}>15 mil</span> já levaram sua carreira ao próximo nivel.</h2>
+        <span>E você vai perder a chance de evoluir de uma vez por todas?</span>
+        <a>
+          <button>ACESSAR TURMA!</button>
+        </a>
+      </div>
+
+
+
+    </main>
+   </>
+  )
+}
+
+
+
+
+
+
+------------------------Atualizar home.modules.scss:
+
+
+
+
+
+.container{
+  display: block;
+}
+
+.containerHeader{
+  min-height: calc(100vh - 5rem);
+  margin: 0 auto;
+  max-width: 1120px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  img{
+    max-width: 640px;
+  }
+}
+
+.ctaText{
+  max-width: 600px;
+
+  h1{
+    font-size: 3.5rem;
+    line-height: 4.5rem;
+    font-weight: 900;
+    margin-top: 2.5rem;
+    color: var(--white);
+  }
+
+  span{
+    font-size: 1rem;
+    line-height: 2.25rem;
+    color: var(--white);
+  }
+
+  button{
+    background-color: var(--blue-900);
+    border:0;
+    padding: 1rem 1.8rem;
+    margin-top: 2.5rem;
+    border-radius: 7px;
+    color: var(--white);
+    font-weight: bold;
+  }
+}
+
+.divisor{
+  width: 100%;
+  bottom: 0;
+  height: 1px;
+  border-color: var(--gray-200)
+}
+
+
+.sectionContent{
+  margin: 5.5rem auto;
+  max-width: 1120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  section{
+    max-width: 670px;
+  }
+
+
+  img{
+    max-width: 550px;
+  }
+
+  h2{
+    font-size: 2.2rem;
+    line-height: 4.5rem;
+    font-weight: 900;
+    margin-top: 2.2rem;
+    color: var(--white);
+  }
+
+  span{
+    font-size: 1rem;
+    line-height: 2.25rem;
+    color: var(--white);
+  }
+}
+
+
+.nextLevelContent{
+  max-width: 1120px;
+  margin: 6rem auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+
+  h2{
+    font-size: 2.8rem;
+    line-height: 4.5rem;
+    font-weight: 900;
+    color: var(--white);
+
+    span{
+      font-size: 2.8rem;
+      line-height: 4.5rem;
+      font-weight: 900;
+      color: var(--blue-900);
+    }
+  }
+
+  span{
+    font-size: 1rem;
+    line-height: 2.25rem;
+    color: var(--white);
+  }
+
+
+  button{
+    background-color: var(--blue-900);
+    border:0;
+    padding: 1rem 1.8rem;
+    margin-top: 2.5rem;
+    border-radius: 6px;
+    color: var(--white);
+    font-weight: bold;
+  }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
