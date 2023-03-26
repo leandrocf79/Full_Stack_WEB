@@ -1232,21 +1232,47 @@ export function getPrismicClient(req?: unknown){  // O proprio site pede para pa
 Para esse projeto escolher a opção "Single Type", o site atualizou e nem tem mais isso 
 https://projetoblogg.prismic.io/documents/working?l=pt-br
 
+A documentação pede para instalar:
+npx @slicemachine/init --repository projetoblogg && npm run slicemachine
+
+Abra o lik que será oferecido no terminal do projeto:
+ http://localhost:9999/
+
+Create One
+Para este projeto: Single Type
+
+Custom Type Name:
+NextProject
+
+Static Zone: +Add a new field
+
+---Para este projeto adicionar:
+
+********Seguir a ordem em que as coisas estão no projeto para não se perder.
+Renomear Main para home
+
+UID (Unique) 		Renomear de uid,
+Key text/Simple Text  	Renomear title ( Clicar na canetinha e escolher que ele venha como h1, em 03-2023 já não tem mais essa opção)
+Rich Text 		sub_title
+Link			link_action (Pode clicar no canetinha e escolher "Allow target blank" Para abrir outra página quando clicado)
+-
+Key text		mobile
+Rich Text 		mobile_content
+Image			mobile_banner
+-
+Key text		title_web
+Rich Text		web_content
+Image			web_banner
+
+Salvar: Save to File System
+
+Clicar na canetinha de cada um e preencher a parte
+PLACEHOLDER com os textos que deseja.
+
+o link pode ser algum vídeo do youtube para teste: 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+depoios de tudo entrar em Changes e publicar, Push Changes
 
 
 
