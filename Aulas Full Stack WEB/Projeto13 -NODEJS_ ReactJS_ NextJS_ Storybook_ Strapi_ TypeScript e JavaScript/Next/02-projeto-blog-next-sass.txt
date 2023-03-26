@@ -29,7 +29,20 @@ yarn add @types/react @types/node -D
 
 Substituir as extenções para tsx em src/pages
 
+-------------------------
 
+yarn add react-icons
+
+
+
+Instalar no termianl do projeto:
+yarn add @prismicio/client prismic-dom
+
+Para versão da aula da Udemy:
+yarn add @prismicio/client@5.1.0 prismic-dom
+
+
+-------------------------
 
 ----------------- _app.tsx  SEM tipagem:
 
@@ -675,6 +688,7 @@ export default function Home() {
 
 
 
+
 .container{
   display: block;
 }
@@ -803,21 +817,420 @@ export default function Home() {
 
 }
 
+@media (max-width: 1095px){
+  .container{
+    .containerHeader{
+      padding: 0 2rem;
+
+      button{
+        display: block;
+      }
+    }
+
+    img{
+      max-width: 600px;
+    }
+
+    div h1{
+      font-size: 3rem;
+    }
+
+    div h2{
+      font-size: 2.3rem;
+
+      span{
+        font-size: 2.3rem;
+      }
+    }
+
+    .sectionContent, .nextLevelContent{
+      padding: 0 2rem;
+    }
+  }
+}
+
+
+@media (max-width: 950px){
+  .container{
+    .containerHeader{
+      flex-direction: column;
+
+      button{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    div img{
+      max-width: 500px;
+    }
+    
+    div h1{
+      font-size: 3rem;
+    }
+
+    h2{
+      font-size: 1rem;
+    }
+
+    .sectionContent{
+      flex-direction: column;
+      img{
+        margin-top: 2rem;
+        max-width: 400px;
+      } 
+
+    }
+  }
+}
+
+
+
+========================================Usar imagens estáticas para 
+desenvolver front e depois elas virão de forma dinâmica da API
+
+****LEMBRANDO QUE EM PROJETO REAL, NÃO USAR LEGADOS: legacyBehavior
+Criar a parte de conteúdos.
+Criar pages/posts/index.tsx:
+
+
+
+
+
+import Head from 'next/head';
+
+import styles from './styles.module.scss';
+import Link from 'next/link';
+
+import Image from 'next/image';
+import thumbImg from '../../../public/images/thumb.png';
+
+export default function Posts(){
+  return(
+    <>
+     <Head>
+       <title>Blog | Sujeito Programador</title>
+     </Head>
+     <main className={styles.container}>
+       <div className={styles.posts}>
+         <Link legacyBehavior href="/" >
+          <a>
+            <Image 
+              src={thumbImg} 
+              alt="Post titulo 1"
+              width={720}
+              height={410}
+              quality={100}
+            />
+            <strong>Criando meu primeiro aplicativo</strong>
+            <time>14 JULHO 2021</time>
+            <p>Hoje vamos criar o controle de mostrar a senha no input, uma opção para os nossos formulários de cadastro e login. Mas chega de conversa e bora pro código junto comigo que o vídeo está show de bola!</p>
+          </a>
+         </Link>
+       </div>
+     </main>
+    </>
+  )
+}
 
 
 
 
 
 
+-------------
+
+
+Criar pages/posts/stules.module.scss:
+
+
+
+.container{
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.posts{
+  max-width: 720px;
+  margin: 5rem auto;
+
+
+  a{
+    display: block;
+
+    & + a{
+      margin-top: 2rem;
+      padding-top: 2rem;
+    }
+
+    time{
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      color: var(--gray-200);
+    }
+
+    img{
+      max-width: 100%;
+      max-height: 410px;
+      border: 2px solid var(--blue-900);
+      border-radius: 6px;
+      border-image: linear-gradient(95deg, #31b4d0, transparent) 1;
+    }
+
+    strong{
+      display: block;
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      line-height: 2rem;
+      color: var(--white);
+      transition: color 0.3s;
+    }
+
+    p{
+      color: var(--white);
+      margin-top: 0.5rem;
+      line-height: 1.62rem;
+    }
+
+    &:hover strong{
+      color: var(--blue-900);
+    }
+  }
+}
+
+
+
+
+---------------Criar BOTÕES de navegação para próxima ou para pg anterior.
+instalar
+yarn add react-icons
+
+Criar pages/posts/index.tsx:
 
 
 
 
 
 
+import Head from 'next/head';
+
+import styles from './styles.module.scss';
+import Link from 'next/link';
+
+import Image from 'next/image';
+import thumbImg from '../../../public/images/thumb.png';
+
+import { FiChevronLeft, FiChevronsLeft, FiChevronRight, FiChevronsRight} from 'react-icons/fi';
+
+export default function Posts(){
+  return(
+    <>
+     <Head>
+       <title>Blog | Sujeito Programador</title>
+     </Head>
+     <main className={styles.container}>
+       <div className={styles.posts}>
+         <Link legacyBehavior href="/">
+          <a>
+            <Image 
+              src={thumbImg} 
+              alt="Post titulo 1"
+              width={720}
+              height={410}
+              quality={100}
+            />
+            <strong>Criando meu primeiro aplicativo</strong>
+            <time>14 JULHO 2021</time>
+            <p>Hoje vamos criar o controle de mostrar a senha no input, uma opção para os nossos formulários de cadastro e login. Mas chega de conversa e bora pro código junto comigo que o vídeo está show de bola!</p>
+          </a>
+         </Link>
+
+         <div className={styles.buttonNavigate}>
+            <div>
+              <button>
+                <FiChevronsLeft size={25} color="#FFF" />
+              </button>
+              <button>
+                <FiChevronLeft size={25} color="#FFF" />
+              </button>
+            </div>
+
+            <div>
+              <button>
+                <FiChevronRight size={25} color="#FFF" />
+              </button>
+              <button>
+                <FiChevronsRight size={25} color="#FFF" />
+              </button>
+            </div>
+            
+         </div>
+       </div>
+     </main>
+    </>
+  )
+}
 
 
 
+
+
+--------------Atualizar pages/posts/stules.module.scss:
+
+
+
+
+
+.container{
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.posts{
+  max-width: 720px;
+  margin: 5rem auto;
+
+
+  a{
+    display: block;
+
+    & + a{
+      margin-top: 2rem;
+      padding-top: 2rem;
+    }
+
+    time{
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      color: var(--gray-200);
+    }
+
+    img{
+      max-width: 100%;
+      max-height: 410px;
+      border: 2px solid var(--blue-900);
+      border-radius: 6px;
+      border-image: linear-gradient(95deg, #31b4d0, transparent) 1;
+    }
+
+    strong{
+      display: block;
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      line-height: 2rem;
+      color: var(--white);
+      transition: color 0.3s;
+    }
+
+    p{
+      color: var(--white);
+      margin-top: 0.5rem;
+      line-height: 1.62rem;
+    }
+
+    &:hover strong{
+      color: var(--blue-900);
+    }
+  }
+}
+
+.buttonNavigate{
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  flex-direction: row; /* para por tudo na mesma linha */
+  justify-content: space-between; /* deu certo assim por ter duas div */
+
+  div{
+    display: flex;
+    flex-direction: row;
+  }
+
+  button{
+    margin: 0 5px;
+    border: 0;
+    background: var(--blue-900);
+    color: var(--white);
+    display: flex;
+    padding: 0.5rem;
+    border-radius: 5px;
+
+    svg{
+      padding: 0 3px;
+    }
+  }
+
+}
+
+
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+Deixar dinâmico todo o site.
+
+Pode, obviamente, criar uma área administrativa com acesso ao BD e
+criar toda a parte de segurança etc.
+Neste projeto será usado um outro recurso para aprendizado.
+
+Sites recomendados:
+https://strapi.io/
+
+Esse prismic é mais estável, não precisa hospedar, vai dar menos dor de cabeça.
+
+https://prismic.io/
+Ele é gratuito até 100gb.
+
+
+Criar uma conta.
+Criar um novo repositório/with another framework
+ Será usado Next.Js
+free
+
+Criar repositório.
+
+https://prismic.io/dashboard
+
+Acesse Settings:
+https://projetoblogg.prismic.io/settings/repository/
+-----
+Instalar no termianl do projeto:
+yarn add @prismicio/client prismic-dom
+
+Para versão da aula da Udemy:
+yarn add @prismicio/client@5.1.0 prismic-dom
+-----
+
+Criar src/services/prismic.ts: (ts - é um arquivo de configuração)
+
+Nesta área do site:https://projetoblogg.prismic.io/settings/apps/
+
+Copiar o link que foir gerado: [  https://projetoblogg.prismic.io/settings/apps/  ]
+
+
+import Prismic from '@prismicio/client';
+
+export function getPrismicClient(req?: unknown){  // O proprio site pede para passar tipagem como unknown
+  const prismic = Prismic.client('https://projetoblogg.prismic.io/settings/apps/', {
+    req,
+  })
+
+  return prismic;
+}
+
+
+---------------Criar os conteúdos no site prismic:
+
+
+Para esse projeto escolher a opção "Single Type", o site atualizou e nem tem mais isso 
+https://projetoblogg.prismic.io/documents/working?l=pt-br
 
 
 
