@@ -1,0 +1,5 @@
+legacyBehavior
+
+usar em ActiveLink/index  em: <Link {...rest} legacyBehavior>
+
+USAR EM POSTS/INDEX em: <Link legacyBehavior href="/">
