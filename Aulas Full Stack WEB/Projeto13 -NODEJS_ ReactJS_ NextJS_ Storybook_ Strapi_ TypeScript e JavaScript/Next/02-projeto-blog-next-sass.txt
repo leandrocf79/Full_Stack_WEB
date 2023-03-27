@@ -2054,6 +2054,8 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 
+------------------------------------Navegar para a postagem clicada
+CRIAR pages/posts/[slug].tsx:
 
 
 
@@ -2061,97 +2063,569 @@ export const getStaticProps: GetStaticProps = async () => {
 
 
 
+import { GetServerSideProps } from 'next';
+import styles from './post.module.scss';
 
+import { getPrismicClient } from '../../services/prismic';
+import { RichText } from 'prismic-dom';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+interface PostProps{
+  post: {
+    slug: string;
+    title: string;
+    description: string;
+    cover: string;
+    updatedAt: string;
+  }
+}
+
+export default function Post({ post }: PostProps ){
+
+  console.log(post); // Já está recebendo as postagens.
+
+  return(
+    <div>
+      <h1>DETALHE DO POST</h1>
+    </div>
+  )
+}
+
+// A requisição será pelo lado do servidor getServerSide
+//req - faz a requisição
+// params - para acessar o que tiver na url
+export const getServerSideProps: GetServerSideProps = async ({ req, params}) => {
+  //console.log(slug);
+  const { slug } = params;
+  const prismic = getPrismicClient(req);//passar a requisição
+
+  const response = await prismic.getByUID('post', String(slug), {});//Fazendo a requisição no servidor. getByUID e {}  - tem na documentação do prismic
+  
+  if(!response){ // Se não existir o slug digitado no link pelo cliente será direcionado para a pg posts
+    return{
+      redirect:{
+        destination: '/posts',
+        permanent: false
+      }
+    }
+  }
+
+  const post = { // Se o slug existe ele entra aqui
+    slug: slug,
+    title: RichText.asText(response.data.title),
+    description: RichText.asHtml(response.data.description),
+    cover: response.data.cover.url,
+    updatedAt: new Date(response.last_publication_date).toLocaleDateString('pt-BR', { //Vai passar a ultima atualização
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    })
+  };
+
+  return {
+    props:{
+      post
+    }
+  }
+}
+
+
+
+
+----------------
+
+Já está recebendo as postagens.
+Desenvolver as postagens
+
+
+
+
+import { GetServerSideProps } from 'next';
+import styles from './post.module.scss';
+
+import { getPrismicClient } from '../../services/prismic';
+import { RichText } from 'prismic-dom';
+
+import Head from 'next/head';
+import Image from 'next/image';
+
+interface PostProps{
+  post: {
+    slug: string;
+    title: string;
+    description: string;
+    cover: string;
+    updatedAt: string;
+  }
+}
+
+export default function Post({ post }: PostProps ){
+  return(
+    <>
+      <Head>
+        <title>{post.title}</title>
+      </Head> 
+      <main className={styles.container}>
+        <article className={styles.post}>
+          <Image
+            quality={100}
+            src={post.cover}
+            width={720}
+            height={410}
+            alt={post.title}
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN0vQgAAWEBGHsgcxcAAAAASUVORK5CYII="
+          />
+
+          <h1>{post.title}</h1>
+          <time>{post.updatedAt}</time>
+          <div className={styles.postContent} dangerouslySetInnerHTML={{ __html: post.description }}></div>
+        </article>
+      </main>
+    </>
+  )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req, params}) => {
+  const { slug } = params;
+  const prismic = getPrismicClient(req);
+
+  const response = await prismic.getByUID('post', String(slug), {});
+
+  if(!response){
+    return{
+      redirect:{
+        destination: '/posts',
+        permanent: false
+      }
+    }
+  }
+
+  const post = {
+    slug: slug,
+    title: RichText.asText(response.data.title),
+    description: RichText.asHtml(response.data.description),
+    cover: response.data.cover.url,
+    updatedAt: new Date(response.last_publication_date).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    })
+  };
+
+  return {
+    props:{
+      post
+    }
+  }
+}
+
+
+
+
+----------------Estilizar post.modules.scss:
+
+
+.container{
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  padding-bottom: 5rem;
+}
+
+.post{
+  max-width: 720px;
+  margin: 5rem auto 0;
+
+  img{
+    max-width: 100%;
+    max-height: 410px;
+    border-radius: 15px;
+  }
+
+  h1{
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--white);
+  }
+
+  time{
+    color: var(--gray-100);
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    display: block;
+  }
+  
+}
+
+.postContent{
+  margin-top: 2rem;
+  line-height: 2rem;
+  font-size: 1.125rem;
+  color: var(--white);
+
+  iframe{
+    width: 100%;
+    min-height: 350px;
+    padding: 0.5rem 0;
+  }
+
+  p, ul{
+    margin: 1.5rem 0;
+  }
+
+  ul{
+    padding-left: 1.5rem;
+
+    li{
+      margin: 0.5rem 0;
+    }
+  }
+
+  a:hover{
+    color: var(--yellow-500);
+  }
+
+  pre{
+    border-radius: 0.5rem;
+    background: var(--gray-700);
+    padding: 0.5rem;
+    color: var(--white);
+  }
+}
+
+
+
+
+------------------Aba Quem somos?
+
+Criar pages/sobre/index.tsx
+
+
+
+
+
+import { GetStaticProps } from "next";
+
+import Head from 'next/head';
+import styles from './styles.module.scss';
+
+import { getPrismicClient } from '../../services/prismic';
+import Prismic from '@prismicio/client';
+import { RichText } from 'prismic-dom';
+
+import { FaYoutube, FaInstagram, FaLinkedin, FaFacebook} from 'react-icons/fa';
+
+type Content = {
+  title: string;
+  description: string;
+  banner: string;
+  facebook: string;
+  instagram: string;
+  youtube: string;
+  linkedin: string;
+}
+
+interface ContentProps{
+  content: Content
+}
+
+export default function Sobre({ content }: ContentProps){
+  return(
+    <>
+      <Head>
+        <title>Quem somos? | Sujeito Programador</title>
+      </Head>
+      <main className={styles.container}>
+        <div className={styles.containerHeader}>
+          <section className={styles.ctaText}>
+            <h1>{content.title}</h1>
+            <p>{content.description}</p>
+
+            <a href={content.youtube}>
+              <FaYoutube size={40} />
+            </a>
+
+            <a href={content.instagram}>
+              <FaInstagram size={40} />
+            </a>
+
+            <a href={content.facebook}>
+              <FaFacebook size={40} />
+            </a>
+
+            <a href={content.linkedin}>
+              <FaLinkedin size={40} />
+            </a>
+          </section>
+
+          <img
+            src={content.banner}
+            alt="Sobre Sujeito Programador"
+          />
+
+        </div>
+      </main>
+    </>
+  )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+
+  const response = await prismic.query([
+    Prismic.Predicates.at('document.type', 'about')
+  ])
+
+  const {
+    title,
+    description,
+    banner,
+    facebook,
+    instagram,
+    youtube,
+    linkedin
+  } = response.results[0].data;
+
+  const content = {
+    title: RichText.asText(title),
+    description: RichText.asText(description),
+    banner: banner.url,
+    facebook: facebook.url,
+    instagram: instagram.url,
+    youtube: youtube.url,
+    linkedin: linkedin.url
+  };
+
+  return{ // LEMBRAR SEMPRE QUE EM PRODUÇÃO VAI TER QUE REVALIDAR. Vai funcionar bem em desenvolvimento, mas em produção tem que revalidar
+    props:{
+      content
+    },
+    revalidate: 60 * 15  // A cada 15 minutos será revalidado, ou seja, a página será atualizada
+  }
+}
+
+
+
+
+-----------pages/sobre/index.tsx
+
+
+
+import { GetStaticProps } from "next";
+
+import Head from 'next/head';
+import styles from './styles.module.scss';
+
+import { getPrismicClient } from '../../services/prismic';
+import Prismic from '@prismicio/client';
+import { RichText } from 'prismic-dom';
+
+import { FaYoutube, FaInstagram, FaLinkedin, FaFacebook} from 'react-icons/fa';
+
+type Content = {
+  title: string;
+  description: string;
+  banner: string;
+  facebook: string;
+  instagram: string;
+  youtube: string;
+  linkedin: string;
+}
+
+interface ContentProps{
+  content: Content
+}
+
+export default function Sobre({ content }: ContentProps){
+  return(
+    <>
+      <Head>
+        <title>Quem somos? | Sujeito Programador</title>
+      </Head>
+      <main className={styles.container}>
+        <div className={styles.containerHeader}>
+          <section className={styles.ctaText}>
+            <h1>{content.title}</h1>
+            <p>{content.description}</p>
+
+            <a href={content.youtube}>
+              <FaYoutube size={40} />
+            </a>
+
+            <a href={content.instagram}>
+              <FaInstagram size={40} />
+            </a>
+
+            <a href={content.facebook}>
+              <FaFacebook size={40} />
+            </a>
+
+            <a href={content.linkedin}>
+              <FaLinkedin size={40} />
+            </a>
+          </section>
+
+          <img
+            src={content.banner}
+            alt="Sobre Sujeito Programador"
+          />
+
+        </div>
+      </main>
+    </>
+  )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+
+  const response = await prismic.query([
+    Prismic.Predicates.at('document.type', 'about')
+  ])
+
+  const {
+    title,
+    description,
+    banner,
+    facebook,
+    instagram,
+    youtube,
+    linkedin
+  } = response.results[0].data;
+
+  const content = {
+    title: RichText.asText(title),
+    description: RichText.asText(description),
+    banner: banner.url,
+    facebook: facebook.url,
+    instagram: instagram.url,
+    youtube: youtube.url,
+    linkedin: linkedin.url
+  };
+
+  return{ // LEMBRAR SEMPRE QUE EM PRODUÇÃO VAI TER QUE REVALIDAR. Vai funcionar bem em desenvolvimento, mas em produção tem que revalidar
+    props:{
+      content
+    },
+    revalidate: 60 * 15  // A cada 15 minutos será revalidado, ou seja, a página será atualizada
+  }
+}
+
+
+
+------------Estilizar:
+
+
+
+
+
+
+.container{
+  display: block;
+}
+
+.containerHeader{
+  height: calc(100vh - 6rem);
+  margin: 0 auto;
+  max-width: 1120px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  img{
+    max-width: 490px;
+  }
+}
+
+.ctaText{
+  max-width: 600px;
+
+  h1{
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 2.5rem 0;
+    color: var(--white);
+  }
+
+  p{
+    font-size: 1rem;
+    line-height: 2.25rem;
+    color: var(--white);
+    white-space: pre-wrap;
+  }
+
+  a svg{
+    margin-top: 15px;
+  }
+
+  svg{
+    color: #FFF;
+    cursor: pointer;
+    margin-left: 15px;
+  }
+
+  svg:hover{
+    color: var(--blue-900);
+  }
+}
+
+@media (max-width: 1110px){
+  .containerHeader{
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem;
+
+    img{
+      max-width: 390px;
+      padding: 1.5rem 0;
+    }
+  }
+
+  .ctaText{
+    h1{
+      font-size: 2.5rem;
+    }
+  }
+}
+
+
+-----------------------------Prução:
+No terminal: 
+yarn build
+
+Vai dar erro dizendo para não usar <img>, deu um link para ver como 
+ alaterar, mas tem como desabilitar isso tb.
+
+Procure por um arquivo chamado   .eslintrc
+
+{
+    "extends": ["next", "next/core-web-vitals"],
+}
+
+
+Acrescente, copie a regra apresentada no terminal sobre o erro:
+
+{
+    "extends": ["next", "next/core-web-vitals"],
+    "rules":{
+        "@next/next/no-img-element": "off"
+    }
+}
+
+
+No terminal novamente: 
+yarn build
+
+yarn start
+
+
+Subir para o GitHub
+
+Criar conta na Vercel para criar domínio
+https://vercel.com/
+
+Vai pedir para conectar com o github
 
 
 
