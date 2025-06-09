@@ -36,6 +36,31 @@ git add .
 git commit -m "Finalizado"
 git push origin master
 
+
+********** PARA ARQUIVOS MUITO GRANDES **********
+# Instale o Git LFS (se ainda não tiver)
+git lfs install
+
+# Rastreie os arquivos grandes com o LFS
+git lfs track "sdk/native/3rdparty/libs/x86_64/libippicv.a"
+git lfs track "sdk/native/libs/x86_64/libopencv_java4.so"
+
+# Adicione os arquivos novamente
+git add .gitattributes  # Arquivo que armazena as configurações do LFS
+git add sdk/native/3rdparty/libs/x86_64/libippicv.a
+git add sdk/native/libs/x86_64/libopencv_java4.so
+
+# Faça o commit e push novamente
+git commit -m "Adiciona arquivos grandes via Git LFS"
+git push origin master
+
+
+
+
+
+
+
+
 --------------------------------------------------
 Clone Repository:
 
