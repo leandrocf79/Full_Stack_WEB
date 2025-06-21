@@ -40,6 +40,9 @@ git push origin master
 ********** PARA ARQUIVOS MUITO GRANDES **********
 # Instale o Git LFS (se ainda não tiver)
 git lfs install
+git config lfs.allowincompletepush true
+********** **********
+
 
 # Rastreie os arquivos grandes com o LFS
 git lfs track "sdk/native/3rdparty/libs/x86_64/libippicv.a"
